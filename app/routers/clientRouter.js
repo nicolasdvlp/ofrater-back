@@ -5,7 +5,7 @@ const router = express.Router();
 
 /**
  * Routes /client
- */
+**/
 
 router.get('/', /* controller ici */);
 
