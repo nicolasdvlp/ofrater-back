@@ -1,0 +1,5 @@
+%syntax-version=1.0.0
+%project=ofrater
+%uri=http://ofrater.io/
+
+01_init 2020-09-23T13:57:17Z "Etudiant O'clock",,, <etudiant@teleporteur> # Mise de la structure de base de ofrater
