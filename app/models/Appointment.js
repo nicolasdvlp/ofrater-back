@@ -76,6 +76,5 @@ class Appointment extends CoreModel {
 
     set service_id(value) {
         this._service_id = value;
-    };
-    
+    };    
 }

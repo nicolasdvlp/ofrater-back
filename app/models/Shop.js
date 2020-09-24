@@ -89,4 +89,3 @@ class Shop extends CoreModel {
 }
 
 module.exports = Shop;
-
