@@ -1,6 +1,7 @@
-const coreModel = require('./coreModel');
+const db = require('../database');
+const CoreModel = require('./CoreModel');
 
-class Role extends coreModel {
+class Role extends CoreModel {
 
     _name
 

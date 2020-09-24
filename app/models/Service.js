@@ -1,6 +1,7 @@
-const coreModel = require('./coreModel');
+const db = require('../database');
+const CoreModel = require('./CoreModel');
 
-class Service extends coreModel {
+class Service extends CoreModel {
 
     _name;
     _price;
@@ -45,5 +46,3 @@ class Service extends coreModel {
 }
 
 module.exports = Service;
-
-    
