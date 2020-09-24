@@ -1,6 +1,7 @@
-const coreModel = require('./coreModel');
+const db = require('../database');
+const CoreModel = require('./CoreModel');
 
-class Appointment extends coreModel {
+class Appointment extends CoreModel {
 
     _slot_start;
     _slot_end;
