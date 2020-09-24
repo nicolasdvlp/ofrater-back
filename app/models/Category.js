@@ -1,6 +1,7 @@
-const coreModel = require('./coreModel');
+const db = require('../database');
+const CoreModel = require('./CoreModel');
 
-class Category extends coreModel {
+class Category extends CoreModel {
 
     _name;
 
