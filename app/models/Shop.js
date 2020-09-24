@@ -1,6 +1,7 @@
-const coreModel = require('./coreModel');
+const db = require('../database');
+const CoreModel = require('./CoreModel');
 
-class Shop extends coreModel {
+class Shop extends CoreModel {
 
     _shop_name;
     _opening_time;
@@ -72,6 +73,20 @@ class Shop extends coreModel {
     set postal_code(value) {
         this._postal_code = value;
     }
+
+
+    static async findShopByCity(city) {
+
+        const result = await db.query(`SELECT * FROM shop WHERE city = $1;`, [city]);
+
+        const shopList = [];
+        for (const shop of result.rows) {
+            shopList.push(new this(shop));
+        }
+
+        return shopList;
+    }
 }
 
 module.exports = Shop;
+
