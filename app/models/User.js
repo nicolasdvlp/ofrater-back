@@ -1,6 +1,5 @@
 const db = require('../database');
-
-const CoreModel = require('../models/coreModel');
+const CoreModel = require('./CoreModel');
 
 module.exports = class User extends CoreModel {
    
@@ -15,6 +14,7 @@ module.exports = class User extends CoreModel {
 
     constructor(obj) {
         
+        super(obj);
         this._first_name = obj.first_name;
         this._last_name = obj.last_name;
         this._phone_number = obj.phone_number;
@@ -97,6 +97,20 @@ module.exports = class User extends CoreModel {
 
     set role_id(value) {
         this._role_id = value;
+    };
+
+    /**
+     * 
+     */
+    static async findAllPro() {
+        const result = await db.query(`SELECT * FROM "user" WHERE role_id = $1;`, [1]);
+
+        const proList = [];
+        for (const professional of result.rows) {
+            proList.push(new this(professional));
+        }
+
+        return proList;
     };
 
 }
