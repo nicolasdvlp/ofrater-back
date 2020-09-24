@@ -14,6 +14,7 @@ DROP TABLE shop;
 DROP TABLE "service";
 DROP DOMAIN star_eval;
 DROP DOMAIN pfloat;
+DROP DOMAIN phone;
 DROP DOMAIN email_address;
 DROP DOMAIN postal_code_fr;
 
