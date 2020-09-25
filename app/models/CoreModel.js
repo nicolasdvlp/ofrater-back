@@ -35,11 +35,52 @@ class CoreModel {
 
     }
 
-    static async findById(id) {
-        const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE id = $1;`, [id]);
+    static async findById(idToFind) {
+        const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE id = $1;`, [idToFind]);
 
         return new this(result.rows[0]);
     }
+
+    async insert() {
+
+
+        const _cleanFields = [];
+        const _cleanPlaceholders = [];
+        const values = [];
+        let placeHolderInc = 1;
+    
+        Object.keys(this).forEach((key) => {
+            key = key.replace('_', '');
+
+            if (key === "id") return false;
+        
+            _cleanFields.push(`"${key}"`);
+            _cleanPlaceholders.push(`$${placeHolderInc}`);
+            values.push(this[key]);
+            placeHolderInc++;
+                
+        });
+
+        const fields = _cleanFields.join(', ');
+        const placeholders = _cleanPlaceholders.join(', ');
+
+        const query = {
+            text: `
+                INSERT INTO "${this.constructor.name.toLowerCase()}"
+                (${fields}) 
+                VALUES (${placeholders}) 
+                RETURNING "id"
+                `,
+                values: values,
+            };
+
+
+        const result = await db.query(query); 
+        console.log(result);
+        this.data = result.rows[0];
+
+    }
+
 
 }
 
