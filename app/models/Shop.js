@@ -75,9 +75,9 @@ class Shop extends CoreModel {
     }
 
 
-    static async findShopByCity(city) {
+    static async findShopByCity(cityOrZip) {
 
-        const result = await db.query(`SELECT * FROM shop WHERE city = $1;`, [city]);
+        const result = await db.query(`SELECT * FROM shop WHERE LOWER(city) LIKE LOWER($1) OR postal_code LIKE $2;`, [`%${cityOrZip}%`, `%${cityOrZip}%`]);
 
         const shopList = [];
         for (const shop of result.rows) {
