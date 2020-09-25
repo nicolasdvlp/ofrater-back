@@ -35,7 +35,11 @@ class CoreModel {
 
     }
 
+    static async findById(id) {
+        const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE id = $1;`, [id]);
 
+        return new this(result.rows[0]);
+    }
 
 }
 
