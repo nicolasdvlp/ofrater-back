@@ -43,7 +43,10 @@ const Review = require('./app/models/Review');
     // const freshUser = await User.findAllPro();
     // console.log(freshUser);
 
-    const shoplist = await Shop.findShopByCity('Arnac-la-Poste');
-    console.log(shoplist);
+    // const shoplist = await Shop.findShopByCity('Arnac-la-Poste');
+    // console.log(shoplist);
+
+    const user = await User.findById(8);
+    console.log(user);
 
 })();
