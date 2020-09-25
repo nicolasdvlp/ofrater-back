@@ -1,4 +1,5 @@
 const express = require('express');
+const clientController = require('../controllers/clientController');
 
 const router = express.Router();
 
@@ -6,12 +7,5 @@ const router = express.Router();
 /**
  * Routes /client
 **/
-
-router.get('/', /* controller ici */);
-
-
-
-
-
 
 module.exports = router;

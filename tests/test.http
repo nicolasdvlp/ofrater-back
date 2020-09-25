@@ -1,0 +1,8 @@
+POST http://localhost:3000/mainsearch HTTP/1.1
+content-type: application/json
+
+{
+    "input": "4"
+}
+
+###

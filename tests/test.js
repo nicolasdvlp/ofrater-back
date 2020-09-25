@@ -1,12 +1,12 @@
 if (process.env.NODE_ENV !== 'production') {require('dotenv').config();}
 
-const Category = require('./app/models/Category');
-const User = require('./app/models/User');
-const Shop = require('./app/models/Shop');
-const Service = require('./app/models/Service');
-const Role = require('./app/models/Role');
-const Appointment = require('./app/models/Appointment');
-const Review = require('./app/models/Review');
+const Category = require('../app/models/Category');
+const User = require('../app/models/User');
+const Shop = require('../app/models/Shop');
+const Service = require('../app/models/Service');
+const Role = require('../app/models/Role');
+const Appointment = require('../app/models/Appointment');
+const Review = require('../app/models/Review');
 
 
 (async () => {
@@ -43,7 +43,22 @@ const Review = require('./app/models/Review');
     // const freshUser = await User.findAllPro();
     // console.log(freshUser);
 
-    const shoplist = await Shop.findShopByCity('Arnac-la-Poste');
-    console.log(shoplist);
+    // const shoplist = await Shop.findShopByCity('Arnac-la-Poste');
+    // console.log(shoplist);
+
+    // const user = await User.findById(3);
+    // console.log(user);
+
+
+    // const listCategories = await Category.findAll();
+    // console.log(listCategories);
+
+
+
+    const toiletteur = new Category({name: "Toilottage"});
+    toiletteur.insert();
+    console.log(toiletteur);
+
+    
 
 })();
