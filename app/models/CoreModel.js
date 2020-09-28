@@ -49,6 +49,7 @@ class CoreModel {
 
     async insert() {
 
+
         const _cleanFields = [];
         const _cleanPlaceholders = [];
         const values = [];
@@ -70,6 +71,7 @@ class CoreModel {
         const placeholders = _cleanPlaceholders.join(', ');
 
         const query = {
+
             text: `INSERT INTO "${this.constructor.name.toLowerCase()}" (${fields}) VALUES (${placeholders}) RETURNING "id"`,
                 values: values,
             };
