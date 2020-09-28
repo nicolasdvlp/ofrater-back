@@ -18,14 +18,14 @@ INSERT INTO "category" ("name") VALUES
 ('barbier'),
 ('coiffeur');
 
-INSERT INTO "user" (first_name, last_name, phone_number, age, mail, "password", avatar, role_id) VALUES 
-('Lucien', 'Bramard', '0634121212', 42, 'lucien.bramard@gmail.com', 'azerty123', 'url_avatar', 1),
-('Etienne', 'Mousse', '0624320118', 12, 'emousseBG@gmail.com', 'youpi123', 'url_avatar', 1),
-('Fox', 'Mulder', '0602000000', 53, 'fmulder@gmail.com', '*D9k+fA.77W', 'url_avatar', 1),
-('Bob', 'L''éponge', '0798150836', 36, 'bleponge@gmail.com', 'coincoin', 'url_avatar', 1),
-('Dana', 'Scully', '0675000000', 47, 'dscully@gmail.com', '=34Udz*%i2.X', 'url_avatar', 2),
-('Joel', 'Noyeux', '0836656565', 78, 'joyeuxnoel@gmail.com', 'christmas', 'url_avatar', 2),
-('Anne', 'O''nyme', '0675000000', 47, 'agathachristie@gmail.com', '=34Udz*%i2.X', 'url_avatar', 2);
+INSERT INTO "user" (first_name, last_name, phone_number, birth, mail, "password", avatar, role_id) VALUES 
+('Lucien', 'Bramard', '0634121212', '1983-08-01', 'lucien.bramard@gmail.com', 'azerty123', 'url_avatar', 1),
+('Etienne', 'Mousse', '0624320118', '1980-05-03', 'emousseBG@gmail.com', 'youpi123', 'url_avatar', 1),
+('Fox', 'Mulder', '0602000000', '1998-02-15', 'fmulder@gmail.com', '*D9k+fA.77W', 'url_avatar', 1),
+('Bob', 'L''éponge', '0798150836', '2001-01-09', 'bleponge@gmail.com', 'coincoin', 'url_avatar', 1),
+('Dana', 'Scully', '0675000000', '1970-12-25', 'dscully@gmail.com', '=34Udz*%i2.X', 'url_avatar', 2),
+('Joel', 'Noyeux', '0836656565', '1985-11-10', 'joyeuxnoel@gmail.com', 'christmas', 'url_avatar', 2),
+('Anne', 'O''nyme', '0675000000', '1965-11-19', 'agathachristie@gmail.com', '=34Udz*%i2.X', 'url_avatar', 2);
     
 INSERT INTO "appointment" (slot_start, slot_end, shop_id, user_id, service_id) VALUES
 ('2020-10-19 08:30:00+02', '2020-10-19 08:59:59+02', 1, NULL, NULL),
@@ -64,6 +64,3 @@ INSERT INTO shop_has_category (shop_id, category_id) VALUES
 (3, 2);
 
 COMMIT;
-
-
-
