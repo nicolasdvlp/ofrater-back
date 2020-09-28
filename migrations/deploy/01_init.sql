@@ -29,6 +29,10 @@ CREATE DOMAIN pfloat AS float
 CREATE DOMAIN star_eval AS text
     CHECK (VALUE ~ '^[1-5]{1}$');
 
+--CREATE DOMAIN birthd AS date
+--    CHECK (VALUE ~ '^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$');
+
+
 -- ****************
 --      TABLES
 -- ****************
@@ -67,7 +71,7 @@ CREATE TABLE "user" (
     first_name text NOT NULL,
     last_name text NOT NULL,
     phone_number phone NOT NULL,
-    age int NOT NULL,
+    birth date NOT NULL,
     mail email_address NOT NULL UNIQUE,
     "password" text NOT NULL,
     avatar text,
