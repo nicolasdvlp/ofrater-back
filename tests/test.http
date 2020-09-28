@@ -1,8 +1,24 @@
-POST http://localhost:3000/mainsearch HTTP/1.1
+###
+POST http://localhost:3001/mainsearch HTTP/1.1
 content-type: application/json
 
 {
     "input": "4"
 }
 
-###
+### Route to find one professional
+POST http://localhost:3001/searchOnePro
+Content-Type: application/json
+
+{
+    "id": 3
+}
+
+### Route to find professionnals by location
+POST http://localhost:3001/searchProByLocation
+Content-Type: application/json
+
+{
+    "zipOrCity": "4444"
+}
+

@@ -74,10 +74,14 @@ class Shop extends CoreModel {
         this._postal_code = value;
     }
 
+    // Méthode pour la page d'accueil qui retourne uniquement les CP et les villes pour la recherche "prédictive"
+    static async findCityOrZip(cityOrZip) {
 
-    static async findShopByCity(cityOrZip) {
+        const result = await db.query(`SELECT city, postal_code FROM shop WHERE LOWER(city) LIKE LOWER($1) OR postal_code LIKE $2;`, [`%${cityOrZip}%`, `%${cityOrZip}%`]);
 
-        const result = await db.query(`SELECT * FROM shop WHERE LOWER(city) LIKE LOWER($1) OR postal_code LIKE $2;`, [`%${cityOrZip}%`, `%${cityOrZip}%`]);
+        if (result.rowCount===0) {
+            throw new Error(`No match found with City or Zip code  "${cityOrZip}".`);
+        }
 
         const shopList = [];
         for (const shop of result.rows) {
@@ -86,6 +90,24 @@ class Shop extends CoreModel {
 
         return shopList;
     }
+
+    static async findShopByCity(cityOrZip) {
+
+        const result = await db.query(`SELECT * FROM shop WHERE LOWER(city) LIKE LOWER($1) OR postal_code LIKE $2;`, [`%${cityOrZip}%`, `%${cityOrZip}%`]);
+
+        if (result.rowCount===0) {
+            throw new Error(`No match found with City or Zip code  "${cityOrZip}".`);
+        }
+
+        const shopList = [];
+        for (const shop of result.rows) {
+            shopList.push(new this(shop));
+        }
+
+        return shopList;
+    }
+
+
 }
 
 module.exports = Shop;

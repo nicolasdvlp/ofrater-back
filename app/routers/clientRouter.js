@@ -6,6 +6,6 @@ const router = express.Router();
 
 /**
  * Routes /client
-**/
+ */
 
 module.exports = router;
