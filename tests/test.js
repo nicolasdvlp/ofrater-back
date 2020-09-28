@@ -54,11 +54,9 @@ const Review = require('../app/models/Review');
     // console.log(listCategories);
 
 
-
     const toiletteur = new Category({name: "Toilottage"});
     toiletteur.insert();
     console.log(toiletteur);
-
-    
+ 
 
 })();

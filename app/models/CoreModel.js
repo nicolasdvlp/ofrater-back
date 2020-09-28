@@ -36,9 +36,15 @@ class CoreModel {
     }
 
     static async findById(idToFind) {
+
         const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE id = $1;`, [idToFind]);
 
+        if (result.rowCount===0) {
+            throw new Error(`No match found with id "${idToFind}" for table "${this.name.toLowerCase()}".`);
+        }
+
         return new this(result.rows[0]);
+
     }
 
     async insert() {
@@ -65,22 +71,72 @@ class CoreModel {
         const placeholders = _cleanPlaceholders.join(', ');
 
         const query = {
-            text: `
-                INSERT INTO "${this.constructor.name.toLowerCase()}"
-                (${fields}) 
-                VALUES (${placeholders}) 
-                RETURNING "id"
-                `,
+
+            text: `INSERT INTO "${this.constructor.name.toLowerCase()}" (${fields}) VALUES (${placeholders}) RETURNING "id"`,
                 values: values,
             };
 
-
         const result = await db.query(query); 
-        console.log(result);
-        this.data = result.rows[0];
+
+        this.id = result.rows[0].id;
+
+        console.log(this)
 
     }
 
+    async update() {
+    
+        const _cleanPlaceholders = [];
+        let incPlaceHolders = 1;
+        const values = [];
+        Object.keys(this).forEach((key) => {
+            key = key.replace('_', '');
+            if (key === "id") return false;
+    
+            _cleanPlaceholders.push(`"${key}" = $${incPlaceHolders}`);
+            values.push(this[key]);
+            incPlaceHolders++;
+        });
+
+        values.push(this.id);
+        const placeholders = _cleanPlaceholders.join(', ');
+    
+        const query = {
+          text: `
+            UPDATE "${this.constructor.name.toLowerCase()}" SET 
+            ${placeholders}
+            WHERE "id" = $${incPlaceHolders}
+          `,
+          values: values,
+        };
+    
+        const result = await db.query(query);
+        
+    }
+    
+    async delete() {
+        // constructor représente la classe elle même auquel on accède depuis l'instance this --> this.constructor
+        const query = {
+            text: `DELETE FROM "${this.constructor.name.toLowerCase()}" WHERE id=$1`,
+            values: [this.id],
+        };
+        const result = await db.query(query);
+
+    }
+    
+    /**
+     * Insert or Update function to store in DB
+     * @param {function} 
+     */
+    save(){
+    
+        if(this.id){
+            this.update();
+          }
+          else {
+            this.insert();
+          }
+    }
 
 }
 
