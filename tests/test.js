@@ -55,9 +55,21 @@ const Review = require('../app/models/Review');
 
 
 
-    const toiletteur = new Category({name: "Toilottage"});
-    toiletteur.insert();
-    console.log(toiletteur);
+    const toiletteur = new Category({name: "Wesh alors"});
+    // toiletteur.insert();
+    // console.log(toiletteur);
+
+
+    // const toiletteur = await Category.findById(4);
+    // console.log(toiletteur);
+
+    // toiletteur.name = "yaya";
+
+
+    toiletteur.save();
+    
+
+    // toiletteur.delete();
 
     
 
