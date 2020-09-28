@@ -6,7 +6,7 @@ module.exports = class User extends CoreModel {
     _first_name;
     _last_name;
     _phone_number;
-    _age;
+    _birth;
     _mail;
     _password;
     _avatar;
@@ -18,7 +18,7 @@ module.exports = class User extends CoreModel {
         this._first_name = obj.first_name;
         this._last_name = obj.last_name;
         this._phone_number = obj.phone_number;
-        this._age = obj.age;
+        this._birth = obj.birth;
         this._mail = obj.mail;
         this._password = obj.password;
         this._avatar = obj.avatar;
@@ -43,8 +43,8 @@ module.exports = class User extends CoreModel {
         return this._phone_number;
     }
     
-    get age() {
-        return this._age;
+    get birth() {
+        return this._birth;
     }
     
     get mail() {
@@ -79,8 +79,8 @@ module.exports = class User extends CoreModel {
         this._phone_number = value;
     };
 
-    set age(value) {
-        this._age = value;
+    set birth(value) {
+        this._birth = value;
     };
 
     set mail(value) {
