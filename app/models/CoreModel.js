@@ -36,9 +36,15 @@ class CoreModel {
     }
 
     static async findById(idToFind) {
+
         const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE id = $1;`, [idToFind]);
 
+        if (result.rowCount===0) {
+            throw new Error(`No match found with id "${idToFind}" for table "${this.name.toLowerCase()}".`);
+        }
+
         return new this(result.rows[0]);
+
     }
 
     async insert() {
@@ -68,10 +74,11 @@ class CoreModel {
                 values: values,
             };
 
-
         const result = await db.query(query); 
 
-        this.data = result.rows[0];
+        this.id = result.rows[0].id;
+
+        console.log(this)
 
     }
 
@@ -107,11 +114,11 @@ class CoreModel {
     
     async delete() {
         // constructor représente la classe elle même auquel on accède depuis l'instance this --> this.constructor
-    const query = {
-        text: `DELETE FROM "${this.constructor.name.toLowerCase()}" WHERE id=$1`,
-        values: [this.id],
-    };
-    const result = await db.query(query);
+        const query = {
+            text: `DELETE FROM "${this.constructor.name.toLowerCase()}" WHERE id=$1`,
+            values: [this.id],
+        };
+        const result = await db.query(query);
 
     }
     
