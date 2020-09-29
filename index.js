@@ -27,19 +27,14 @@ app.use(session({
     maxAge: (1000 * 60 * 60 * 10) // 10 hours
    } 
 }))
-// custom middleware to check if user is logged in
-const userMiddleware = require('./app/middlewares/userMiddleware');
-app.use(userMiddleware)
 
-
-
-//! check session 
-app.use((req, _, next) => {
-  console.log('=== SESSION CHECKER ===');
-  console.table(req.session);
-  console.log('=== END OF SESSION CHECKER ===');
-  next();
-});
+// check session 
+// app.use((req, _, next) => {
+//   console.log('=== SESSION CHECKER ===');
+//   console.table(req.session);
+//   console.log('=== END OF SESSION CHECKER ===');
+//   next();
+// });
 
 
 
