@@ -19,11 +19,13 @@ router.get('/searchProByLocation', mainController.findProByLocation)
 
 
 /**
- * Routes Login
+ * Routes Login/signin/signout
  */
 
  router.post('/registration', mainController.register);
  router.post('/login', mainController.postLogin);
+
+ router.post('/signout', mainController.signout);
 
 
 // custom middleware to check if user is logged in
@@ -31,6 +33,6 @@ router.use(userMiddleware);
 
 
 // 404 gestion
-router.use(mainController.error404);
+// router.use(mainController.error404);
 
 module.exports = router;

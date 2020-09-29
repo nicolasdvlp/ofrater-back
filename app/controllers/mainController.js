@@ -119,14 +119,31 @@ module.exports = {
     async postLogin(request, response) {
 
         const { mail, password } = request.body
-        const userToConnect = await User.findByMail(mail);
 
-        if(await bcrypt.compare(password, userToConnect.password)) {
-            
-            request.session.user = userToConnect;
+        try {
+            const userToConnect = await User.findByMail(mail);
+            if(await bcrypt.compare(password, userToConnect.password)) {
+                request.session.user = userToConnect;
+            }
 
+        } catch (error) {
+            console.log(error);    
         }
+
         response.json('Logged in.')
 
+    },
+
+    async signout(req, res) {
+
+        try {
+            await req.session.destroy();
+
+        } catch (error) {
+            console.log(error);    
+        }
+
+        res.json('User logged out.');
     }
+
 }
