@@ -7,6 +7,7 @@ const router = express.Router();
 /**
  * Routes /client
  */
+router.get('/:id/profile', clientController.getProfile);
 router.put('/profile', clientController.updateProfile);
 
 
