@@ -19,16 +19,25 @@ const app = express();
 // body-parson json
 app.use(express.json());
 
-// // session
-// app.use(session({
-//   secret: 'Une super phrase de chiffrement de ouf',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: { secure: false } // true si https
-// }))
-// // custom middleware to check if user is logged in
-// const userMiddleware = require('./app/middlewares/userMiddleware');
-// app.use(userMiddleware)
+// session
+app.use(session({
+  secret: 'Une super phrase de chiffrement de ouf Iliade 4 Life',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { 
+    secure: false, //! true if https
+    maxAge: (1000 * 60 * 60 * 10) // 10 hours
+   } 
+}))
+
+// check session 
+// app.use((req, _, next) => {
+//   console.log('=== SESSION CHECKER ===');
+//   console.table(req.session);
+//   console.log('=== END OF SESSION CHECKER ===');
+//   next();
+// });
+
 
 
 /**

@@ -1,5 +1,5 @@
 ###
-POST http://localhost:3000/mainsearch HTTP/1.1
+GET http://localhost:3000/mainsearch HTTP/1.1
 content-type: application/json
 
 {
@@ -7,7 +7,7 @@ content-type: application/json
 }
 
 ### Route to find one professional
-POST http://localhost:3002/searchOnePro
+GET http://localhost:3000/searchOnePro
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### Route to find professionnals by location
-POST http://localhost:3002/searchProByLocation
+GET http://localhost:3000/searchProByLocation
 Content-Type: application/json
 
 {
@@ -67,9 +67,19 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "dzdda@dz11hmmk2das.fr",
+    "mail": "toto@tata.fr",
     "password": "azerty",
     "role_id": 1
+}
+
+
+### LOGIN 
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "mail": "toto@tata.fr",
+    "password": "azerty"
 }
 
 ### Route to update a client profile
