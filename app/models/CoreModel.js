@@ -78,8 +78,6 @@ class CoreModel {
 
         this.id = result.rows[0].id;
 
-        console.log(this)
-
     }
 
     async update() {
@@ -122,19 +120,24 @@ class CoreModel {
 
     }
     
-    /**
-     * Insert or Update function to store in DB
-     * @param {function} 
-     */
-    save(){
+    // /**
+    //  * Insert or Update function to store in DB
+    //  * @param {function} 
+    //  */
+    // async save(){
     
-        if(this.id){
-            this.update();
-          }
-          else {
-            this.insert();
-          }
-    }
+    //     console.log('le this avant traitemen', this);
+
+    //     if(this.id){
+    //         this.update();
+    //         console.log('le this apres le update', this);
+    //       }
+    //       else {
+    //         this.insert();
+    //         console.log('le this apres le insert', this);
+
+    //       }
+    // }
 
 }
 

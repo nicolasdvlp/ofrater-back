@@ -113,4 +113,14 @@ module.exports = class User extends CoreModel {
         return proList;
     };
 
+    async ownShop(shopInstance) {
+
+        const query = {
+            text: `INSERT INTO "user_owns_shop" (user_id, shop_id) VALUES ($1, $2) RETURNING "id"`,
+                values: [this.id, shopInstance.id],
+            };
+
+        const result = await db.query(query); 
+
+    };
 }

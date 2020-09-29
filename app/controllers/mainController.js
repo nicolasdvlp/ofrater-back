@@ -13,8 +13,10 @@ module.exports = {
     // Route "/mainsearch"
     async findCityOrZip(request, response) {
 
+        let searchedShops;
+
         try {
-            const searchedShops = await Shop.findShopByCity(request.body.input);
+            searchedShops = await Shop.findShopByCity(request.body.input);
         } catch (error) {
             console.log(error);
             response.status(404).json(`No professional found for location : ${request.body.zipOrCity}.`)
@@ -53,7 +55,16 @@ module.exports = {
 
     async register(request, response) {
         const {first_name, last_name, phone_number, birth, mail, password, role_id} = request.body;
-        console.log(request.body.shop);
+        let shop_name, opening_time, address_name, address_number, city, postal_code;
+
+        if (request.body.shop) {
+            shop_name = request.body.shop.shop_name;
+            opening_time = request.body.shop.opening_time;
+            address_name = request.body.shop.address_name;
+            address_number = request.body.shop.address_number;
+            city = request.body.shop.city;
+            postal_code = request.body.shop.postal_code;
+        }
 
         const _shop = {}
 
@@ -75,7 +86,10 @@ module.exports = {
             const hash = bcrypt.hashSync(password, saltRounds);
 
             newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
-            newUser.save();
+            await newUser.insert();
+
+
+            // console.log('dans le main controller newUser :', newUser);
 
             if(newUser.role_id === 2) {
                 newShop = new Shop({ 
@@ -87,7 +101,9 @@ module.exports = {
                     postal_code: _shop.postal_code
                 });
 
-                newShop.save();
+                await newShop.insert();
+
+                await newUser.ownShop(newShop);
             }
 
 
