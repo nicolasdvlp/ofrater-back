@@ -72,8 +72,8 @@ Content-Type: application/json
     "role_id": 1
 }
 
-### LOGIN 
 
+### LOGIN 
 POST http://localhost:3000/login
 Content-Type: application/json
 
@@ -82,3 +82,21 @@ Content-Type: application/json
     "password": "azerty"
 }
 
+### Route to update a client profile
+PUT http://localhost:3002/client/profile
+Content-Type: application/json
+
+{
+    "id": 25,
+    "first_name": "youpi",
+}
+
+### Route to update a professional profile
+PUT http://localhost:3003/pro/profile
+Content-Type: application/json
+
+{
+    "id": 19,
+    "first_name": "youpi",
+    "last_name": "super"
+}
