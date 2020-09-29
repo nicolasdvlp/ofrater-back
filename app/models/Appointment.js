@@ -78,3 +78,5 @@ class Appointment extends CoreModel {
         this._service_id = value;
     };    
 }
+
+module.exports = Appointment;
