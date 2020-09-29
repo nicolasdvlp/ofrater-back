@@ -45,7 +45,7 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "dzdda@dz112dkfads.fr",
+    "mail": "dzdda@dz112dkfjljmfmglads.fr",
     "password": "azerty",
     "role_id": 2,
     "shop": {
@@ -67,7 +67,7 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "dzdda@dz112das.fr",
+    "mail": "dzdda@dz11hmmk2das.fr",
     "password": "azerty",
-    "role_id": 2
+    "role_id": 1
 }
