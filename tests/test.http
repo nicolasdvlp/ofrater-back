@@ -1,21 +1,21 @@
-###
-GET http://localhost:3000/mainsearch HTTP/1.1
+### Search shop/pro by city name or zip code
+GET http://localhost:3006/mainsearch HTTP/1.1
 content-type: application/json
 
 {
-    "input": "4"
+    "input": "6"
 }
 
 ### Route to find one professional
-GET http://localhost:3000/searchOnePro
+GET http://localhost:3006/searchOnePro
 Content-Type: application/json
 
 {
-    "id": 2
+    "id": 7
 }
 
 ### Route to find professionnals by location
-GET http://localhost:3000/searchProByLocation
+GET http://localhost:3006/searchProByLocation
 Content-Type: application/json
 
 {
@@ -23,33 +23,33 @@ Content-Type: application/json
 }
 
 ### Route to create a new user (user registration)
-POST http://localhost:3000/registration
+POST http://localhost:3006/registration
 Content-Type: application/json
 
 {
-    "first_name": "dsf",
-    "last_name": "fdsf",
+    "first_name": "Patrick",
+    "last_name": "L'étoile de mer",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "dzdddda@dz112da.fr",
+    "mail": "patrick.Le@gmail.fr",
     "password": "azerty",
     "role_id": 1
 }
 
 ### Route to create a new user and shop (user registration)
-POST http://localhost:3000/registration
+POST http://localhost:3006/registration
 Content-Type: application/json
 
 {
-    "first_name": "dsf",
+    "first_name": "zizou",
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "dzdda@dz112dkfjljmfmglads.fr",
+    "mail": "zizoupresident@zizou.fr",
     "password": "azerty",
     "role_id": 2,
     "shop": {
-        "shop_name" : "BarbaBulle2",
+        "shop_name" : "Zizou Président",
         "opening_time" : "du lundi au dimanche 7/7! de 9h à 19h",
         "address_name" : "Place du Champ de Foire",
         "address_number" : 16,
@@ -59,7 +59,7 @@ Content-Type: application/json
 }
 
 ### 
-POST http://localhost:3000/registration
+POST http://localhost:3006/registration
 Content-Type: application/json
 
 {
@@ -74,7 +74,7 @@ Content-Type: application/json
 
 
 ### LOGIN 
-POST http://localhost:3000/login
+POST http://localhost:3006/login
 Content-Type: application/json
 
 {
@@ -83,16 +83,16 @@ Content-Type: application/json
 }
 
 ### Route to update a client profile
-PUT http://localhost:3002/client/profile
+PUT http://localhost:3006/client/profile
 Content-Type: application/json
 
 {
     "id": 25,
-    "first_name": "youpi",
+    "first_name": "youpi"
 }
 
 ### Route to update a professional profile
-PUT http://localhost:3003/pro/profile
+PUT http://localhost:3006/pro/profile
 Content-Type: application/json
 
 {
