@@ -1,5 +1,5 @@
 ###
-POST http://localhost:3000/mainsearch HTTP/1.1
+GET http://localhost:3000/mainsearch HTTP/1.1
 content-type: application/json
 
 {
@@ -7,7 +7,7 @@ content-type: application/json
 }
 
 ### Route to find one professional
-POST http://localhost:3000/searchOnePro
+GET http://localhost:3000/searchOnePro
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### Route to find professionnals by location
-POST http://localhost:3000/searchProByLocation
+GET http://localhost:3000/searchProByLocation
 Content-Type: application/json
 
 {

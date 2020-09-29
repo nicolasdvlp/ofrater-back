@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const mainController = require('../controllers/mainController');
+const userMiddleware = require('../middlewares/userMiddleware');
+
 
 
 /**
@@ -22,6 +24,10 @@ router.get('/searchProByLocation', mainController.findProByLocation)
 
  router.post('/registration', mainController.register);
  router.post('/login', mainController.postLogin);
+
+
+// custom middleware to check if user is logged in
+router.use(userMiddleware);
 
 
 // 404 gestion
