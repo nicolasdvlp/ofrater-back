@@ -99,11 +99,8 @@ module.exports = class User extends CoreModel {
         this._role_id = value;
     };
 
-    /**
-     * 
-     */
     static async findAllPro() {
-        const result = await db.query(`SELECT * FROM "user" WHERE role_id = $1;`, [1]);
+        const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE role_id = $1;`, [1]);
 
         const proList = [];
         for (const professional of result.rows) {
@@ -111,6 +108,17 @@ module.exports = class User extends CoreModel {
         }
 
         return proList;
+    };
+
+    static async findByMail(mail) {
+
+        const result = await db.query(`select * from "${this.name.toLowerCase()}" where mail=$1;`, [mail]);
+
+        if (result.rowCount===0) {
+            throw new Error(`No match found with mail "${mail}" for table "${this.name.toLowerCase()}".`);
+        }
+
+        return result.rows[0];
     };
 
     async ownShop(shopInstance) {
