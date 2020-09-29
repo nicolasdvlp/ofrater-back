@@ -11,30 +11,15 @@ git clone git@github.com:O-clock-Iliade/projet-ofrater-back.git
 npm i
 ```
 3. Créer le fichier _.env_ à la racine du projet et le compléter avec les variables d'environnement (un exemple est donné dans le fichier _.env.example_).
-4. Installer _Sqitch_ éventuellement pour le versioning de BDD
+4. Installer _Sqitch_ pour le versioning de BDD
+5. 
 
 
 ## Creation de BDD
 
-`createdb ofrat`
+1. `createdb ofrater`
+2. `sqitch deploy`
 
-
-
-```
-tudiant@teleporteur:~/Oclock/apotheose/ofrater$ psql -U barbeapapa -d ofrat -f data/data.sql 
-BEGIN
-psql:data/data.sql:7: ERREUR:  droit refusé pour la table service
-psql:data/data.sql:12: ERREUR:  la transaction est annulée, les commandes sont ignorées jusqu'à la fin du bloc
-de la transaction
-psql:data/data.sql:16: ERREUR:  la transaction est annulée, les commandes sont ignorées jusqu'à la fin du bloc
-de la transaction
-psql:data/data.sql:20: ERREUR:  la transaction est annulée, les commandes sont ignorées jusqu'à la fin du bloc
-de la transaction
-psql:data/data.sql:27: ERREUR:  la transaction est annulée, les commandes sont ignorées jusqu'à la fin du bloc
-de la transaction
-ROLLBACK
-```
 
 TODO LIST
 
-Voir si utilisation de joy avec active record ou si verification dans les setter et getter

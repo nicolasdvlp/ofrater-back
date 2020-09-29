@@ -1,3 +1,4 @@
+###
 POST http://localhost:3000/mainsearch HTTP/1.1
 content-type: application/json
 
@@ -5,4 +6,68 @@ content-type: application/json
     "input": "4"
 }
 
-###
+### Route to find one professional
+POST http://localhost:3000/searchOnePro
+Content-Type: application/json
+
+{
+    "id": 2
+}
+
+### Route to find professionnals by location
+POST http://localhost:3000/searchProByLocation
+Content-Type: application/json
+
+{
+    "zipOrCity": "4"
+}
+
+### Route to create a new user (user registration)
+POST http://localhost:3000/registration
+Content-Type: application/json
+
+{
+    "first_name": "dsf",
+    "last_name": "fdsf",
+    "phone_number": "0679958989",
+    "birth": "12/01/1985",
+    "mail": "dzdddda@dz112da.fr",
+    "password": "azerty",
+    "role_id": 1
+}
+
+### Route to create a new user and shop (user registration)
+POST http://localhost:3000/registration
+Content-Type: application/json
+
+{
+    "first_name": "dsf",
+    "last_name": "fdsf",
+    "phone_number": "0679958989",
+    "birth": "12/01/1985",
+    "mail": "dzdda@dz112dkfjljmfmglads.fr",
+    "password": "azerty",
+    "role_id": 2,
+    "shop": {
+        "shop_name" : "BarbaBulle2",
+        "opening_time" : "du lundi au dimanche 7/7! de 9h à 19h",
+        "address_name" : "Place du Champ de Foire",
+        "address_number" : 16,
+        "city" : "Arnac-La-Poste",
+        "postal_code" : "87160"
+    }
+}
+
+### 
+POST http://localhost:3000/registration
+Content-Type: application/json
+
+{
+    "first_name": "dsf",
+    "last_name": "fdsf",
+    "phone_number": "0679958989",
+    "birth": "12/01/1985",
+    "mail": "dzdda@dz11hmmk2das.fr",
+    "password": "azerty",
+    "role_id": 1
+}

@@ -1,4 +1,6 @@
-// ### Requires ###
+/**
+ * Requires
+ */
 if (process.env.NODE_ENV !== 'production') {require('dotenv').config();}
 const PORT = process.env.PORT || 3000;
 const express = require('express');
@@ -9,10 +11,27 @@ const proRouter = require('./app/routers/proRouter');
 
 const app = express();
 
-// ### Middlewares ###
+/**
+ * Middlewares
+ */
+// body-parson json
 app.use(express.json());
 
-// ### Router ###
+// // session
+// app.use(session({
+//   secret: 'Une super phrase de chiffrement de ouf',
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { secure: false } // true si https
+// }))
+// // custom middleware to check if user is logged in
+// const userMiddleware = require('./app/middlewares/userMiddleware');
+// app.use(userMiddleware)
+
+
+/**
+ * Routers
+ */
 app.use(mainRouter);
 app.use('/client', clientRouter);
 app.use('/pro', proRouter);
