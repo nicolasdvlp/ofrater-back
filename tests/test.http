@@ -94,6 +94,9 @@ Content-Type: application/json
     "first_name": "youpi"
 }
 
+### Route to access own profile for a pro
+GET http://localhost:3012/pro/12/profile
+
 ### Route to update a professional profile
 PUT http://localhost:3006/pro/profile
 Content-Type: application/json
