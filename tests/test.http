@@ -67,7 +67,18 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "dzdda@dz11hmmk2das.fr",
+    "mail": "toto@tata.fr",
     "password": "azerty",
     "role_id": 1
 }
+
+### LOGIN 
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "mail": "toto@tata.fr",
+    "password": "azerty"
+}
+
