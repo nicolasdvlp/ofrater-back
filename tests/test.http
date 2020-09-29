@@ -82,6 +82,9 @@ Content-Type: application/json
     "password": "azerty"
 }
 
+### Route to access own profile for a client
+GET http://localhost:3011/client/12/profile
+
 ### Route to update a client profile
 PUT http://localhost:3006/client/profile
 Content-Type: application/json
