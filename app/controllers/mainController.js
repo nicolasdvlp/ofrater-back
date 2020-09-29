@@ -118,5 +118,11 @@ module.exports = {
 
     async postLogin(request, response) {
 
+        const { mail, password } = request.body
+
+        const userToConnect = await User.findByMail(mail);
+
+        const checkPassword = await bcrypt.compare(password, userToConnect.password);
+
     }
 }
