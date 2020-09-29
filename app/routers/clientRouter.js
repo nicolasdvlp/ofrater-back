@@ -7,5 +7,9 @@ const router = express.Router();
 /**
  * Routes /client
  */
+router.put('/profile', clientController.updateProfile);
+
+
+
 
 module.exports = router;

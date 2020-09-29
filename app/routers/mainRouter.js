@@ -23,8 +23,4 @@ router.post('/searchProByLocation', mainController.findProByLocation)
  router.post('/registration', mainController.register);
  router.post('/login', mainController.postLogin);
 
-
-// 404 gestion
-router.use(mainController.error404);
-
 module.exports = router;
