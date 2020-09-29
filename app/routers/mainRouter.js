@@ -8,11 +8,11 @@ const mainController = require('../controllers/mainController');
  */
 
 // Route for city and zip in the main page
-router.post('/mainsearch', mainController.findCityOrZip);
+router.get('/mainsearch', mainController.findCityOrZip);
 // Route to get Pro detailscontacté par téléphone au numéro que vous avez in
-router.post('/searchOnePro', mainController.findOnePro);
+router.get('/searchOnePro', mainController.findOnePro);
 // Route to get list of pro by location
-router.post('/searchProByLocation', mainController.findProByLocation)
+router.get('/searchProByLocation', mainController.findProByLocation)
 
 
 
