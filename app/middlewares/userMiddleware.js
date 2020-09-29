@@ -4,6 +4,9 @@ module.exports = (req, res, next) => {
     }
     else {
         res.locals.connected_user = false;
+        throw new Error('Unauthorized. User must login.') 
     }
     next();
+
+
 }
