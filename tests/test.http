@@ -78,5 +78,15 @@ Content-Type: application/json
 
 {
     "id": 25,
-    "first_name": "youpi"
+    "first_name": "youpi",
+}
+
+### Route to update a professional profile
+PUT http://localhost:3003/pro/profile
+Content-Type: application/json
+
+{
+    "id": 19,
+    "first_name": "youpi",
+    "last_name": "super"
 }
