@@ -14,7 +14,7 @@ router.get('/mainsearch', mainController.findCityOrZip);
 // Route to get Pro detailscontacté par téléphone au numéro que vous avez in
 router.get('/searchOnePro', mainController.findOnePro);
 // Route to get list of pro by location
-router.get('/searchProByLocation', mainController.findProByLocation)
+router.get('/searchProByLocation', mainController.findProByLocation);
 
 
 
@@ -29,8 +29,7 @@ router.get('/searchProByLocation', mainController.findProByLocation)
 
 
 // custom middleware to check if user is logged in
-router.use(userMiddleware);
-
+//  router.use(userMiddleware);
 
 // 404 gestion
 // router.use(mainController.error404);

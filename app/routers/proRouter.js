@@ -7,4 +7,6 @@ const proController = require('../controllers/proController');
  */
 router.put('/profile', proController.updateProfile);
 
+router.post('/availableappointment', proController.postAvailableAppointment)
+
 module.exports = router;

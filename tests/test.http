@@ -73,14 +73,7 @@ Content-Type: application/json
 }
 
 
-### LOGIN 
-POST http://localhost:3000/login
-Content-Type: application/json
 
-{
-    "mail": "toto@tata.fr",
-    "password": "azerty"
-}
 
 ### Route to update a client profile
 PUT http://localhost:3002/client/profile
@@ -99,4 +92,46 @@ Content-Type: application/json
     "id": 19,
     "first_name": "youpi",
     "last_name": "super"
+}
+
+### LOGIN 
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "mail": "toto@tata.fr",
+    "password": "azerty"
+}
+
+### test
+POST http://localhost:3000/pro/availableappointment
+Content-Type: application/json
+
+{
+    "dateStart": "2020-12-01",
+    "dateEnd": "2020-12-05",
+    "starthour": "09:00",
+    "endHour": "17:00",
+    "shopID": 2
+}
+
+
+
+
+
+
+
+### Generate appointement
+
+POST http://localhost:3000/pro/availableappointment
+Content-Type: application/json
+
+{
+    "dateStart": "2020-12-01",
+    "dateEnd": "2020-12-05",
+    "starthour": "09:00",
+    "endHour": "17:00",
+    "shopID": 2,
+    "slotStart": "2020-10-20 22:00:0+02",
+    "slotEnd": "2020-10-20 22:29:59+02"
 }
