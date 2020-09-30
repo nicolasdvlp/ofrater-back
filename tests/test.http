@@ -110,7 +110,7 @@ Content-Type: application/json
 {
     "dateStart": "2020-12-01",
     "dateEnd": "2020-12-05",
-    "starthour": "09:00",
+    "startHour": "09:00",
     "endHour": "17:00",
     "shopID": 2
 }
