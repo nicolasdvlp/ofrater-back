@@ -15,7 +15,7 @@ class Appointment extends CoreModel {
         super(obj);
         this._slot_start = obj.slot_start;
         this._slot_end = obj.slot_end;
-        this._is_attended = obj.is_attended;
+        this._is_attended = obj.is_attended===undefined?false:obj.is_attended;
         this._shop_id = obj.shop_id;
         this._user_id = obj.user_id;
         this._service_id = obj.service_id;
