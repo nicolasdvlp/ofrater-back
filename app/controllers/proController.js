@@ -29,78 +29,63 @@ module.exports = {
     },
 
     async postAvailableAppointment (req, res) {
-    // FIXME: a modifier pour la connection pro
+
         try {
 
             const { 
+                shopID,
                 dateStart,
                 dateEnd,
-                startHour,
-                endHour,
-                shopID
+                days
             } = req.body
-
             
-            // TODO faire horaire de debut de la journée
+            // function a insert appointment un a day with starting hour and ending hour
+            const generateNewAppointmentForADay = async function (date, startHour, endHour, shopID) {
 
-            const generateNewAppointmentForADay = async function (date, startHour, dateEnd, shopID=1) {
-
-                // TODO faire horaire de debut de la journée
                 const _toJoinStart = [date, startHour]
                 const toJoinStart = _toJoinStart.join(' ')
 
                 const debutDeJ = moment(toJoinStart, "YYYY-MM-DD HH:mm");
-                // console.log(debutDeJ, ' debut de journée');
 
-                // TODO faire horaire de fin de la journée
                 const _toJoinEnd = [date, endHour]
                 const toJoinEnd = _toJoinEnd.join(' ')
 
                 const finDeJ = moment(toJoinEnd, "YYYY-MM-DD HH:mm");
-                // console.log(finDeJ, ' fin de journée');
 
-                // TODO GENERER DES TIMESTAMPS
-
-                let _timestampsz = [];
-
-
+                // calculate how many slot exist to repeat 'insert'
                 const indexDay = await (finDeJ - debutDeJ) /30 / 60 /1000;
 
-                const timestampArray = [];
+                const startTimestampArray = [];
 
-                // TODO mettre dans un tableau  les timestampz pour les heure de début
-
-
+                // loop to add start times in startTimestampArray
                 for (let index = 0; index < indexDay; index++) {
-                    let currentTime = debutDeJ.format("YYYY-MM-DD HH:mm:SS").toString();
+                    let currentTime = debutDeJ.format("YYYY-MM-DD HH:mm").toString();
 
                     if (index === 0) {
-                        timestampArray.push(currentTime);
+                        startTimestampArray.push(currentTime);
                     } else {
-                        currentTime = debutDeJ.add(30, 'm').format("YYYY-MM-DD HH:mm:SS").toString();
-                        timestampArray.push(currentTime);
+                        currentTime = debutDeJ.add(30, 'm').format("YYYY-MM-DD HH:mm").toString();
+                        startTimestampArray.push(currentTime);
                     }
                 };
 
-                // TODO generer un deuxieme tableau pour les heure de fin
-
+                // endTimestampArray array
                 const endTimestampArray = timestampArray.map(date => 
-                    moment(date, "YYYY-MM-DD HH:mm:SS")
+                    moment(date, "YYYY-MM-DD HH:mm")
                     .add(30, "m")
-                    .subtract(1, 'S')
-                    .format("YYYY-MM-DD HH:mm:SS")
+                    .subtract(1, 'm')
+                    .format("YYYY-MM-DD HH:mm")
                     .toString()
                 );
 
-                // TODO BOUCLER SUR LE TABLEAU POUR INSERER DES RDV
-
+                // loop to insert appointments in given date
                 for (let index = 0; index < timestampArray.length; index++) {
-                    await generateNewAppointment(1, timestampArray[index], endTimestampArray[index]); // FIXME: CHANGER LE SHOP ID avec this.id
+                    await generateNewAppointment(shopID, timestampArray[index], endTimestampArray[index]); 
                 };
 
             };
 
-
+            // function to add one appointment
             const generateNewAppointment = async function (shopID, slotStart, slotEnd) {
             
                 let newAppointment = new Appointment({
@@ -111,38 +96,88 @@ module.exports = {
                 await newAppointment.insert()
             };
 
-
+           let dateToCible = moment(dateStart, "YYYY-MM-DD").add(0, "day").format("YYYY-MM-DD").toString();
             
-
-            let dateToCible = moment(dateStart, "YYYY-MM-DD").add(0, "day").format("YYYY-MM-DD").toString();
-         
+            // loop to add appointments in a day
             for (let index = 0 ; dateToCible !== dateEnd; index++) {
 
                 dateToCible = moment(dateStart, "YYYY-MM-DD").add(index, "day").format("YYYY-MM-DD").toString();
-                console.log('dateToCible', dateToCible);
-                await generateNewAppointmentForADay(dateToCible, startHour, dateEnd);
 
+                const jourDeDateCible = moment(dateToCible, "YYYY-MM-DD").format("dddd").toString().toLowerCase();
+
+                // Switch to verify the dayy of the week and if it's a worked day
+                switch (jourDeDateCible) {
+                    case "monday":
+                        if(!!days.monday.amStart && !!days.monday.amEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.monday.amStart, days.monday.amEnd)
+                        };
+                        if(!!days.monday.pmStart && !!days.monday.pmEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.monday.pmStart, days.monday.pmEnd)
+                        };
+                        break;
+
+                    case "tuesday":
+                        if(!!days.tuesday.amStart && !!days.tuesday.amEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.tuesday.amStart, days.tuesday.amEnd)
+                        };
+                        if(!!days.tuesday.pmStart && !!days.tuesday.pmEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.tuesday.pmStart, days.tuesday.pmEnd)
+                        };
+                        break;
+
+                    case "wednesday":
+                        if(!!days.wednesday.amStart && !!days.wednesday.amEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.wednesday.amStart, days.wednesday.amEnd)
+                        };
+                        if(!!days.wednesday.pmStart && !!days.wednesday.pmEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.wednesday.pmStart, days.wednesday.pmEnd)
+                        };
+                        break;
+
+                    case "thursday":
+                        if(!!days.thursday.amStart && !!days.thursday.amEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.thursday.amStart, days.thursday.amEnd)
+                        };
+                        if(!!days.thursday.pmStart && !!days.thursday.pmEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.thursday.pmStart, days.thursday.pmEnd)
+                        };
+                        break;
+
+                    case "friday":
+                        if(!!days.friday.amStart && !!days.friday.amEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.friday.amStart, days.friday.amEnd)
+                        };
+                        if(!!days.friday.pmStart && !!days.friday.pmEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.friday.pmStart, days.friday.pmEnd)
+                        };
+                        break;
+
+                    case "saturday":
+                        if(!!days.saturday.amStart && !!days.saturday.amEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.saturday.amStart, days.saturday.amEnd)
+                        };
+                        if(!!days.saturday.pmStart && !!days.saturday.pmEnd) {
+                            await generateNewAppointmentForADay(dateToCible, days.saturday.pmStart, days.saturday.pmEnd)
+                        };
+                        break;
+
+                    case "sunday":
+                        if(!!days.sunday.amStart && !!days.sunday.amEnd) {
+                            generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd)
+                        };
+                        if(!!days.sunday.pmStart && !!days.sunday.pmEnd) {
+                            generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd)
+                        };
+                        break;
+
+                    default:
+                        break;
+                }
             }
 
-/*
-            generateNewAppointmentForADay(dateStart, startHour, endHour);
-*/
-
-
-
-             
-
         } catch (error) {
-
             console.log(error);
             res.end()
-
         }
-
     }
 }
-
-// TODO 🗳 methode qui verifie le jour de la semaine pour attribuer les bon parametre d'horraire sur la journée SWITCH
-    // * 🗳methode qui va boucler tous les jours la methode du dessous entre telle date et telle date
-        //! ✅ methode de prise de plusieurs rdv entre telle heure et telle heure (toutes les heures ou demi heure par ex)
-            //? ✅ methode de prise de un 1 rdv

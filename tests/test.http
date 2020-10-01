@@ -108,11 +108,53 @@ POST http://localhost:3001/pro/availableappointment
 Content-Type: application/json
 
 {
-    "dateStart": "2020-12-01",
-    "dateEnd": "2020-12-03",
-    "startHour": "09:00",
-    "endHour": "10:30",
-    "shopID": 2
+    "shopID": 2,
+    "dateStart": "2020-11-27",
+    "dateEnd": "2020-12-02",
+    "days": {
+        "monday":{
+            "amStart": "",
+            "amEnd": "",
+            "pmStart":"",
+            "pmEnd":""
+        },
+        "tuesday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"14:00",
+            "pmEnd":"15:00"
+        },
+        "wednesday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"14:00",
+            "pmEnd":"15:00"
+        },
+        "thursday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"14:00",
+            "pmEnd":"15:00"
+        },
+        "friday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"14:00",
+            "pmEnd":"15:00"
+        },
+        "saturday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"",
+            "pmEnd":""
+        },
+        "sunday":{
+            "amStart": "",
+            "amEnd": "",
+            "pmStart":"",
+            "pmEnd":""
+        }
+    }
 }
 
 
@@ -135,3 +177,9 @@ Content-Type: application/json
     "slotStart": "2020-10-20 22:00:0+02",
     "slotEnd": "2020-10-20 22:29:59+02"
 }
+
+
+
+
+
+
