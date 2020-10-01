@@ -104,7 +104,7 @@ Content-Type: application/json
 }
 
 ### test
-POST http://localhost:3000/pro/availableappointment
+POST http://localhost:3001/pro/availableappointment
 Content-Type: application/json
 
 {
