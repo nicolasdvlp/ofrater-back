@@ -8,4 +8,6 @@ const proController = require('../controllers/proController');
 router.get('/:id/profile', proController.getProfile);
 router.put('/profile', proController.updateProfile);
 
+router.post('/availableappointment', proController.postAvailableAppointment)
+
 module.exports = router;
