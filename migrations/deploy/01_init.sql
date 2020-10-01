@@ -80,8 +80,8 @@ CREATE TABLE "user" (
 
 CREATE TABLE "appointment" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    slot_start TIMESTAMPTZ NOT NULL,
-    slot_end TIMESTAMPTZ NOT NULL,
+    slot_start TIMESTAMP NOT NULL,
+    slot_end TIMESTAMP NOT NULL,
     is_attended boolean NOT NULL DEFAULT false,
     shop_id int REFERENCES shop(id) NOT NULL,
     user_id int REFERENCES "user"(id) NULL,
