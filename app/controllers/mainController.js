@@ -11,10 +11,6 @@ module.exports = {
             .json('Page not found');
     },
     
-
-
-
-    
     // Route "/mainsearch"
     async findCityOrZip(request, response) {
 
@@ -29,17 +25,6 @@ module.exports = {
         response.json(searchedShops);
     },
     
-
-
-
-
-
-
-
-
-
-
-
     // Route "/searchProByLocation"
     async findProByLocation(request, response) {
         

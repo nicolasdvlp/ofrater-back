@@ -55,7 +55,7 @@ INSERT INTO shop_has_service (shop_id, service_id) VALUES
 INSERT INTO user_owns_shop (shop_id, user_id) VALUES
 (1, 7),
 (3, 5),
-(2, 6);
+(2, 
 
 INSERT INTO shop_has_category (shop_id, category_id) VALUES
 (1, 1),
