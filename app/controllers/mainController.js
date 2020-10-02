@@ -1,6 +1,7 @@
 const Shop = require('../models/Shop');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const Role = require('../models/Role');
 
 module.exports = {
 
@@ -41,20 +42,25 @@ module.exports = {
     async findOnePro(request, response) {
         const proId = request.body.id;
         let pro;
+        let cat;
 
         try {
             pro = await Shop.findById(proId);
+
+            cat = await Role.findShopCategories(proId);
             
         } catch(error) {
             console.trace(error);
             response.status(404).json(`No professional found for id ${proId}.`)
         }
 
-        response.json(pro);
+
+
+        response.json({...pro, category: cat});
     },
 
     async register(request, response) {
-        const {first_name, last_name, phone_number, birth, mail, password, role_id} = request.body;
+        const { first_name, last_name, phone_number, birth, mail, password, role_id } = request.body;
         let shop_name, opening_time, address_name, address_number, city, postal_code;
 
         if (!first_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'first_name' }); };
