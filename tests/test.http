@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ### Route to create a new user (user registration)
-POST http://localhost:3006/registration
+POST http://localhost:3001/registration
 Content-Type: application/json
 
 {
@@ -32,7 +32,9 @@ Content-Type: application/json
     "phone_number": "0679958989",
     "birth": "12/01/1985",
     "mail": "patrick.Le@gmail.fr",
+    "checkmail": "patrick.Le@gmail.fr",
     "password": "azerty",
+    "checkpassword": "azerty",
     "role_id": 1
 }
 
