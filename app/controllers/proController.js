@@ -14,7 +14,7 @@ module.exports = {
             if (!request.body.id) { return res.status(400).json({ message: 'missing_required_parameter', info: 'id' }); };
 
             pro = await User.findById(request.body.id);
-        // FIXME:
+        
             for (const key of Object.keys(request.body)) {
                 if (key !== "id") {
                     pro[key] = request.body[key];
