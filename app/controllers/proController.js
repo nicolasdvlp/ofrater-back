@@ -87,6 +87,7 @@ module.exports = {
                 };
 
                 // endTimestampArray array
+
                 const endTimestampArray = startTimestampArray.map(date => 
                     moment(date, "YYYY-MM-DD HH:mm")
                     .add(30, "m")
@@ -96,6 +97,7 @@ module.exports = {
                 );
 
                 // loop to insert appointments in given date
+
                 for (let index = 0; index < startTimestampArray.length; index++) {
                     await generateNewAppointment(shopID, startTimestampArray[index], endTimestampArray[index]); 
                 };
