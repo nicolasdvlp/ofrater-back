@@ -69,16 +69,33 @@ module.exports = {
     },
 
     async register(request, response) {
-        const {first_name, last_name, phone_number, birth, mail, password, role_id} = request.body;
+        const { first_name, last_name, phone_number, birth, mail, password, role_id } = request.body;
         let shop_name, opening_time, address_name, address_number, city, postal_code;
 
+        if (!first_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'first_name' }); };
+        if (!last_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'last_name' }); };
+        if (!phone_number) { return response.status(400).json({ message: 'missing_required_parameter', info: 'phone_number' }); };
+        if (!birth) { return response.status(400).json({ message: 'missing_required_parameter', info: 'birth' }); };
+        if (!mail) { return response.status(400).json({ message: 'missing_required_parameter', info: 'mail' }); };
+        if (!password) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password' }); };
+        if (!role_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'role_id' }); };
+
         if (request.body.shop) {
+
             shop_name = request.body.shop.shop_name;
             opening_time = request.body.shop.opening_time;
             address_name = request.body.shop.address_name;
             address_number = request.body.shop.address_number;
             city = request.body.shop.city;
             postal_code = request.body.shop.postal_code;
+
+            if (!shop_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shop_name' }); };
+            if (!opening_time) { return response.status(400).json({ message: 'missing_required_parameter', info: 'opening_time' }); };
+            if (!address_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'address_name' }); };
+            if (!address_number) { return response.status(400).json({ message: 'missing_required_parameter', info: 'address_number' }); };
+            if (!city) { return response.status(400).json({ message: 'missing_required_parameter', info: 'city' }); };
+            if (!postal_code) { return response.status(400).json({ message: 'missing_required_parameter', info: 'postal_code' }); };
+
         }
 
         const _shop = {}
