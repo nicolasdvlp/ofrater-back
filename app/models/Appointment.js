@@ -5,7 +5,7 @@ class Appointment extends CoreModel {
 
     _slot_start;
     _slot_end;
-    _isAttended;
+    _is_attended;
     _shop_id;
     _user_id;
     _service_id;
@@ -15,7 +15,7 @@ class Appointment extends CoreModel {
         super(obj);
         this._slot_start = obj.slot_start;
         this._slot_end = obj.slot_end;
-        this._isAttended = obj.isAttended;
+        this._is_attended = obj.is_attended===undefined?false:obj.is_attended;
         this._shop_id = obj.shop_id;
         this._user_id = obj.user_id;
         this._service_id = obj.service_id;
@@ -34,8 +34,8 @@ class Appointment extends CoreModel {
         return this._slot_end;
     }
     
-    get isAttended() {
-        return this._isAttended;
+    get is_attended() {
+        return this._is_attended;
     }
     
     get shop_id() {
@@ -62,8 +62,8 @@ class Appointment extends CoreModel {
         this._slot_end = value;
     };
 
-    set isAttended(value) {
-        this._isAttended = value;
+    set is_attended(value) {
+        this._is_attended = value;
     };
 
     set shop_id(value) {
@@ -78,3 +78,5 @@ class Appointment extends CoreModel {
         this._service_id = value;
     };    
 }
+
+module.exports = Appointment;

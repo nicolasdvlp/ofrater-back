@@ -12,7 +12,6 @@ DROP TABLE category;
 DROP TABLE "role";
 DROP TABLE shop;
 DROP TABLE "service";
-DROP DOMAIN birthd;
 DROP DOMAIN star_eval;
 DROP DOMAIN pfloat;
 DROP DOMAIN phone;
