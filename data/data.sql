@@ -5,10 +5,12 @@ INSERT INTO "service" (price, duration, "name") VALUES
 (20, 30, 'rasage'),
 (10, 30, 'soin');
 
-INSERT INTO "shop" (shop_name, opening_time, address_name, address_number, city, postal_code) VALUES
-('BarbaBulle', 'du lundi au dimanche 7/7! de 9h à 19h', 'Place du Champ de Foire', 15, 'Arnac-la-Poste', '87160'),
-('Barbi Choux', 'lundi	Fermé\nmardi	09:30–19:30\nmercredi	09:30–19:30\njeudi	09:30–19:30\nvendredi	09:30–19:30\nsamedi	09:30–19:30\ndimanche	09:30–14:30', 'Place de l''Église', 1, 'Mouais', '44590'),
-('Séduc'' Tif', 'lundi	Fermé\nmardi au vendredi 09:30–19:30\nsamedi et dimanche fermé aussi', 'route de Tours', 40, 'Bourré', '41400');
+INSERT INTO "shop" (shop_name, opening_time, address_name, address_number, city, postal_code, avatar_shop) VALUES
+('BarbaBulle', 'du lundi au dimanche 7/7! de 9h à 19h', 'Place du Champ de Foire', 15, 'Arnac-la-Poste', '87160','https://i.pinimg.com/originals/ed/9f/00/ed9f00b1d16c3a8a02630e1c237c7f0a.jpg'),
+('Barbi Choux', 'lundi	Fermé\nmardi	09:30–19:30\nmercredi	09:30–19:30\njeudi	09:30–19:30\nvendredi	09:30–19:30\nsamedi	09:30–19:30\ndimanche	09:30–14:30', 'Place de lÉglise', 1, 'Mouais', '44590', 'https://le-de.cdn-website.com/1c7a0f4892624c47bcab835e7d0ca47b/dms3rep/multi/opt/5daed470720000fd99d16cc1_os-24517911-640w.png'),
+('Séduc Tif', 'lundi	Fermé\nmardi au vendredi 09:30–19:30\nsamedi et dimanche fermé aussi', 'route de Tours', 40, 'Bourré', '41400','https://le-de.cdn-website.com/1c7a0f4892624c47bcab835e7d0ca47b/dms3rep/multi/opt/5daed470720000fd99d16cc1_os-24517911-640w.png'),
+('Hug  barber shop','du lundi au dimanche 7/7! de 9h à 19h', 'Rue des chenapans', 39, 'Libon-sur-Loire','75000', 'https://cdn-elle.ladmedia.fr/var/plain_site/storage/images/beaute/soins/tendances/barbier/barbier-paris-11e/56320187-1-fre-FR/Barbier-Paris-11e.jpg'),
+('ALain-le-Malin','du lundi au dimanche 7/7! de 9h à 19h', 'Avenue des Cocotiers', 69, 'Lyon','42000', 'https://www.parisinfo.com/var/otcp/sites/images/node_43/node_51/node_77884/node_77888/salon-mus%C3%A9e-alain-ma%C3%AEtre-barbier-coiffeur-%7C-630x405-%7C-%C2%A9-dr/10938342-1-fre-FR/Salon-Mus%C3%A9e-Alain-Ma%C3%AEtre-Barbier-Coiffeur-%7C-630x405-%7C-%C2%A9-DR.jpg');
 
 INSERT INTO "role" ("name") VALUES
 ('client'),
