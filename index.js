@@ -51,4 +51,4 @@ app.use(mainController.error404);
 // ### Serveur Listener ###
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`);
-  });
+});

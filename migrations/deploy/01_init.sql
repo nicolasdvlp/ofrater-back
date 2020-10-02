@@ -48,7 +48,7 @@ CREATE TABLE "shop" (
     shop_name text NOT NULL,
     opening_time text NOT NULL,
     avatar_shop text, 
-    isActive boolean NOT NULL DEFAULT true, 
+    is_active boolean NOT NULL DEFAULT true, 
     address_name text NOT NULL,
     address_number int NOT NULL, 
     city text NOT NULL,
@@ -80,12 +80,12 @@ CREATE TABLE "user" (
 
 CREATE TABLE "appointment" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    slot_start TIMESTAMPTZ NOT NULL,
-    slot_end TIMESTAMPTZ NOT NULL,
-    isAttended boolean DEFAULT FALSE,
-    shop_id int REFERENCES shop(id),
-    user_id int REFERENCES "user"(id),
-    service_id int REFERENCES "service"(id)
+    slot_start TIMESTAMP NOT NULL,
+    slot_end TIMESTAMP NOT NULL,
+    is_attended boolean NOT NULL DEFAULT false,
+    shop_id int REFERENCES shop(id) NOT NULL,
+    user_id int REFERENCES "user"(id) NULL,
+    service_id int REFERENCES "service"(id) NULL
 );
 
 CREATE TABLE "review" (

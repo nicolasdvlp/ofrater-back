@@ -5,6 +5,20 @@ moment().format();
 
 module.exports = {
 
+    async getProfile (request, response) {
+
+        let pro;
+
+        try {
+            pro = await User.findById(request.params.id);
+        } catch(error) {
+            console.trace(error);
+            response.status(404).json(`No user found for id ${request.params.id}.`);
+        }
+
+        response.json(pro);
+    },
+
     async updateProfile (request, response) {
 
         let pro;
@@ -40,6 +54,7 @@ module.exports = {
             if (!dateStart) { return res.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
             if (!dateEnd) { return res.status(400).json({ message: 'missing_required_parameter', info: 'dateEnd' }); };
             if (!days) { return res.status(400).json({ message: 'missing_required_parameter', info: 'days {Object}' }); };
+
 
             // function a insert appointment un a day with starting hour and ending hour
             const generateNewAppointmentForADay = async function (date, startHour, endHour, shopID) {
