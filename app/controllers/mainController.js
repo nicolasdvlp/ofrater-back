@@ -2,6 +2,7 @@ const Shop = require('../models/Shop');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const Role = require('../models/Role');
+const { number } = require('joi');
 
 module.exports = {
 
@@ -40,7 +41,13 @@ module.exports = {
     },
 
     async findOnePro(request, response) {
-        const proId = request.body.id;
+        
+        const proId = parseInt(request.body.id);
+        
+        if (!request.body.id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
+        if (isNaN(proId)||proId<0||typeof proId !== number) { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'shopID' }); };
+        
+        
         let pro;
         let cat;
 
