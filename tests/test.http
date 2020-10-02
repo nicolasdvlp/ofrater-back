@@ -1,21 +1,21 @@
-### Search shop/pro by city name or zip code
-GET http://localhost:3006/mainsearch HTTP/1.1
+###
+GET http://localhost:3001/mainsearch HTTP/1.1
 content-type: application/json
 
 {
-    "input": "6"
+    "input": "4"
 }
 
 ### Route to find one professional
-GET http://localhost:3006/searchOnePro
+GET http://localhost:3001/searchOnePro
 Content-Type: application/json
 
 {
-    "id": 7
+    "id": 1
 }
 
 ### Route to find professionnals by location
-GET http://localhost:3006/searchProByLocation
+GET http://localhost:3001/searchProByLocation
 Content-Type: application/json
 
 {
@@ -23,33 +23,33 @@ Content-Type: application/json
 }
 
 ### Route to create a new user (user registration)
-POST http://localhost:3006/registration
+POST http://localhost:3000/registration
 Content-Type: application/json
 
 {
-    "first_name": "Patrick",
-    "last_name": "L'étoile de mer",
+    "first_name": "dsf",
+    "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "patrick.Le@gmail.fr",
+    "mail": "dzdddda@dz112da.fr",
     "password": "azerty",
     "role_id": 1
 }
 
 ### Route to create a new user and shop (user registration)
-POST http://localhost:3006/registration
+POST http://localhost:3000/registration
 Content-Type: application/json
 
 {
-    "first_name": "zizou",
+    "first_name": "dsf",
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "zizoupresident@zizou.fr",
+    "mail": "dzdda@dz112dkfjljmfmglads.fr",
     "password": "azerty",
     "role_id": 2,
     "shop": {
-        "shop_name" : "Zizou Président",
+        "shop_name" : "BarbaBulle2",
         "opening_time" : "du lundi au dimanche 7/7! de 9h à 19h",
         "address_name" : "Place du Champ de Foire",
         "address_number" : 16,
@@ -59,7 +59,7 @@ Content-Type: application/json
 }
 
 ### 
-POST http://localhost:3006/registration
+POST http://localhost:3000/registration
 Content-Type: application/json
 
 {
@@ -73,30 +73,19 @@ Content-Type: application/json
 }
 
 
-//  <<<<<<< availableAppointementPostMethod
-//  ### LOGIN 
-//  POST http://localhost:3006/login
-//  Content-Type: application/json
-//  >>>>>>> master
 
-
-### Route to access own profile for a client
-GET http://localhost:3011/client/12/profile
 
 ### Route to update a client profile
-PUT http://localhost:3006/client/profile
+PUT http://localhost:3002/client/profile
 Content-Type: application/json
 
 {
     "id": 25,
-    "first_name": "youpi"
+    "first_name": "youpi",
 }
 
-### Route to access own profile for a pro
-GET http://localhost:3012/pro/12/profile
-
 ### Route to update a professional profile
-PUT http://localhost:3006/pro/profile
+PUT http://localhost:3003/pro/profile
 Content-Type: application/json
 
 {

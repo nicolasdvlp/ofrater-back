@@ -1,6 +1,7 @@
 const Shop = require('../models/Shop');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const Role = require('../models/Role');
 
 module.exports = {
 
@@ -9,10 +10,6 @@ module.exports = {
             .status(404)
             .json('Page not found');
     },
-    
-
-
-
     
     // Route "/mainsearch"
     async findCityOrZip(request, response) {
@@ -28,17 +25,6 @@ module.exports = {
         response.json(searchedShops);
     },
     
-
-
-
-
-
-
-
-
-
-
-
     // Route "/searchProByLocation"
     async findProByLocation(request, response) {
         
@@ -56,16 +42,21 @@ module.exports = {
     async findOnePro(request, response) {
         const proId = request.body.id;
         let pro;
+        let cat;
 
         try {
             pro = await Shop.findById(proId);
+
+            cat = await Role.findShopCategories(proId);
             
         } catch(error) {
             console.trace(error);
             response.status(404).json(`No professional found for id ${proId}.`)
         }
 
-        response.json(pro);
+
+
+        response.json({...pro, category: cat});
     },
 
     async register(request, response) {
