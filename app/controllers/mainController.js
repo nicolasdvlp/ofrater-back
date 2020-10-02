@@ -60,7 +60,7 @@ module.exports = {
     },
 
     async register(request, response) {
-        const { first_name, last_name, phone_number, birth, mail, password, role_id } = request.body;
+        const { first_name, last_name, phone_number, birth, mail, checkmail, password, checkpassword, role_id } = request.body;
         let shop_name, opening_time, address_name, address_number, city, postal_code;
 
         if (!first_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'first_name' }); };
@@ -68,7 +68,9 @@ module.exports = {
         if (!phone_number) { return response.status(400).json({ message: 'missing_required_parameter', info: 'phone_number' }); };
         if (!birth) { return response.status(400).json({ message: 'missing_required_parameter', info: 'birth' }); };
         if (!mail) { return response.status(400).json({ message: 'missing_required_parameter', info: 'mail' }); };
+        if (!checkmail) { return response.status(400).json({ message: 'missing_required_parameter', info: 'checkmail' }); };
         if (!password) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password' }); };
+        if (!checkpassword) { return response.status(400).json({ message: 'missing_required_parameter', info: 'checkpassword' }); };
         if (!role_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'role_id' }); };
 
         if (request.body.shop) {
@@ -108,8 +110,14 @@ module.exports = {
 
             const hash = bcrypt.hashSync(password, saltRounds);
 
-            newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
-            await newUser.insert();
+            if (password === checkpassword && mail === checkmail) {
+                newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
+                await newUser.insert();
+            } else if (password !== checkpassword) {
+                return response.json(`Your password could not be checked.`);
+            } else if (mail !== checkmail) {
+                return response.json(`Your mail address could not be checked.`)
+            }
 
 
             // console.log('dans le main controller newUser :', newUser);
