@@ -7,10 +7,11 @@ const router = express.Router();
 /**
  * Routes /client
  */
-router.get('/:id/profile', clientController.getProfile);
+router.post('/profile', clientController.getProfile);
 router.put('/profile', clientController.updateProfile);
 
-
+// to book an appointment
+router.post('/book', clientController.bookAnAppointement);
 
 
 module.exports = router;
