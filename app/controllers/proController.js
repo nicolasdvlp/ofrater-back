@@ -193,5 +193,28 @@ module.exports = {
             console.log(error);
             res.end()
         }
-    }
+    },
+
+    async getAppointmentsPro (request, response) {
+
+        let rdvs = [];
+
+        try {
+
+            let { shopID, dateStart, dateEnd } = request.body
+
+            if (!shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
+            if (!dateStart) { return rresponses.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
+
+            if (!dateEnd) { dateEnd = dateStart };
+            
+            rdvs = await Appointment.getAppointmentShop(dateStart, dateEnd, shopID);
+
+        } catch(error) {
+            console.trace(error);
+            response.status(404).json(`No appointment founded for shopID ${request.params.shopID}.`);
+        }
+
+        response.json(rdvs);
+    },
 }
