@@ -10,10 +10,14 @@ module.exports = {
         let pro;
 
         try {
-            pro = await User.findById(request.params.id);
+    
+            if (!request.body.shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
+
+            pro = await User.findById(request.body.shopID);
+    
         } catch(error) {
             console.trace(error);
-            response.status(404).json(`No user found for id ${request.params.id}.`);
+            response.status(404).json(`No shop found for id ${request.params.shopID}.`);
         }
 
         response.json(pro);
@@ -24,7 +28,10 @@ module.exports = {
         let pro;
 
         try {
-            pro = await User.findById(request.body.id);
+
+            if (!request.body.shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
+
+            pro = await User.findById(request.body.shopID);
 
             for (const key of Object.keys(request.body)) {
                 if (key !== "id") {
@@ -32,12 +39,15 @@ module.exports = {
                 };
 
             }
-        } catch(error) {
-            console.trace(error);
-            response.status(404).json(`Could not find user with id ${request.body.id};`)
-        }
 
-        pro.update();
+            pro.update();
+
+        } catch(error) {
+
+            console.trace(error);
+            response.status(404).json(`Could not find shop with id ${request.body.shopID};`)
+
+        }
 
         response.json(pro);
     },
