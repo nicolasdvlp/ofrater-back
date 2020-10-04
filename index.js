@@ -46,7 +46,7 @@ app.use(session({
 app.use(mainRouter);
 app.use('/client', clientRouter);
 app.use('/pro', proRouter);
-app.use(mainController.error404);
+// app.use(mainController.error404);
 
 // ### Serveur Listener ###
 app.listen(PORT, () => {

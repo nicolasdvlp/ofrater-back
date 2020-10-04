@@ -77,6 +77,20 @@ class Appointment extends CoreModel {
     set service_id(value) {
         this._service_id = value;
     };    
+
+    static async getAppointmentShop(dateStart, dateEnd=dateStart, shopId) {
+
+        const query = {
+            text: `select * from appointment where DATE(slot_start) BETWEEN $1 AND $2 and shop_id = $3 ORDER BY slot_start ASC ;`,
+                values: [dateStart, dateEnd, shopId],
+            };
+
+        const result = await db.query(query); 
+
+        return result.rows;
+
+    }
+
 }
 
 module.exports = Appointment;
