@@ -235,7 +235,7 @@ Content-Type: application/json
 
 {
     "shopID": 1,
-    "dateStart": "30/11/2020",
-    "dateEnd": ""
+    "dateStart": "2020-11-28",
+    "dateEnd": "2020-11-30"
 }
 
