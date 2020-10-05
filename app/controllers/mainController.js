@@ -45,7 +45,7 @@ module.exports = {
         const proId = parseInt(request.body.id);
         
         if (!request.body.id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
-        if (isNaN(proId)||proId<0||typeof proId !== number) { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'shopID' }); };
+        // if (isNaN(proId)||proId<0||typeof proId !== number) { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'shopID' }); };
         
         
         let pro;

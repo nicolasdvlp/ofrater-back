@@ -11,7 +11,7 @@ POST  http://localhost:3000/searchOnePro
 Content-Type: application/json
 
 {
-    "id": -7
+    "id": ""
 }
 
 ### Route to find professionnals by location
