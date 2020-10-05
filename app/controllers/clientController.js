@@ -62,9 +62,9 @@ module.exports = {
         if (!userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
         if (!serviceID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
 
-        if (isNaN(appointmentID)||appointmentID<0||typeof appointmentID !== number) { return response.status(400).json({ message: 'appointmentID must be a positive number', info: 'appointmentID' }); };
-        if (isNaN(userID)||userID<0||typeof userID !== number) { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
-        if (isNaN(serviceID)||serviceID<0||typeof serviceID !== number) { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
+        if (isNaN(appointmentID)||appointmentID<=0||typeof appointmentID !== 'number') { return response.status(400).json({ message: 'appointmentID must be a positive number', info: 'appointmentID' }); };
+        if (isNaN(userID)||userID<=0||typeof userID !== 'number') { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
+        if (isNaN(serviceID)||serviceID<=0||typeof serviceID !== 'number') { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
         
         let rdv;
 
