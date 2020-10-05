@@ -7,7 +7,7 @@ content-type: application/json
 }
 
 ### Route to find one professional
-POST  http://localhost:3000/searchOnePro
+POST  http://localhost:3000/searchonepro
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### Route to find professionnals by location
-GET http://localhost:3000/searchProByLocation
+GET http://localhost:3000/searchprobylocation
 Content-Type: application/json
 
 {
