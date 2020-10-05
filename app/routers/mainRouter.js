@@ -8,7 +8,7 @@ const userMiddleware = require('../middlewares/userMiddleware');
 /**
  * Test route
  */
-router.get('/hello', (req, res) => {console.log("Hello Wordl!");})
+router.get('/hello', (req, res) => {res.json("Hello Wordl!");})
 
 /**
  * Routes Search
