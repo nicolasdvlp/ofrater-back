@@ -96,8 +96,8 @@ class Appointment extends CoreModel {
         const query = {
             text: `
             SELECT appointment.*, shop.shop_name, shop.opening_time, shop.avatar_shop, shop.is_active, shop.address_name, shop.address_number, shop.city, shop.postal_code, service.price, service.duration, service.name FROM appointment  JOIN shop ON appointment.shop_id = shop.id JOIN service ON appointment.service_id = service.id WHERE user_id = $1 AND appointment.slot_start > now() ORDER BY appointment.slot_start DESC ;`,
-                values: [userID],
-            };
+            values: [userID],
+        };
 
         const result = await db.query(query); 
 
@@ -109,8 +109,8 @@ class Appointment extends CoreModel {
 
         const query = {
             text: `SELECT appointment.*, shop.shop_name, shop.opening_time, shop.avatar_shop, shop.is_active, shop.address_name, shop.address_number, shop.city, shop.postal_code, service.price, service.duration, service.name FROM appointment  JOIN shop ON appointment.shop_id = shop.id JOIN service ON appointment.service_id = service.id WHERE user_id = $1 AND appointment.slot_start < now() ORDER BY appointment.slot_start DESC ;`,
-                values: [userID],
-            };
+            values: [userID],
+        };
 
         const result = await db.query(query); 
 
@@ -121,11 +121,9 @@ class Appointment extends CoreModel {
     static async getAllHistoryUserAppointments(userID) {
 
         const query = {
-            text: `
-            SELECT appointment.*, shop.shop_name, shop.opening_time, shop.avatar_shop, shop.is_active, shop.address_name, shop.address_number, shop.city, shop.postal_code, service.price, service.duration, service.name FROM appointment  JOIN shop ON appointment.shop_id = shop.id JOIN service ON appointment.service_id = service.id WHERE user_id = $1 ORDER BY appointment.slot_start DESC ;`,
-
-                values: [userID],
-            };
+            text: `SELECT appointment.*, shop.shop_name, shop.opening_time, shop.avatar_shop, shop.is_active, shop.address_name, shop.address_number, shop.city, shop.postal_code, service.price, service.duration, service.name FROM appointment  JOIN shop ON appointment.shop_id = shop.id JOIN service ON appointment.service_id = service.id WHERE user_id = $1 ORDER BY appointment.slot_start DESC ;`,
+            values: [userID],
+        };
 
         const result = await db.query(query); 
 

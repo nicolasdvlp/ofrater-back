@@ -43,6 +43,24 @@ class Service extends CoreModel {
     set duration(value) {
         this._duration = value
     }
+
+    static async getShopServices(shopID) {
+
+            const query = {
+                text: `SELECT service.* FROM service JOIN shop_has_service ON shop_has_service.service_id = service.id  WHERE shop_has_service.shop_id = $1;`,
+                values: [shopID],
+            };
+    
+            const result = await db.query(query); 
+    
+            return result.rows;
+    
+        }
+
 }
+
+
+
+
 
 module.exports = Service;

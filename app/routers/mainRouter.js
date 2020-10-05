@@ -14,8 +14,12 @@ router.post('/mainsearch', mainController.findCityOrZip);
 // Route to get Pro detailscontacté par téléphone au numéro que vous avez in
 router.post('/searchOnePro', mainController.findOnePro);
 // Route to get list of pro by location
-router.get('/searchProByLocation', mainController.findProByLocation);
+router.post('/searchProByLocation', mainController.findProByLocation);
 
+/**
+ * To get service's shop
+ */
+router.post('/services', mainController.getShopServices);
 
 
 /**

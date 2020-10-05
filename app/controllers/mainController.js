@@ -3,6 +3,9 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const Role = require('../models/Role');
 const { number } = require('joi');
+const { getShopServices } = require('../models/Service');
+const Appointment = require('../models/Appointment');
+const Service = require('../models/Service');
 
 module.exports = {
 
@@ -29,13 +32,16 @@ module.exports = {
     // Route "/searchProByLocation"
     async findProByLocation(request, response) {
         
+        const { zipOrCity } = request.body
         let findedPros;
 
+        if (!zipOrCity) { return response.status(400).json({ message: 'missing_required_parameter', info: 'zipOrCity' }); };
+
         try {
-            findedPros = await Shop.findShopByCity(request.body.zipOrCity);
+            findedPros = await Shop.findShopByCity(zipOrCity);
         } catch (error) {
             console.log(error);
-            response.status(404).json(`No professional found for location : ${request.body.zipOrCity}.`)
+            response.status(404).json(`No professional found for location : ${zipOrCity}.`)
         }
         response.json(findedPros);
     },
@@ -45,7 +51,7 @@ module.exports = {
         const proId = parseInt(request.body.id);
         
         if (!request.body.id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
-        // if (isNaN(proId)||proId<0||typeof proId !== number) { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'shopID' }); };
+        if (isNaN(proId)||proId<=0||typeof proId !== 'number') { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'shopID' }); };
         
         
         let pro;
@@ -131,9 +137,6 @@ module.exports = {
                 return response.json(`Your password must contain at least one lowercase letter, one uppercase letter, one digit and be composed of minimum 6 characters.`);
             }
 
-
-            // console.log('dans le main controller newUser :', newUser);
-
             if(newUser.role_id === 2) {
                 newShop = new Shop({ 
                     shop_name: _shop.shop_name,
@@ -149,11 +152,11 @@ module.exports = {
                 await newUser.ownShop(newShop);
             }
 
-
-
         } catch(error) {
+
             console.trace(error);
             response.status(404).json(`New user could not have been created.`);
+
         }
 
         response.json(newUser);
@@ -163,14 +166,20 @@ module.exports = {
 
         const { mail, password } = request.body
 
+        if (!mail) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shop_name' }); };
+        if (!password) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password' }); };
+
         try {
+
             const userToConnect = await User.findByMail(mail);
             if(await bcrypt.compare(password, userToConnect.password)) {
                 request.session.user = userToConnect;
             }
 
         } catch (error) {
+
             console.log(error);    
+
         }
 
         response.json('Logged in.')
@@ -187,6 +196,26 @@ module.exports = {
         }
 
         res.json('User logged out.');
+    },
+
+    async getShopServices(req, res) {
+
+        const { shopID } = req.body;
+        let services = [];
+        if (!shopID) { return res.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
+        
+        try {
+
+            services = await Service.getShopServices(shopID);
+
+        } catch (error) {
+
+            console.log(error);    
+        }
+
+        res.json(services)
     }
+
+
 
 }
