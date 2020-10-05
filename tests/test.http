@@ -56,6 +56,20 @@ Content-Type: application/json
     "role_id": 1
 }
 
+### Route to create a new user (user registration)
+PUT http://localhost:3003/client/profile
+Content-Type: application/json
+
+{
+    "userID": 1,
+    "first_name": "rene",
+    "phone_number": "0679958989",
+    "birth": "12/01/1985",
+    "role_id": 1
+}
+
+
+
 ### Route to create a new user and shop (user registration)
 POST http://localhost:3006/registration
 Content-Type: application/json
@@ -259,3 +273,20 @@ Content-Type: application/json
     "dateEnd": "2020-11-30"
 }
 
+### Book an appointment
+PUT http://localhost:3003/client/book
+Content-Type: application/json
+
+{
+    "appointment_id": 1,
+    "user_id": 2,
+    "service_id": 2
+}
+
+###  Cancel an appointment for a client
+PUT http://localhost:3003/client/deleteappointment
+Content-Type: application/json
+
+{
+    "id": 1
+}
