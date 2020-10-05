@@ -6,9 +6,13 @@ const userMiddleware = require('../middlewares/userMiddleware');
 
 
 /**
+ * Test route
+ */
+router.get('/hello', (req, res) => {console.log("Hello Wordl!");})
+
+/**
  * Routes Search
  */
-
 // Route for city and zip in the main page
 router.post('/mainsearch', mainController.findCityOrZip);
 // Route to get Pro detailscontacté par téléphone au numéro que vous avez in
