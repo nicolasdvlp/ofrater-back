@@ -9,6 +9,7 @@ const mainRouter = require('./app/routers/mainRouter');
 const clientRouter = require('./app/routers/clientRouter');
 const proRouter = require('./app/routers/proRouter');
 const mainController = require('./app/controllers/mainController');
+const cors = require('cors');
 
 
 const app = express();
@@ -29,6 +30,8 @@ app.use(session({
     maxAge: (1000 * 60 * 60 * 10) // 10 hours
    } 
 }))
+
+app.use(cors())
 
 // check session 
 // app.use((req, _, next) => {
