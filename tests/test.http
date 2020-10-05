@@ -22,6 +22,15 @@ Content-Type: application/json
     "zipOrCity": "4"
 }
 
+### Route to find professionnals by location
+POST http://localhost:3000/services
+Content-Type: application/json
+
+{
+    "shopID": "2"
+}
+
+
 ### get Profile client
 
 POST http://localhost:3000/client/profile
