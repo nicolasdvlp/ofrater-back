@@ -91,6 +91,44 @@ class Appointment extends CoreModel {
 
     }
 
+    static async getUpcomingUserAppointment(userID) {
+
+        const query = {
+            text: `SELECT appointment.*, shop.shop_name, shop.opening_time, shop.avatar_shop, shop.is_active, shop.address_name, shop.address_number, shop.city, shop.postal_code FROM appointment JOIN shop ON appointment.shop_id = shop.id  WHERE user_id = 1 AND appointment.slot_start > now() ORDER BY appointment.slot_start DESC ;`,
+                values: [dateStart, dateEnd, shopId],
+            };
+
+        const result = await db.query(query); 
+
+        return result.rows;
+
+    }
+
+    static async getHistoryUserAppointments(userID) {
+
+        const query = {
+            text: `SELECT appointment.*, shop.shop_name, shop.opening_time, shop.avatar_shop, shop.is_active, shop.address_name, shop.address_number, shop.city, shop.postal_code FROM appointment JOIN shop ON appointment.shop_id = shop.id  WHERE user_id = 1 AND appointment.slot_start < now() ORDER BY appointment.slot_start DESC ;`,
+                values: [dateStart, dateEnd, shopId],
+            };
+
+        const result = await db.query(query); 
+
+        return result.rows;
+
+    }
+
+    static async getAllHistoryUserAppointments(userID) {
+
+        const query = {
+            text: `SELECT appointment.*, shop.shop_name, shop.opening_time, shop.avatar_shop, shop.is_active, shop.address_name, shop.address_number, shop.city, shop.postal_codeF ROM appointment JOIN shop ON appointment.shop_id = shop.id WHERE user_id = 1 ORDER BY appointment.slot_start DESC ;`,
+                values: [userID],
+            };
+
+        const result = await db.query(query); 
+
+        return result.rows;
+
+    }
 }
 
 module.exports = Appointment;
