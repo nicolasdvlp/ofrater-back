@@ -1,5 +1,5 @@
 ### Search shop/pro by city name or zip code
-GET http://localhost:3006/mainsearch HTTP/1.1
+POST http://localhost:3006/mainsearch HTTP/1.1
 content-type: application/json
 
 {
@@ -7,11 +7,11 @@ content-type: application/json
 }
 
 ### Route to find one professional
-GET http://localhost:3006/searchOnePro
+POST  http://localhost:3000/searchOnePro
 Content-Type: application/json
 
 {
-    "id": 7
+    "id": -7
 }
 
 ### Route to find professionnals by location

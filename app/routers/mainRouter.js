@@ -10,9 +10,9 @@ const userMiddleware = require('../middlewares/userMiddleware');
  */
 
 // Route for city and zip in the main page
-router.get('/mainsearch', mainController.findCityOrZip);
+router.post('/mainsearch', mainController.findCityOrZip);
 // Route to get Pro detailscontacté par téléphone au numéro que vous avez in
-router.get('/searchOnePro', mainController.findOnePro);
+router.post('/searchOnePro', mainController.findOnePro);
 // Route to get list of pro by location
 router.get('/searchProByLocation', mainController.findProByLocation);
 

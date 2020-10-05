@@ -23,18 +23,24 @@ module.exports = {
 
         let pro;
 
-        try {
-            pro = await User.findById(request.body.id);
+        const {id} = req.body;
+        const shopID = parseInt(id);
 
+        try {
+
+            if (isNaN(shopID)||shopID<0) { return res.status(400).json({ message: 'ShopID must be a positive number', info: 'shopID' }); };
+            if (!id) { return res.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
+
+            pro = await User.findById(shopID);
+        
             for (const key of Object.keys(request.body)) {
                 if (key !== "id") {
                     pro[key] = request.body[key];
                 };
-
             }
         } catch(error) {
             console.trace(error);
-            response.status(404).json(`Could not find user with id ${request.body.id};`)
+            response.status(404).json(`Could not find user with id ${shopID};`)
         }
 
         pro.update();
@@ -46,13 +52,13 @@ module.exports = {
 
         try {
 
-            const { 
-                shopID,
-                dateStart,
-                dateEnd,
-                days
-            } = req.body
+            const { shopID, dateStart, dateEnd, days } = req.body
             
+            if (!shopID) { return res.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
+            if (!dateStart) { return res.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
+            if (!dateEnd) { return res.status(400).json({ message: 'missing_required_parameter', info: 'dateEnd' }); };
+            if (!days) { return res.status(400).json({ message: 'missing_required_parameter', info: 'days {Object}' }); };
+
             // function a insert appointment un a day with starting hour and ending hour
             const generateNewAppointmentForADay = async function (date, startHour, endHour, shopID) {
 
@@ -84,7 +90,8 @@ module.exports = {
                 };
 
                 // endTimestampArray array
-                const endTimestampArray = timestampArray.map(date => 
+
+                const endTimestampArray = startTimestampArray.map(date => 
                     moment(date, "YYYY-MM-DD HH:mm")
                     .add(30, "m")
                     .subtract(1, 'm')
@@ -93,8 +100,9 @@ module.exports = {
                 );
 
                 // loop to insert appointments in given date
-                for (let index = 0; index < timestampArray.length; index++) {
-                    await generateNewAppointment(shopID, timestampArray[index], endTimestampArray[index]); 
+
+                for (let index = 0; index < startTimestampArray.length; index++) {
+                    await generateNewAppointment(shopID, startTimestampArray[index], endTimestampArray[index]); 
                 };
 
             };
@@ -123,75 +131,78 @@ module.exports = {
                 switch (jourDeDateCible) {
                     case "monday":
                         if(!!days.monday.amStart && !!days.monday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.monday.amStart, days.monday.amEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.monday.amStart, days.monday.amEnd, shopID)
                         };
                         if(!!days.monday.pmStart && !!days.monday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.monday.pmStart, days.monday.pmEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.monday.pmStart, days.monday.pmEnd, shopID)
                         };
                         break;
 
                     case "tuesday":
                         if(!!days.tuesday.amStart && !!days.tuesday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.tuesday.amStart, days.tuesday.amEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.tuesday.amStart, days.tuesday.amEnd, shopID)
                         };
                         if(!!days.tuesday.pmStart && !!days.tuesday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.tuesday.pmStart, days.tuesday.pmEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.tuesday.pmStart, days.tuesday.pmEnd, shopID)
                         };
                         break;
 
                     case "wednesday":
                         if(!!days.wednesday.amStart && !!days.wednesday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.wednesday.amStart, days.wednesday.amEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.wednesday.amStart, days.wednesday.amEnd, shopID)
                         };
                         if(!!days.wednesday.pmStart && !!days.wednesday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.wednesday.pmStart, days.wednesday.pmEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.wednesday.pmStart, days.wednesday.pmEnd, shopID)
                         };
                         break;
 
                     case "thursday":
                         if(!!days.thursday.amStart && !!days.thursday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.thursday.amStart, days.thursday.amEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.thursday.amStart, days.thursday.amEnd, shopID)
                         };
                         if(!!days.thursday.pmStart && !!days.thursday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.thursday.pmStart, days.thursday.pmEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.thursday.pmStart, days.thursday.pmEnd, shopID)
                         };
                         break;
 
                     case "friday":
                         if(!!days.friday.amStart && !!days.friday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.friday.amStart, days.friday.amEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.friday.amStart, days.friday.amEnd, shopID)
                         };
                         if(!!days.friday.pmStart && !!days.friday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.friday.pmStart, days.friday.pmEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.friday.pmStart, days.friday.pmEnd, shopID)
                         };
                         break;
 
                     case "saturday":
                         if(!!days.saturday.amStart && !!days.saturday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.saturday.amStart, days.saturday.amEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.saturday.amStart, days.saturday.amEnd, shopID)
                         };
                         if(!!days.saturday.pmStart && !!days.saturday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.saturday.pmStart, days.saturday.pmEnd)
+                            await generateNewAppointmentForADay(dateToCible, days.saturday.pmStart, days.saturday.pmEnd, shopID)
                         };
                         break;
 
                     case "sunday":
                         if(!!days.sunday.amStart && !!days.sunday.amEnd) {
-                            generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd)
+                            generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd, shopID)
                         };
                         if(!!days.sunday.pmStart && !!days.sunday.pmEnd) {
-                            generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd)
+                            generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd, shopID)
                         };
                         break;
 
                     default:
+                        // TODO:
                         break;
                 }
             }
-
+            
         } catch (error) {
+
             console.log(error);
-            res.end()
+            return res.status(500).json({ message: 'Internal server error' });
+
         }
     }
 }
