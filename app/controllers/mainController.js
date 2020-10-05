@@ -108,15 +108,20 @@ module.exports = {
 
         try {
 
+            const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
             const hash = bcrypt.hashSync(password, saltRounds);
 
-            if (password === checkpassword && mail === checkmail) {
-                newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
-                await newUser.insert();
-            } else if (password !== checkpassword) {
-                return response.json(`Your password could not be checked.`);
-            } else if (mail !== checkmail) {
-                return response.json(`Your mail address could not be checked.`)
+            if (passwordRegex.test(password)) {
+                if (password === checkpassword && mail === checkmail) {
+                    newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
+                    await newUser.insert();
+                } else if (password !== checkpassword) {
+                    return response.json(`Your password could not be checked.`);
+                } else if (mail !== checkmail) {
+                    return response.json(`Your mail address could not be checked.`)
+                }
+            } else if (!passwordRegex.test(password)) {
+                return response.json(`Your password must contain at least one lowercase letter, one uppercase letter, one digit and be composed of minimum 6 characters.`);
             }
 
 
