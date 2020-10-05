@@ -11,7 +11,10 @@ router.post('/profile', clientController.getProfile);
 router.put('/profile', clientController.updateProfile);
 
 // to book an appointment
-router.post('/book', clientController.bookAnAppointement);
+router.put('/book', clientController.bookAnAppointement);
+
+// to delete an appointment
+router.put('/cancelAppointment', clientController.cancelAppointment);
 
 
 module.exports = router;

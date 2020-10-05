@@ -40,7 +40,7 @@ module.exports = {
             client = await User.findById(request.body.userID);
 
             for (const key of Object.keys(request.body)) {
-                if (key !== "id") {
+                if (key !== "userID") {
                     client[key] = request.body[key];
                 };
 
@@ -58,24 +58,24 @@ module.exports = {
 
     async bookAnAppointement (request, response) {
 
-        const { appointmentID, userID, serviceID } = request.body;
-        
-        if (!appointmentID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'appointmentID' }); };
-        if (!userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
-        if (!serviceID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
+        const { appointment_id, user_id, service_id } = request.body;
 
-        if (isNaN(appointmentID)||appointmentID<=0||typeof appointmentID !== 'number') { return response.status(400).json({ message: 'appointmentID must be a positive number', info: 'appointmentID' }); };
-        if (isNaN(userID)||userID<=0||typeof userID !== 'number') { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
-        if (isNaN(serviceID)||serviceID<=0||typeof serviceID !== 'number') { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
+        if (!appointment_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'appointment_id' }); };
+        if (!user_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
+        if (!service_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
+
+        if (isNaN(appointment_id)||appointment_id<0||typeof appointment_id !== 'number') { return response.status(400).json({ message: 'appointment_id must be a positive number', info: 'appointment_id' }); };
+        if (isNaN(user_id)||user_id<0||typeof user_id !== 'number') { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
+        if (isNaN(service_id)||service_id<0||typeof service_id !== 'number') { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
         
         let rdv;
 
         try {
 
-            rdv = await Appointment.findById(appointmentID);
+            rdv = await Appointment.findById(appointment_id);
 
             for (const key of Object.keys(request.body)) {
-                if (key !== "id") {
+                if (key !== "appointment_id") {
                     rdv[key] = request.body[key];
                 };
 
@@ -90,8 +90,27 @@ module.exports = {
 
         }
 
-        response.json(pro);
+        response.json(rdv);
     },
 
+    async cancelAppointment(request, response) {
+
+        let appointment;
+
+        try {
+            appointment = await Appointment.findById(request.body.id);
+
+            appointment.user_id = null;
+            appointment.service_id = null;
+
+            appointment.update();
+        } catch(error) {
+            console.trace(error);
+            return response.json(`Your appointment could not have been cancelled.`);
+        }
+
+
+        response.json(appointment);
+    }
 
 }
