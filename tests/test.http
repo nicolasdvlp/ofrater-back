@@ -70,7 +70,7 @@ Content-Type: application/json
 }
 
 ### 
-POST http://localhost:3006/registration
+POST http://localhost:3001/registration
 Content-Type: application/json
 
 {
@@ -79,7 +79,9 @@ Content-Type: application/json
     "phone_number": "0679958989",
     "birth": "12/01/1985",
     "mail": "toto@tata.fr",
-    "password": "azerty",
+    "checkmail": "toto@tata.fr",
+    "password": "azertyA6",
+    "checkpassword": "azertyA6",
     "role_id": 1
 }
 
