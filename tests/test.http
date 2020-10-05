@@ -11,15 +11,24 @@ POST  http://localhost:3000/searchOnePro
 Content-Type: application/json
 
 {
-    "id": ""
+    "id": "2"
 }
 
 ### Route to find professionnals by location
-GET http://localhost:3006/searchProByLocation
+GET http://localhost:3000/searchProByLocation
 Content-Type: application/json
 
 {
     "zipOrCity": "4"
+}
+
+### get Profile client
+
+POST http://localhost:3000/client/profile
+Content-Type: application/json
+
+{
+    "userID": "2"
 }
 
 ### Route to create a new user (user registration)

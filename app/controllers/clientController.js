@@ -5,22 +5,26 @@ module.exports = {
 
     async getProfile (request, response) {
 
+        const { userID } = request.body
+
         let client;
 
         try {
     
-            if (!request.body.userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
+            if (!userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
 
-            client = await User.findById(request.body.userID);
+            client = await User.findById(userID);
+            upcomingAppointment = await Appointment.getUpcomingUserAppointment(userID);
+            historyAppointment = await Appointment.getHistoryUserAppointments(userID)
 
         } catch(error) {
 
             console.trace(error);
-            response.status(404).json(`No user found for id ${request.params.userID}.`);
+            response.status(404).json(`No user found for id ${userID}.`);
 
         }
 
-        response.json(client);
+        response.json({ ...client, upcomingAppointment, historyAppointment });
     },
 
     async updateProfile (request, response) {
