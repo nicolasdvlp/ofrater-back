@@ -50,9 +50,9 @@ Content-Type: application/json
     "phone_number": "0679958989",
     "birth": "12/01/1985",
     "mail": "patrick.Le@gmail.fr",
-    "checkmail": "patrick.Le@gmail.fr",
+    "mail_confirm": "patrick.Le@gmail.fr",
     "password": "azerty",
-    "checkpassword": "azerty",
+    "password_confirm": "azerty",
     "role_id": 1
 }
 
@@ -88,9 +88,9 @@ Content-Type: application/json
     "phone_number": "0679958989",
     "birth": "12/01/1985",
     "mail": "toto@tata.fr",
-    "checkmail": "toto@tata.fr",
+    "mail_confirm": "toto@tata.fr",
     "password": "azertyA6",
-    "checkpassword": "azertyA6",
+    "password_confirm": "azertyA6",
     "role_id": 1
 }
 

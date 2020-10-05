@@ -130,6 +130,7 @@ class Appointment extends CoreModel {
         return result.rows;
 
     }
+
 }
 
 module.exports = Appointment;

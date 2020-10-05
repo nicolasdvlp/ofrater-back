@@ -10,7 +10,7 @@ module.exports = {
         let client;
 
         try {
-    
+
             if (!userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
 
             client = await User.findById(userID);

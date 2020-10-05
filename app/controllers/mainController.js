@@ -73,7 +73,7 @@ module.exports = {
     },
 
     async register(request, response) {
-        const { first_name, last_name, phone_number, birth, mail, checkmail, password, checkpassword, role_id } = request.body;
+        const { first_name, last_name, phone_number, birth, mail, mail_confirm, password, password_confirm, role_id } = request.body;
         let shop_name, opening_time, address_name, address_number, city, postal_code;
 
         if (!first_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'first_name' }); };
@@ -81,9 +81,9 @@ module.exports = {
         if (!phone_number) { return response.status(400).json({ message: 'missing_required_parameter', info: 'phone_number' }); };
         if (!birth) { return response.status(400).json({ message: 'missing_required_parameter', info: 'birth' }); };
         if (!mail) { return response.status(400).json({ message: 'missing_required_parameter', info: 'mail' }); };
-        if (!checkmail) { return response.status(400).json({ message: 'missing_required_parameter', info: 'checkmail' }); };
+        if (!mail_confirm) { return response.status(400).json({ message: 'missing_required_parameter', info: 'mail_confirm' }); };
         if (!password) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password' }); };
-        if (!checkpassword) { return response.status(400).json({ message: 'missing_required_parameter', info: 'checkpassword' }); };
+        if (!password_confirm) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password_confirm' }); };
         if (!role_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'role_id' }); };
 
         if (request.body.shop) {
@@ -125,12 +125,12 @@ module.exports = {
             const hash = bcrypt.hashSync(password, saltRounds);
 
             if (passwordRegex.test(password)) {
-                if (password === checkpassword && mail === checkmail) {
+                if (password === password_confirm && mail === mail_confirm) {
                     newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
                     await newUser.insert();
-                } else if (password !== checkpassword) {
+                } else if (password !== password_confirm) {
                     return response.json(`Your password could not be checked.`);
-                } else if (mail !== checkmail) {
+                } else if (mail !== mail_confirm) {
                     return response.json(`Your mail address could not be checked.`)
                 }
             } else if (!passwordRegex.test(password)) {
