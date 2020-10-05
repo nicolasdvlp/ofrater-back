@@ -8,6 +8,8 @@ module.exports = {
         const { userID } = request.body
 
         let client;
+        let upcomingAppointment;
+        let historyAppointment;
 
         try {
 

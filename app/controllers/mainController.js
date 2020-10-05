@@ -50,17 +50,18 @@ module.exports = {
         
         const proId = parseInt(request.body.id);
         
-        if (!request.body.id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
-        if (isNaN(proId)||proId<=0||typeof proId !== 'number') { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'shopID' }); };
+        if (!request.body.id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'id' }); };
+        if (isNaN(proId)||proId<=0||typeof proId !== 'number') { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'id' }); };
         
         
         let pro;
-        let cat;
+        let category;
+        let service;
 
         try {
             pro = await Shop.findById(proId);
-
-            cat = await Role.findShopCategories(proId);
+            category = await Role.findShopCategories(proId);
+            service = await Service.getShopServices(proId);
             
         } catch(error) {
             console.trace(error);
@@ -69,7 +70,7 @@ module.exports = {
 
 
 
-        response.json({...pro, category: cat});
+        response.json({...pro, category, service});
     },
 
     async register(request, response) {
