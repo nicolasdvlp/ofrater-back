@@ -55,7 +55,7 @@ class Service extends CoreModel {
     
             return result.rows;
     
-        }
+    }
 
 }
 
