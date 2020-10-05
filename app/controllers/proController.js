@@ -34,7 +34,7 @@ module.exports = {
             pro = await User.findById(request.body.shopID);
 
             for (const key of Object.keys(request.body)) {
-                if (key !== "id") {
+                if (key !== "shopID") {
                     pro[key] = request.body[key];
                 };
 
