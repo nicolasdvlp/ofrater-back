@@ -91,6 +91,37 @@ class Appointment extends CoreModel {
 
     }
 
+    static async getAppointmentsClient(proId) {
+        const query = {
+            text: `SELECT
+                        appointment.slot_start,
+                        appointment.slot_end,
+                        appointment.shop_id
+                    FROM "${this.name.toLowerCase()}" 
+                    JOIN "shop" ON appointment.shop_id = shop.id
+                    JOIN "user_owns_shop" ON user_owns_shop.shop_id = shop.id
+                    JOIN "user" ON user_owns_shop.user_id = "user".id
+                    WHERE
+                        appointment.user_id IS NULL
+                        AND user_owns_shop.user_id = $1
+                        AND appointment.slot_start > now()
+                    ORDER BY appointment.slot_start ASC;`,
+            values: [proId]
+        }
+        const result = await db.query(query);
+
+        const appointmentsArray = [];
+        for (const appointment of result.rows) {
+            // console.log('appointment :', appointment);
+            appointmentsArray.push(new this(appointment));
+        }
+
+
+        // console.log('appointmentsArray :', appointmentsArray);
+        // return appointmentsArray;
+        return result.rows;
+    }
+
     static async getUpcomingUserAppointment(userID) {
 
         const query = {
