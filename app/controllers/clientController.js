@@ -111,6 +111,23 @@ module.exports = {
 
 
         response.json(appointment);
+    },
+
+    async getProPage(request, response) {
+        let availableAppointments;
+        let pro;
+
+        try {
+            pro = await User.findProById(request.body.id);
+            availableAppointments = await Appointment.getAppointmentsClient(request.body.id);
+        } catch (error) {
+            console.trace(error);
+            return response.json(``);
+        }
+
+        response.json({pro, availableAppointments});
+
+        
     }
 
 }
