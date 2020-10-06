@@ -56,12 +56,7 @@ module.exports = {
 
         try {
 
-            const { 
-                shopID,
-                dateStart,
-                dateEnd,
-                days
-            } = req.body
+            const {  shopID, dateStart, dateEnd, days } = req.body
             
             // function a insert appointment un a day with starting hour and ending hour
             const generateNewAppointmentForADay = async function (date, startHour, endHour, shopID) {
@@ -199,9 +194,10 @@ module.exports = {
                 }
             }
 
+            res.json('Available Appointments inserted')
+
         } catch (error) {
             console.log(error);
-            res.end()
         }
     },
 
