@@ -19,14 +19,14 @@ module.exports = {
             upcomingAppointment = await Appointment.getUpcomingUserAppointment(userID);
             historyAppointment = await Appointment.getHistoryUserAppointments(userID)
 
+            response.json({ ...client, upcomingAppointment, historyAppointment });
+
         } catch(error) {
 
             console.trace(error);
             response.status(404).json(`No user found for id ${userID}.`);
 
         }
-
-        response.json({ ...client, upcomingAppointment, historyAppointment });
     },
 
     async updateProfile (request, response) {
@@ -43,17 +43,18 @@ module.exports = {
                 if (key !== "userID") {
                     client[key] = request.body[key];
                 };
-
             }
+
+            client.update();
+
+            response.json('Profile Updated');
+
         } catch(error) {
             
             console.trace(error);
             response.status(404).json(`Could not find user with id ${request.body.userID};`)
+
         }
-
-        client.update();
-
-        response.json(client);
     },
 
     async modifyAnAppointment (request, response) {
@@ -90,15 +91,14 @@ module.exports = {
             
             oldRdv.update();
 
+            response.json('Appointment modified.');
+
         } catch(error) {
 
             console.trace(error);
-            response.status(404).json(`Can not book`)
+            response.status(404).json(`Appointment NOT modified.`)
 
         }
-
-        response.json(pro);
-
     },
     
     async bookAnAppointement (request, response) {
@@ -128,14 +128,14 @@ module.exports = {
 
             rdv.update();
 
+            response.json(rdv);
+
         } catch(error) {
 
             console.trace(error);
             response.status(404).json(`Can not book`)
 
         }
-
-        response.json(rdv);
     },
 
     async cancelAppointment(request, response) {
@@ -155,7 +155,6 @@ module.exports = {
         }
 
 
-        response.json(appointment);
+        response.json('Appointment cancelled');
     }
-
 }
