@@ -16,5 +16,8 @@ router.put('/book', clientController.bookAnAppointement);
 // to cancel an appointment
 router.put('/cancelAppointment', clientController.cancelAppointment);
 
+// to modify an appointment and clear the old appointment
+router.put('/bookmodify', clientController.modifyAnAppointment);
 
 module.exports = router;
+
