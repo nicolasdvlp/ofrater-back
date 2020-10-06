@@ -6,9 +6,13 @@ const userMiddleware = require('../middlewares/userMiddleware');
 
 
 /**
+ * Test route
+ */
+router.get('/hello', (req, res) => {res.json("Hello Wordl!");})
+
+/**
  * Routes Search
  */
-
 // Route for city and zip in the main page
 router.post('/mainsearch', mainController.findCityOrZip);
 // Route to get Pro detailscontacté par téléphone au numéro que vous avez in
@@ -32,7 +36,7 @@ router.post('/signout', mainController.signout);
 
 
 // custom middleware to check if user is logged in
-//  router.use(userMiddleware);
+router.use(userMiddleware);
 
 // 404 gestion
 // router.use(mainController.error404);
