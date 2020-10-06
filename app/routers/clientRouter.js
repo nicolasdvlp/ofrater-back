@@ -13,7 +13,7 @@ router.put('/profile', clientController.updateProfile);
 // to book an appointment
 router.put('/book', clientController.bookAnAppointement);
 
-// to delete an appointment
+// to cancel an appointment
 router.put('/cancelAppointment', clientController.cancelAppointment);
 
 
