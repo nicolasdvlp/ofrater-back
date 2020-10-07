@@ -110,12 +110,6 @@ module.exports = class User extends CoreModel {
         return proList;
     };
 
-    static async findProById(proId) {
-        const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE role_id = $1 AND id = $2;`, [2, proId]);
-
-        return result.rows[0];
-    }
-
     static async findByMail(mail) {
 
         const result = await db.query(`select * from "${this.name.toLowerCase()}" where mail=$1;`, [mail]);
