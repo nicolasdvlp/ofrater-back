@@ -54,6 +54,10 @@ module.exports = {
 
     async postAvailableAppointment (req, res) {
 
+        let startTimestampArray = [];
+        let endTimestampArray = [];
+        let alreadyInDatabaseArray = [];
+
         try {
 
             const {  shopID, dateStart, dateEnd, days } = req.body
@@ -61,47 +65,47 @@ module.exports = {
             // function a insert appointment un a day with starting hour and ending hour
             const generateNewAppointmentForADay = async function (date, startHour, endHour, shopID) {
 
-                const _toJoinStart = [date, startHour]
-                const toJoinStart = _toJoinStart.join(' ')
-
-                const debutDeJ = moment(toJoinStart, "YYYY-MM-DD HH:mm");
-
-                const _toJoinEnd = [date, endHour]
-                const toJoinEnd = _toJoinEnd.join(' ')
-
-                const finDeJ = moment(toJoinEnd, "YYYY-MM-DD HH:mm");
+                const startTime = moment(date + ' ' + startHour, "YYYY-MM-DD HH:mm");
+                const endTime = moment(date + ' ' + endHour, "YYYY-MM-DD HH:mm");
 
                 // calculate how many slot exist to repeat 'insert'
-                const indexDay = await (finDeJ - debutDeJ) /30 / 60 /1000;
-
-                const startTimestampArray = [];
+                const indexDay = await (endTime - startTime) /30 / 60 /1000;
 
                 // loop to add start times in startTimestampArray
                 for (let index = 0; index < indexDay; index++) {
-                    let currentTime = debutDeJ.format("YYYY-MM-DD HH:mm").toString();
 
-                    if (index === 0) {
-                        startTimestampArray.push(currentTime);
+                    let currentTime = startTime.format("YYYY-MM-DD HH:mm").toString();
+
+                    const isInDatabase = await Appointment.alreadyHaveAppointmentInDatabase(currentTime, shopID)
+                    
+                    if(!!isInDatabase) {
+
+                        alreadyInDatabaseArray.push(currentTime);
+
                     } else {
-                        currentTime = debutDeJ.add(30, 'm').format("YYYY-MM-DD HH:mm").toString();
-                        startTimestampArray.push(currentTime);
+
+                        if (index === 0) {
+                            startTimestampArray.push(currentTime);
+                        } else {
+                            currentTime = startTime.add(30, 'm').format("YYYY-MM-DD HH:mm").toString();
+                            startTimestampArray.push(currentTime);
+                        }
                     }
                 };
 
                 // endTimestampArray array
-                const endTimestampArray = startTimestampArray.map(date => 
+                endTimestampArray = await startTimestampArray.map(date => 
                     moment(date, "YYYY-MM-DD HH:mm")
                     .add(30, "m")
                     .subtract(1, 'm')
                     .format("YYYY-MM-DD HH:mm")
                     .toString()
-                );
+                )
 
                 // loop to insert appointments in given date
                 for (let index = 0; index < startTimestampArray.length; index++) {
                     await generateNewAppointment(shopID, startTimestampArray[index], endTimestampArray[index]); 
                 };
-
             };
 
             // function to add one appointment
@@ -194,10 +198,24 @@ module.exports = {
                 }
             }
 
-            res.json('Available Appointments inserted')
+            res.json({
+                success: true,
+                message: 'Available appointment(s) correctly inserted',
+                number_insertion : startTimestampArray.length,
+                inserted_slot : startTimestampArray,
+                number_already_in_DB : alreadyInDatabaseArray.length,
+                already_in_DB: alreadyInDatabaseArray
+            });
 
         } catch (error) {
-            console.log(error);
+
+            console.trace(error);
+
+            return res.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
         }
     },
 
