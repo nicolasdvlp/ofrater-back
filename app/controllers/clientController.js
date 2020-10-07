@@ -20,14 +20,14 @@ module.exports = {
             upcomingAppointment = await Appointment.getUpcomingUserAppointment(userID);
             historyAppointment = await Appointment.getHistoryUserAppointments(userID)
 
+            response.json({ ...client, upcomingAppointment, historyAppointment });
+
         } catch(error) {
 
             console.trace(error);
             response.status(404).json(`No user found for id ${userID}.`);
 
         }
-
-        response.json({ ...client, upcomingAppointment, historyAppointment });
     },
 
     async updateProfile (request, response) {
@@ -44,19 +44,64 @@ module.exports = {
                 if (key !== "userID") {
                     client[key] = request.body[key];
                 };
-
             }
+
+            client.update();
+
+            response.json('Profile Updated');
+
         } catch(error) {
             
             console.trace(error);
             response.status(404).json(`Could not find user with id ${request.body.userID};`)
+
         }
-
-        client.update();
-
-        response.json(client);
     },
 
+    async modifyAnAppointment (request, response) {
+
+        const { newAppointmentID, oldAappointmentID, userID, serviceID  } = request.body;
+
+        if (!newAppointmentID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'newAppointmentID' }); };
+        if (!oldAappointmentID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'oldAappointmentID' }); };
+        if (!userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
+        if (!serviceID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
+        if (isNaN(newAppointmentID)||newAppointmentID<=0||typeof newAppointmentID !== 'number') { return response.status(400).json({ message: 'newAppointmentID must be a positive number', info: 'newAppointmentID' }); };
+        if (isNaN(oldAappointmentID)||oldAappointmentID<=0||typeof oldAappointmentID !== 'number') { return response.status(400).json({ message: 'oldAappointmentID must be a positive number', info: 'oldAappointmentID' }); };
+        if (isNaN(userID)||userID<=0||typeof userID !== 'number') { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
+        if (isNaN(serviceID)||serviceID<=0||typeof serviceID !== 'number') { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
+
+        let newRdv;
+        let oldRdv;
+
+        try {
+
+            // new appointment reservation
+            newRdv = await Appointment.findById(newAppointmentID);
+
+            newRdv.user_id = userID;
+            newRdv.service_id = ServiceID;
+
+            newRdv.update();
+
+            // old appointment back to null values
+            oldRdv = await Appointment.findById(oldAappointmentID);
+
+            rdv.user_id = null;
+            rdv.service_id = null;
+            
+            oldRdv.update();
+
+            response.json('Appointment modified.');
+
+        } catch(error) {
+
+            console.trace(error);
+            response.status(404).json(`Appointment NOT modified.`)
+
+        }
+    },
+    
     async bookAnAppointement (request, response) {
 
         const { appointment_id, user_id, service_id } = request.body;
@@ -84,14 +129,14 @@ module.exports = {
 
             rdv.update();
 
+            response.json(rdv);
+
         } catch(error) {
 
             console.trace(error);
             response.status(404).json(`Can not book`)
 
         }
-
-        response.json(rdv);
     },
 
     async cancelAppointment(request, response) {
@@ -147,5 +192,4 @@ module.exports = {
             });
         }
     }
-
 }

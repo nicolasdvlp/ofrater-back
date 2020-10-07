@@ -241,12 +241,6 @@ Content-Type: application/json
     }
 }
 
-
-
-
-
-
-
 ### Generate appointement
 
 POST http://localhost:3000/pro/availableappointment
@@ -263,8 +257,7 @@ Content-Type: application/json
 }
 
 ### get pro appointments
-
-POST http://localhost:3003/pro/getappointments
+POST http://localhost:3002/pro/getappointments
 Content-Type: application/json
 
 {
@@ -272,6 +265,17 @@ Content-Type: application/json
     "dateStart": "2019-10-18",
     "dateEnd": "2020-10-30"
 }
+
+### Methode pour décaler un RDV
+PUT http://localhost:3002/client/bookmodify
+Content-Type: application/json
+
+{
+
+    "newAppointmentID": 2, 
+    "oldAappointmentID": 1, 
+    "userID": 2, 
+    "serviceID": 1
 
 ### Book an appointment
 PUT http://localhost:3003/client/book
