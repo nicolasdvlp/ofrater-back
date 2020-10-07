@@ -78,10 +78,11 @@ class Appointment extends CoreModel {
         this._service_id = value;
     };    
 
+    // route pro pour afficher les rendez vous du professionnel (pour l'agenda) TODO: Ajouter les infos des user ayant pris RDV
     static async getAppointmentShop(dateStart, dateEnd=dateStart, shopId) {
 
         const query = {
-            text: `SELECT * FROM appointment WHERE DATE(slot_start) BETWEEN $1 AND $2 AND shop_id = $3 ORDER BY slot_start ASC ;`,
+            text: `select * from ${this.name.toLowerCase()} where DATE(slot_start) BETWEEN $1 AND $2 and shop_id = $3 ORDER BY slot_start ASC ;`,
                 values: [dateStart, dateEnd, shopId],
             };
 
@@ -89,6 +90,22 @@ class Appointment extends CoreModel {
 
         return result.rows;
 
+    }
+
+    // route /client/ to display available appointments for a given professional
+    static async getAppointmentsClient(dateStart, dateEnd=dateStart, shopId) {
+        const query = {
+            text: `select * from ${this.name.toLowerCase()} where DATE(slot_start) BETWEEN $1 AND $2 and shop_id = $3 and appointment.user_id IS NULL ORDER BY slot_start ASC;`,
+            values: [dateStart, dateEnd, shopId]
+        }
+        const result = await db.query(query);
+
+        const appointmentsArray = [];
+        for (const appointment of result.rows) {
+            appointmentsArray.push(new this(appointment));
+        }
+
+        return appointmentsArray;
     }
 
     static async getUpcomingUserAppointment(userID) {
