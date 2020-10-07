@@ -60,7 +60,16 @@ module.exports = {
 
         try {
 
-            const {  shopID, dateStart, dateEnd, days } = req.body
+            const { shopID, dateStart, dateEnd, days } = req.body
+
+            if (!shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
+            if (!dateStart) { return response.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
+            if (!dateEnd) { return response.status(400).json({ message: 'missing_required_parameter', info: 'dateEnd' }); };
+            if (!days) { return response.status(400).json({ message: 'missing_required_parameter', info: 'days' }); };
+            if (isNaN(shopID)||shopID<=0||typeof shopID !== 'number') { return response.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
+            if (typeof dateStart !== 'string') { return response.status(400).json({ message: 'dateStart must be a string YYYY-MM-DD or DD/MM/YYYY', info: 'dateStart' }); };
+            if (typeof dateEnd !== 'string') { return response.status(400).json({ message: 'dateEnd must be a string YYYY-MM-DD or DD/MM/YYYY', info: 'dateEnd' }); };
+            if (typeof days !== 'object') { return response.status(400).json({ message: 'days must be an object with {monday: {amStart: HH:mm, amEnd: HH:mm, pmStart: HH:mm, pmEnd: HH:mm}, tuesday: {...}', info: 'days' }); };
             
             // function a insert appointment un a day with starting hour and ending hour
             const generateNewAppointmentForADay = async function (date, startHour, endHour, shopID) {
