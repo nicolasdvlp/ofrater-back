@@ -230,7 +230,7 @@ module.exports = {
 
     async getAppointmentsPro (request, response) {
 
-        let rdvs = [];
+        let appointments = [];
 
         try {
 
@@ -238,16 +238,30 @@ module.exports = {
 
             if (!shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
             if (!dateStart) { return rresponses.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
+            if (isNaN(shopID)||shopID<=0||typeof shopID !== 'number') { return response.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
+            if (typeof dateStart !== 'string') { return response.status(400).json({ message: 'dateStart must be a string YYYY-MM-DD or DD/MM/YYYY', info: 'dateStart' }); };
 
             if (!dateEnd) { dateEnd = dateStart };
             
-            rdvs = await Appointment.getAppointmentShop(dateStart, dateEnd, shopID);
+            appointments = await Appointment.getAppointmentShop(dateStart, dateEnd, shopID);
+
+            response.json({
+                success: true,
+                message: 'Appointments correctly requested',
+                number_appointment : appointments.length,
+                data: appointments
+            });
 
         } catch(error) {
+
             console.trace(error);
-            response.status(404).json(`No appointment founded for shopID ${request.params.shopID}.`);
+
+            return response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
         }
 
-        response.json(rdvs);
     },
 }
