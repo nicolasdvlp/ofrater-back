@@ -291,10 +291,12 @@ Content-Type: application/json
     "id": 1
 }
 
-### Consult a pro info with its available appointments for a client
-POST http://localhost:3003/client/pro
+### Consult a shop info with its available appointments for a client
+POST http://localhost:3003/client/shop
 Content-Type: application/json
 
 {
-    "id": 7
+    "dateStart": "2019-10-18",
+    "dateEnd": "2020-10-30",
+    "shopID": 4
 }
