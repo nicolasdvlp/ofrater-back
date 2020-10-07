@@ -82,8 +82,8 @@ class Appointment extends CoreModel {
     static async getAppointmentShop(dateStart, dateEnd=dateStart, shopId) {
 
         const query = {
-            text: `select * from ${this.name.toLowerCase()} where DATE(slot_start) BETWEEN $1 AND $2 and shop_id = $3 ORDER BY slot_start ASC ;`,
-                values: [dateStart, dateEnd, shopId],
+            text: `SELECT ${this.name.toLowerCase()}.*, "user".first_name, "user".last_name, "user".phone_number, "user".mail, "user".avatar FROM ${this.name.toLowerCase()} FULL JOIN "user" ON appointment.user_id = "user".id WHERE DATE(slot_start) BETWEEN $1 AND $2 and shop_id = $3 ORDER BY slot_start ASC ;`,
+            values: [dateStart, dateEnd, shopId],
             };
 
         const result = await db.query(query); 
