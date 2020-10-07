@@ -16,8 +16,8 @@ router.put('/book', clientController.bookAnAppointement);
 // to cancel an appointment
 router.put('/cancelAppointment', clientController.cancelAppointment);
 
-// to access one pro page and consult available appointments
-router.post('/pro', clientController.getProPage);
+// to access one shop page and consult available appointments
+router.post('/shop', clientController.getShopPage);
 
 
 module.exports = router;

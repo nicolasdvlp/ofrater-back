@@ -1,5 +1,6 @@
 const Appointment = require('../models/Appointment');
 const User = require('../models/User');
+const Shop = require('../models/Shop');
 
 module.exports = {
 
@@ -104,30 +105,47 @@ module.exports = {
             appointment.service_id = null;
 
             appointment.update();
+
+            response.json({
+                success: true,
+                message: 'Appointment correctly cancelled',
+                appointment
+            });
+
         } catch(error) {
             console.trace(error);
-            return response.json(`Your appointment could not have been cancelled.`);
+            return response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                information: `The appointment ${request.body.id} couldn't have been cancelled.`
+            });
         }
-
-
-        response.json(appointment);
     },
 
-    async getProPage(request, response) {
+    async getShopPage(request, response) {
+
+        const { dateStart, dateEnd, shopID } = request.body;
+
+        if (!dateStart) { return response.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
+        if (!dateEnd) {  dateEnd = dateStart; };
+        if (!shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
+
         let availableAppointments;
-        let pro;
+        let shop;
 
         try {
-            pro = await User.findProById(request.body.id);
-            availableAppointments = await Appointment.getAppointmentsClient(request.body.id);
+            shop = await Shop.findById(shopID);
+            availableAppointments = await Appointment.getAppointmentsClient(dateStart, dateEnd, shopID);
+
+            response.json({shop, availableAppointments});
+
         } catch (error) {
             console.trace(error);
-            return response.json(``);
+            return response.status(500).json({
+                success: false,
+                message: 'Internal Server Error'
+            });
         }
-
-        response.json({pro, availableAppointments});
-
-        
     }
 
 }
