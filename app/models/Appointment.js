@@ -81,7 +81,7 @@ class Appointment extends CoreModel {
     static async getAppointmentShop(dateStart, dateEnd=dateStart, shopId) {
 
         const query = {
-            text: `select * from appointment where DATE(slot_start) BETWEEN $1 AND $2 and shop_id = $3 ORDER BY slot_start ASC ;`,
+            text: `SELECT * FROM appointment WHERE DATE(slot_start) BETWEEN $1 AND $2 AND shop_id = $3 ORDER BY slot_start ASC ;`,
                 values: [dateStart, dateEnd, shopId],
             };
 
@@ -128,6 +128,19 @@ class Appointment extends CoreModel {
         const result = await db.query(query); 
 
         return result.rows;
+
+    }
+
+    static async alreadyHaveAppointmentInDatabase(dateAndTime, shopID) {
+
+        const query = {
+            text: `SELECT * FROM appointment WHERE slot_start = $1 AND shop_id = $2 ;`,
+            values: [dateAndTime, shopID],
+        };
+
+        const result = await db.query(query); 
+
+        return result.rows[0];
 
     }
 
