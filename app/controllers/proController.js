@@ -57,20 +57,25 @@ module.exports = {
         let startTimestampArray = [];
         let endTimestampArray = [];
         let alreadyInDatabaseArray = [];
+        
+        var regexDate = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/g;
+
+        
 
         try {
 
             const { shopID, dateStart, dateEnd, days } = req.body
 
-            if (!shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
-            if (!dateStart) { return response.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
-            if (!dateEnd) { return response.status(400).json({ message: 'missing_required_parameter', info: 'dateEnd' }); };
-            if (!days) { return response.status(400).json({ message: 'missing_required_parameter', info: 'days' }); };
-            if (isNaN(shopID)||shopID<=0||typeof shopID !== 'number') { return response.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
-            if (typeof dateStart !== 'string') { return response.status(400).json({ message: 'dateStart must be a string YYYY-MM-DD or DD/MM/YYYY', info: 'dateStart' }); };
-            if (typeof dateEnd !== 'string') { return response.status(400).json({ message: 'dateEnd must be a string YYYY-MM-DD or DD/MM/YYYY', info: 'dateEnd' }); };
-            if (typeof days !== 'object') { return response.status(400).json({ message: 'days must be an object with {monday: {amStart: HH:mm, amEnd: HH:mm, pmStart: HH:mm, pmEnd: HH:mm}, tuesday: {...}', info: 'days' }); };
-            
+            if (!shopID) { return res.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
+            if (!dateStart) { return res.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
+            if (!dateEnd) { return res.status(400).json({ message: 'missing_required_parameter', info: 'dateEnd' }); };
+            if (!days) { return res.status(400).json({ message: 'missing_required_parameter', info: 'days' }); };
+            if (isNaN(shopID)||shopID<=0||typeof shopID !== 'number') { return res.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
+            if (typeof dateStart !== 'string'||!regexDate.test(dateStart)) { return res.status(400).json({ message: 'dateStart must be a string in format YYYY-MM-DD', info: 'dateStart' }); };
+            if (typeof dateEnd !== 'string'||regexDate.test(dateEnd)) { return res.status(400).json({ message: 'dateEnd must be a string in format YYYY-MM-DD', info: 'dateEnd' }); };
+            if (typeof days !== 'object') { return res.status(400).json({ message: 'days must be an object with {monday: {amStart: HH:mm, amEnd: HH:mm, pmStart: HH:mm, pmEnd: HH:mm}, tuesday: {...}', info: 'days' }); };
+            if ((moment(dateEnd ,"YYYY-MM-DD")<moment(dateStart,"YYYY-MM-DD"))) {return res.status(400).json({ message: 'dateStart must be after dateEnd', info: 'dateStart/dateEnd' });};
+
             // function a insert appointment un a day with starting hour and ending hour
             const generateNewAppointmentForADay = async function (date, startHour, endHour, shopID) {
 
