@@ -78,10 +78,11 @@ class Appointment extends CoreModel {
         this._service_id = value;
     };    
 
+    // route pro pour afficher les rendez vous du professionnel (pour l'agenda) TODO: Ajouter les infos des user ayant pris RDV
     static async getAppointmentShop(dateStart, dateEnd=dateStart, shopId) {
 
         const query = {
-            text: `select * from appointment where DATE(slot_start) BETWEEN $1 AND $2 and shop_id = $3 ORDER BY slot_start ASC ;`,
+            text: `select * from ${this.name.toLowerCase()} where DATE(slot_start) BETWEEN $1 AND $2 and shop_id = $3 ORDER BY slot_start ASC ;`,
                 values: [dateStart, dateEnd, shopId],
             };
 
@@ -91,35 +92,20 @@ class Appointment extends CoreModel {
 
     }
 
-    static async getAppointmentsClient(proId) {
+    // route /client/ to display available appointments for a given professional
+    static async getAppointmentsClient(dateStart, dateEnd=dateStart, shopId) {
         const query = {
-            text: `SELECT
-                        appointment.slot_start,
-                        appointment.slot_end,
-                        appointment.shop_id
-                    FROM "${this.name.toLowerCase()}" 
-                    JOIN "shop" ON appointment.shop_id = shop.id
-                    JOIN "user_owns_shop" ON user_owns_shop.shop_id = shop.id
-                    JOIN "user" ON user_owns_shop.user_id = "user".id
-                    WHERE
-                        appointment.user_id IS NULL
-                        AND user_owns_shop.user_id = $1
-                        AND appointment.slot_start > now()
-                    ORDER BY appointment.slot_start ASC;`,
-            values: [proId]
+            text: `select * from ${this.name.toLowerCase()} where DATE(slot_start) BETWEEN $1 AND $2 and shop_id = $3 and appointment.user_id IS NULL ORDER BY slot_start ASC;`,
+            values: [dateStart, dateEnd, shopId]
         }
         const result = await db.query(query);
 
         const appointmentsArray = [];
         for (const appointment of result.rows) {
-            // console.log('appointment :', appointment);
             appointmentsArray.push(new this(appointment));
         }
 
-
-        // console.log('appointmentsArray :', appointmentsArray);
-        // return appointmentsArray;
-        return result.rows;
+        return appointmentsArray;
     }
 
     static async getUpcomingUserAppointment(userID) {
