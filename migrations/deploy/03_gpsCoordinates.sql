@@ -2,6 +2,9 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
+ALTER TABLE "appointment"
+    ADD COLUMN latitude INT ;
+    ADD COLUMN longitude INT ;
+
 
 COMMIT;

@@ -199,13 +199,21 @@ module.exports = {
             shop = await Shop.findById(shopID);
             availableAppointments = await Appointment.getAppointmentsClient(dateStart, dateEnd, shopID);
 
-            response.json({shop, availableAppointments});
+            response.json({
+                success: true,
+                message: 'Available appointment(s) correctly inserted',
+                data:{
+                    shop, 
+                    availableAppointments
+                }
+            });
 
         } catch (error) {
             console.trace(error);
             response.status(500).json({
                 success: false,
-                message: 'Internal Server Error'
+                message: 'Internal Server Error',
+                error
             });
         }
     }

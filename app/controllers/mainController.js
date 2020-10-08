@@ -128,15 +128,14 @@ module.exports = {
             const adressToGeo = [address_number, address_name.split(' ').join('+'), '%2C', postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
             console.log(adressToGeo);
 
+            let coordonates
             let latitude 
             let longitude
             await fetch(`https://nominatim.openstreetmap.org/search?q=${adressToGeo}&format=geojson`)
             .then(res => res.json())
             .then((json) => {
                 if(!!json.features[0].geometry.coordinates){
-                    latitude=json.features[0].geometry.coordinates[0])
-                    latitude=json.features[0].geometry.coordinates[0])
-
+                    coordonates = json.features[0].geometry.coordinates
                 }
             }
             console.log(latitude);

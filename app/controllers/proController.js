@@ -217,7 +217,7 @@ module.exports = {
 
             console.trace(error);
 
-            return res.status(500).json({
+            res.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
                 error
