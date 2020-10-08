@@ -177,14 +177,13 @@ module.exports = {
                 request.session.user = userToConnect;
             }
 
+            response.json(userToConnect)
+
         } catch (error) {
 
             console.log(error);    
 
         }
-
-        response.json('Logged in.')
-
     },
 
     async signout(req, res) {
