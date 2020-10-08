@@ -6,6 +6,7 @@ const { number } = require('joi');
 const { getShopServices } = require('../models/Service');
 const Appointment = require('../models/Appointment');
 const Service = require('../models/Service');
+const sendmail = require('../mailer/mailer');
 
 module.exports = {
 
@@ -137,6 +138,9 @@ module.exports = {
             } else if (!passwordRegex.test(password)) {
                 return response.json(`Your password must contain at least one lowercase letter, one uppercase letter, one digit and be composed of minimum 6 characters.`);
             }
+
+            // Send welcome email to the new user
+            sendmail(newUser.mail);
 
             if(newUser.role_id === 2) {
                 newShop = new Shop({ 
