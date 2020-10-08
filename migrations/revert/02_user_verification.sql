@@ -3,7 +3,7 @@
 BEGIN;
 
 ALTER TABLE "user"
-DROP COLUMN crypto,
-DROP COLUMN is_verified;
+DROP COLUMN account_validation_crypto,
+DROP COLUMN is_validated;
 
 COMMIT;
