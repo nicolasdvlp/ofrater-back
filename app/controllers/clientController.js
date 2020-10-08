@@ -108,34 +108,41 @@ module.exports = {
 
         if (!appointment_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'appointment_id' }); };
         if (!user_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
-        if (!service_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
+        // if (!service_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
 
         if (isNaN(appointment_id)||appointment_id<0||typeof appointment_id !== 'number') { return response.status(400).json({ message: 'appointment_id must be a positive number', info: 'appointment_id' }); };
         if (isNaN(user_id)||user_id<0||typeof user_id !== 'number') { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
-        if (isNaN(service_id)||service_id<0||typeof service_id !== 'number') { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
+        // if (isNaN(service_id)||service_id<0||typeof service_id !== 'number') { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
         
-        let rdv;
+        let appointment;
 
         try {
 
-            rdv = await Appointment.findById(appointment_id);
+            appointment = await Appointment.findById(appointment_id);
 
             for (const key of Object.keys(request.body)) {
-                if (key !== "appointment_id") {
+                if (key !== "appointment_id"|| /*FIXME: Temporary mod for front*/key !== "service_id") {
                     rdv[key] = request.body[key];
                 };
-
             }
 
-            rdv.update();
+            appointment.update();
 
-            response.json(rdv);
+            response.json({
+                success: true,
+                message: 'Appointment correctly booked',
+                appointment
+            });
 
         } catch(error) {
 
             console.trace(error);
-            response.status(404).json(`Can not book`)
 
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                information: `The appointment ${request.body.id} is not booked.`
+            });
         }
     },
 
@@ -159,7 +166,7 @@ module.exports = {
 
         } catch(error) {
             console.trace(error);
-            return response.status(500).json({
+            response.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
                 information: `The appointment ${request.body.id} couldn't have been cancelled.`
@@ -186,7 +193,7 @@ module.exports = {
 
         } catch (error) {
             console.trace(error);
-            return response.status(500).json({
+            response.status(500).json({
                 success: false,
                 message: 'Internal Server Error'
             });
