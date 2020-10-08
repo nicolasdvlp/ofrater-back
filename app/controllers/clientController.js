@@ -131,7 +131,7 @@ module.exports = {
             response.json({
                 success: true,
                 message: 'Appointment correctly booked',
-                appointment
+                data: appointment
             });
 
         } catch(error) {
@@ -161,7 +161,7 @@ module.exports = {
             response.json({
                 success: true,
                 message: 'Appointment correctly cancelled',
-                appointment
+                data: appointment
             });
 
         } catch(error) {
