@@ -54,8 +54,7 @@ module.exports = {
 
     async postAvailableAppointment (req, res) {
 
-        let startTimestampArray = [];
-        let endTimestampArray = [];
+        let _startTimestampArray = [];
         let alreadyInDatabaseArray = [];
         
         var regexDate = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/g;
@@ -78,6 +77,9 @@ module.exports = {
             // function a insert appointment un a day with starting hour and ending hour
             const generateNewAppointmentForADay = async function (date, startHour, endHour, shopIDD) {
 
+                let startTimestampArray = [];
+                let endTimestampArray = [];
+
                 const startTime = moment(date + ' ' + startHour, "YYYY-MM-DD HH:mm");
                 const endTime = moment(date + ' ' + endHour, "YYYY-MM-DD HH:mm");
 
@@ -92,17 +94,11 @@ module.exports = {
                     const isInDatabase = await Appointment.alreadyHaveAppointmentInDatabase(currentTime, shopID)
                     
                     if(!!isInDatabase) {
-
                         alreadyInDatabaseArray.push(currentTime);
-
                     } else {
-
-                        if (index === 0) {
-                            startTimestampArray.push(currentTime);
-                        } else {
-                            currentTime = startTime.add(30, 'm').format("YYYY-MM-DD HH:mm").toString();
-                            startTimestampArray.push(currentTime);
-                        }
+                        startTimestampArray.push(currentTime);
+                        _startTimestampArray.push(currentTime);
+                        currentTime = startTime.add(30, 'm').format("YYYY-MM-DD HH:mm").toString();
                     }
                 };
 
@@ -133,14 +129,11 @@ module.exports = {
             };
 
            let dateToCible = moment(dateStart, "YYYY-MM-DD").add(0, "day").format("YYYY-MM-DD").toString();
-            
             // loop to add appointments in a day
             for (let index = 0 ; dateToCible !== dateEnd; index++) {
 
                 dateToCible = moment(dateStart, "YYYY-MM-DD").add(index, "day").format("YYYY-MM-DD").toString();
-
                 const jourDeDateCible = moment(dateToCible, "YYYY-MM-DD").format("dddd").toString().toLowerCase();
-
                 // Switch to verify the dayy of the week and if it's a worked day
                 switch (jourDeDateCible) {
                     case "monday":
@@ -199,10 +192,10 @@ module.exports = {
 
                     case "sunday":
                         if(!!days.sunday.amStart && !!days.sunday.amEnd) {
-                            generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd, shopIDD)
+                            await generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd, shopIDD)
                         };
                         if(!!days.sunday.pmStart && !!days.sunday.pmEnd) {
-                            generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd, shopIDD)
+                            await generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd, shopIDD)
                         };
                         break;
 
@@ -214,8 +207,8 @@ module.exports = {
             res.json({
                 success: true,
                 message: 'Available appointment(s) correctly inserted',
-                number_insertion : startTimestampArray.length,
-                inserted_slot : startTimestampArray,
+                number_insertion : _startTimestampArray.length,
+                inserted_slot : _startTimestampArray,
                 number_already_in_DB : alreadyInDatabaseArray.length,
                 already_in_DB: alreadyInDatabaseArray
             });
