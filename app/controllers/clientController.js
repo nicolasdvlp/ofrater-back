@@ -84,17 +84,14 @@ module.exports = {
 
             // new appointment reservation
             newRdv = await Appointment.findById(newAppointmentIDD);
-
             newRdv.user_id = userIDD;
             newRdv.service_id = serviceIDD;
-
             newRdv.update();
 
             // old appointment back to null values
             oldRdv = await Appointment.findById(oldAappointmentIDD);
-
-            rdv.user_id = null;
-            rdv.service_id = null;
+            oldRdv.user_id = null;
+            oldRdv.service_id = null;
             
             oldRdv.update();
 
