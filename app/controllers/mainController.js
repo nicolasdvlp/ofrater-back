@@ -6,6 +6,7 @@ const { number } = require('joi');
 const { getShopServices } = require('../models/Service');
 const Appointment = require('../models/Appointment');
 const Service = require('../models/Service');
+const fetch = require('node-fetch');
 
 module.exports = {
 
@@ -124,6 +125,47 @@ module.exports = {
             const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
             const hash = bcrypt.hashSync(password, saltRounds);
 
+            const adressToGeo = [address_number, address_name.split(' ').join('+'), '%2C', postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
+            console.log(adressToGeo);
+
+            let latitude 
+            let longitude
+            await fetch(`https://nominatim.openstreetmap.org/search?q=${adressToGeo}&format=geojson`)
+            .then(res => res.json())
+            .then((json) => {
+                if(!!json.features[0].geometry.coordinates){
+                    latitude=json.features[0].geometry.coordinates[0])
+                    latitude=json.features[0].geometry.coordinates[0])
+
+                }
+            }
+            console.log(latitude);
+            console.log(longitude);
+
+
+
+            return
+            /*
+            function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+                var R = 6371; // Radius of the earth in km
+                var dLat = deg2rad(lat2-lat1);  // deg2rad below
+                var dLon = deg2rad(lon2-lon1); 
+                var a = 
+                  Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+                  Math.sin(dLon/2) * Math.sin(dLon/2)
+                  ; 
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+                var d = R * c; // Distance in km
+                return d;
+              }
+              
+              function deg2rad(deg) {
+                return deg * (Math.PI/180)
+              }
+
+            */
+
             if (passwordRegex.test(password)) {
                 if (password === password_confirm && mail === mail_confirm) {
                     newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
@@ -151,6 +193,7 @@ module.exports = {
 
                 await newUser.ownShop(newShop);
             }
+            response.json(newUser);
 
         } catch(error) {
 
@@ -159,7 +202,6 @@ module.exports = {
 
         }
 
-        response.json(newUser);
     },
 
     async postLogin(request, response) {

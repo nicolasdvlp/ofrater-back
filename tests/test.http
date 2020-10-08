@@ -71,7 +71,7 @@ Content-Type: application/json
 
 
 ### Route to create a new user and shop (user registration)
-POST http://localhost:3006/registration
+POST http://localhost:3000/registration
 Content-Type: application/json
 
 {
@@ -79,8 +79,10 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "zizoupresident@zizou.fr",
-    "password": "azerty",
+    "mail": "patrick.Le@gmail.fr",
+    "mail_confirm": "patrick.Le@gmail.fr",
+    "password": "azertyA6",
+    "password_confirm": "azertyA6",
     "role_id": 2,
     "shop": {
         "shop_name" : "Zizou Président",
