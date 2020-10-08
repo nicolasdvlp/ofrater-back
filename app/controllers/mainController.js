@@ -7,6 +7,7 @@ const { getShopServices } = require('../models/Service');
 const Appointment = require('../models/Appointment');
 const Service = require('../models/Service');
 const sendmail = require('../mailer/mailer');
+const crypto = require('crypto');
 
 module.exports = {
 
@@ -139,9 +140,6 @@ module.exports = {
                 return response.json(`Your password must contain at least one lowercase letter, one uppercase letter, one digit and be composed of minimum 6 characters.`);
             }
 
-            // Send welcome email to the new user
-            sendmail(newUser.mail);
-
             if(newUser.role_id === 2) {
                 newShop = new Shop({ 
                     shop_name: _shop.shop_name,
@@ -156,6 +154,19 @@ module.exports = {
 
                 await newUser.ownShop(newShop);
             }
+
+            // Creation of a unique string that will be sent to the new user for user activation email
+            const buffer = crypto.randomBytes(1);
+            const bufferString = buffer.toString('hex');
+            console.log('bufferString :', bufferString);
+            console.log('typeof(bufferString) :', typeof(bufferString));
+
+            // Storage of this unique string in db
+            newUser.account_validation_crypto = bufferString;
+            newUser.update();
+
+            // Send email containing the previous string to the new user for account verification
+            sendmail(newUser.mail, bufferString);
 
         } catch(error) {
 
