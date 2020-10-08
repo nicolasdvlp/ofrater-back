@@ -66,10 +66,16 @@ module.exports = {
         if (!oldAappointmentID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'oldAappointmentID' }); };
         if (!userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
         if (!serviceID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
-        if (isNaN(newAppointmentID)||isNaN(newAppointmentID)<=0||typeof isNaN(newAppointmentID) !== 'number') { return response.status(400).json({ message: 'newAppointmentID must be a positive number', info: 'newAppointmentID' }); };
-        if (isNaN(oldAappointmentID)||isNaN(oldAappointmentID)<=0||typeof isNaN(oldAappointmentID) !== 'number') { return response.status(400).json({ message: 'oldAappointmentID must be a positive number', info: 'oldAappointmentID' }); };
-        if (isNaN(userID)||isNaN(userID)<=0||typeof isNaN(userID) !== 'number') { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
-        if (isNaN(serviceID)||isNaN(serviceID)<=0||typeof isNaN(serviceID) !== 'number') { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
+        
+        newAppointmentID = parseInt(newAppointmentID);
+        oldAappointmentID = parseInt(oldAappointmentID);
+        userID = parseInt(userID);
+        serviceID = parseInt(serviceID);
+
+        if (newAppointmentID<=0|| isNaN(newAppointmentID)) { return response.status(400).json({ message: 'newAppointmentID must be a positive number', info: 'newAppointmentID' }); };
+        if (oldAappointmentID<=0|| isNaN(oldAappointmentID)) { return response.status(400).json({ message: 'oldAappointmentID must be a positive number', info: 'oldAappointmentID' }); };
+        if (userID<=0|| isNaN(userID)) { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
+        if (serviceID<=0|| isNaN(serviceID)) { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
 
         let newRdv;
         let oldRdv;
@@ -110,9 +116,13 @@ module.exports = {
         if (!user_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
         // if (!service_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
 
-        if (isNaN(appointment_id)||isNaN(appointment_id)<0||typeof isNaN(appointment_id) !== 'number') { return response.status(400).json({ message: 'appointment_id must be a positive number', info: 'appointment_id' }); };
-        if (isNaN(user_id)||isNaN(user_id)<0||typeof isNaN(user_id) !== 'number') { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
-        // if (isNaN(service_id)||isNaN(service_id)<0||typeof isNaN(service_id) !== 'number') { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
+        appointment_id = parseInt(appointment_id);
+        user_id = parseInt(user_id);
+        // service_id = parseInt(service_id);
+
+        if (appointment_id<=0|| isNaN(appointment_id)) { return response.status(400).json({ message: 'appointment_id must be a positive number', info: 'appointment_id' }); };
+        if (user_id<=0|| isNaN(user_id)) { return response.status(400).json({ message: 'user_id must be a positive number', info: 'user_id' }); };
+        // if (service_id<=0|| isNaN(service_id)) { return response.status(400).json({ message: 'service_id must be a positive number', info: 'service_id' }); };
         
         let appointment;
 
