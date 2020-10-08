@@ -178,6 +178,14 @@ module.exports = {
         response.json(newUser);
     },
 
+    // Method to collect the crypto from the link the user clicked on and compare it with the one in BDD
+    // if the comparison is ok, the user is verified
+    async checkEmail(request, response) {
+        console.log('request.params :', request.params);
+        console.log('request.params.crypto :', request.params.crypto);
+        const userToValidate = await User.findByAccountValidationCrypto(request.params.crypto);
+    },
+
     async postLogin(request, response) {
 
         const { mail, password } = request.body
