@@ -49,11 +49,20 @@ module.exports = {
             client.update();
 
             response.json('Profile Updated');
+            response.json({
+                success: true,
+                message: 'Profile Updated.',
+                data: client
+            });
 
         } catch(error) {
             
             console.trace(error);
-            response.status(404).json(`Could not find user with id ${request.body.userID};`)
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                information: `The profile User is NOT updated.`
+            });
 
         }
     },
