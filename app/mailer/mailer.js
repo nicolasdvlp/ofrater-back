@@ -1,7 +1,7 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
-function sendmail (userEmailAdress) {
+function sendmail (userEmailAdress, account_email_crypto) {
     let transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -14,16 +14,18 @@ function sendmail (userEmailAdress) {
         from: 'barbeapapaofrater@gmail.com',
         to: userEmailAdress,
         subject: 'Bienvenue sur Ofrater !',
-        text: 'Vous venez de vous inscrire sur la meilleure plateforme de prise de rendez-vous chez un coiffeur/barbier !'
+        html: `<p>Vous venez de vous inscrire sur la meilleure plateforme de prise de rendez-vous chez un coiffeur/barbier !<p> <h1>Youpi</h1> <a href="http://localhost:3003/checkEmail/${account_email_crypto}">Cliquez sur ce lien</a>`
     };
 
     transporter.sendMail(mailOptions, function(error, data) {
         if (error) {
             console.log('Error occurs', error);
         } else {
-            console.log('Email sent');
+            console.log('Email sent', data);
         }
     });
 }
 
 module.exports = sendmail;
+
+//sendmail('coincoin@yopmail.com');
