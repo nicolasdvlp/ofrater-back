@@ -110,13 +110,13 @@ module.exports = {
     
     async bookAnAppointement (request, response) {
 
-        const { appointment_id, user_id, service_id } = request.body;
+        const { id, user_id, service_id } = request.body;
 
-        if (!appointment_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'appointment_id' }); };
+        if (!id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'id (appointment id)' }); };
         if (!user_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
         // if (!service_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
 
-        appointment_idd = parseInt(appointment_id);
+        appointment_idd = parseInt(id);
         user_idd = parseInt(user_id);
         // service_idd = parseInt(service_id);
 
@@ -128,11 +128,11 @@ module.exports = {
 
         try {
 
-            appointment = await Appointment.findById(appointment_idd);
+            appointment = await Appointment.findById(id);
 
             for (const key of Object.keys(request.body)) {
-                if (key !== "appointment_id"|| /*FIXME: Temporary mod for front*/key !== "service_id") {
-                    rdv[key] = request.body[key];
+                if (key !== "id"|| /*FIXME: Temporary mod for front*/key !== "service_id") {
+                    appointment[key] = request.body[key];
                 };
             }
 
