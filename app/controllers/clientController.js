@@ -79,11 +79,13 @@ module.exports = {
 
         let newRdv;
         let oldRdv;
+        let _oldRDV;
 
         try {
 
             // new appointment reservation
             newRdv = await Appointment.findById(newAppointmentIDD);
+
 
             newRdv.user_id = userIDD;
             newRdv.service_id = serviceIDD;
@@ -92,19 +94,28 @@ module.exports = {
 
             // old appointment back to null values
             oldRdv = await Appointment.findById(oldAappointmentIDD);
-
-            rdv.user_id = null;
-            rdv.service_id = null;
+            _oldRDV = {...oldRdv}
+            oldRdv.user_id = null;
+            oldRdv.service_id = null;
             
             oldRdv.update();
 
-            response.json('Appointment modified.');
+            response.json({
+                success: true,
+                message: 'Appointment modified.',
+                data: {
+                    new_appointment: newRdv,
+                    old_appointment: _oldRDV,
+                }
+            });
 
         } catch(error) {
-
             console.trace(error);
-            response.status(404).json(`Appointment NOT modified.`)
-
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                information: `The appointment is NOT modified.`
+            });
         }
     },
     

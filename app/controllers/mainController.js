@@ -137,7 +137,7 @@ module.exports = {
                 if(!!json.features[0].geometry.coordinates){
                     coordonates = json.features[0].geometry.coordinates
                 }
-            }
+            })
             console.log(latitude);
             console.log(longitude);
 
