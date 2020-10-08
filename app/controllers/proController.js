@@ -65,18 +65,18 @@ module.exports = {
             const { shopID, dateStart, dateEnd, days } = req.body
 
             if (!shopID) { return res.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
-            shopID = parseInt(shopID);
+            const shopIDD = parseInt(shopID);
             if (!dateStart) { return res.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
             if (!dateEnd) { return res.status(400).json({ message: 'missing_required_parameter', info: 'dateEnd' }); };
             if (!days) { return res.status(400).json({ message: 'missing_required_parameter', info: 'days' }); };
-            if (shopID<=0|| isNaN(shopID)) { return response.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
+            if (shopIDD<=0|| isNaN(shopIDD)) { return response.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
             if (typeof dateStart !== 'string'||!regexDate.test(dateStart)) { return res.status(400).json({ message: 'dateStart must be a string in format YYYY-MM-DD', info: 'dateStart' }); };
             if (typeof dateEnd !== 'string'||regexDate.test(dateEnd)) { return res.status(400).json({ message: 'dateEnd must be a string in format YYYY-MM-DD', info: 'dateEnd' }); };
             if (typeof days !== 'object') { return res.status(400).json({ message: 'days must be an object with {monday: {amStart: HH:mm, amEnd: HH:mm, pmStart: HH:mm, pmEnd: HH:mm}, tuesday: {...}', info: 'days' }); };
             if ((moment(dateEnd ,"YYYY-MM-DD")<moment(dateStart,"YYYY-MM-DD"))) {return res.status(400).json({ message: 'dateStart must be after dateEnd', info: 'dateStart/dateEnd' });};
 
             // function a insert appointment un a day with starting hour and ending hour
-            const generateNewAppointmentForADay = async function (date, startHour, endHour, shopID) {
+            const generateNewAppointmentForADay = async function (date, startHour, endHour, shopIDD) {
 
                 const startTime = moment(date + ' ' + startHour, "YYYY-MM-DD HH:mm");
                 const endTime = moment(date + ' ' + endHour, "YYYY-MM-DD HH:mm");
@@ -122,12 +122,12 @@ module.exports = {
             };
 
             // function to add one appointment
-            const generateNewAppointment = async function (shopID, slotStart, slotEnd) {
+            const generateNewAppointment = async function (shopIDD, slotStart, slotEnd) {
             
                 let newAppointment = new Appointment({
                     slot_start: slotStart, 
                     slot_end: slotEnd, 
-                    shop_id: shopID,
+                    shop_id: shopIDD,
                 })
                 await newAppointment.insert()
             };
@@ -145,64 +145,64 @@ module.exports = {
                 switch (jourDeDateCible) {
                     case "monday":
                         if(!!days.monday.amStart && !!days.monday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.monday.amStart, days.monday.amEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.monday.amStart, days.monday.amEnd, shopIDD)
                         };
                         if(!!days.monday.pmStart && !!days.monday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.monday.pmStart, days.monday.pmEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.monday.pmStart, days.monday.pmEnd, shopIDD)
                         };
                         break;
 
                     case "tuesday":
                         if(!!days.tuesday.amStart && !!days.tuesday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.tuesday.amStart, days.tuesday.amEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.tuesday.amStart, days.tuesday.amEnd, shopIDD)
                         };
                         if(!!days.tuesday.pmStart && !!days.tuesday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.tuesday.pmStart, days.tuesday.pmEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.tuesday.pmStart, days.tuesday.pmEnd, shopIDD)
                         };
                         break;
 
                     case "wednesday":
                         if(!!days.wednesday.amStart && !!days.wednesday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.wednesday.amStart, days.wednesday.amEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.wednesday.amStart, days.wednesday.amEnd, shopIDD)
                         };
                         if(!!days.wednesday.pmStart && !!days.wednesday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.wednesday.pmStart, days.wednesday.pmEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.wednesday.pmStart, days.wednesday.pmEnd, shopIDD)
                         };
                         break;
 
                     case "thursday":
                         if(!!days.thursday.amStart && !!days.thursday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.thursday.amStart, days.thursday.amEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.thursday.amStart, days.thursday.amEnd, shopIDD)
                         };
                         if(!!days.thursday.pmStart && !!days.thursday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.thursday.pmStart, days.thursday.pmEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.thursday.pmStart, days.thursday.pmEnd, shopIDD)
                         };
                         break;
 
                     case "friday":
                         if(!!days.friday.amStart && !!days.friday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.friday.amStart, days.friday.amEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.friday.amStart, days.friday.amEnd, shopIDD)
                         };
                         if(!!days.friday.pmStart && !!days.friday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.friday.pmStart, days.friday.pmEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.friday.pmStart, days.friday.pmEnd, shopIDD)
                         };
                         break;
 
                     case "saturday":
                         if(!!days.saturday.amStart && !!days.saturday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.saturday.amStart, days.saturday.amEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.saturday.amStart, days.saturday.amEnd, shopIDD)
                         };
                         if(!!days.saturday.pmStart && !!days.saturday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.saturday.pmStart, days.saturday.pmEnd, shopID)
+                            await generateNewAppointmentForADay(dateToCible, days.saturday.pmStart, days.saturday.pmEnd, shopIDD)
                         };
                         break;
 
                     case "sunday":
                         if(!!days.sunday.amStart && !!days.sunday.amEnd) {
-                            generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd, shopID)
+                            generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd, shopIDD)
                         };
                         if(!!days.sunday.pmStart && !!days.sunday.pmEnd) {
-                            generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd, shopID)
+                            generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd, shopIDD)
                         };
                         break;
 
@@ -240,14 +240,14 @@ module.exports = {
 
             let { shopID, dateStart, dateEnd } = request.body
             if (!shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
-            shopID = parseInt(shopID);
+            const shopIDD = parseInt(shopID);
             if (!dateStart) { return rresponses.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
-            if (shopID<=0|| isNaN(shopID)) { return response.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
+            if (shopIDD<=0|| isNaN(shopIDD)) { return response.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
             if (typeof dateStart !== 'string') { return response.status(400).json({ message: 'dateStart must be a string YYYY-MM-DD or DD/MM/YYYY', info: 'dateStart' }); };
 
             if (!dateEnd) { dateEnd = dateStart };
             
-            appointments = await Appointment.getAppointmentShop(dateStart, dateEnd, shopID);
+            appointments = await Appointment.getAppointmentShop(dateStart, dateEnd, shopIDD);
 
             response.json({
                 success: true,
