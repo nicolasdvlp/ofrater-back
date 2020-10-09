@@ -31,6 +31,7 @@ router.post('/services', mainController.getShopServices);
  */
 
 router.post('/registration', mainController.register);
+router.get('/checkEmail/:crypto', mainController.checkEmail);
 router.post('/login', mainController.postLogin);
 router.post('/signout', mainController.signout);
 

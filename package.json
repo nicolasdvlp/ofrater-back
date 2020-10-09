@@ -26,6 +26,7 @@
     "joi": "^17.2.1",
     "moment": "^2.29.0",
     "moment-timezone": "^0.5.31",
+    "nodemailer": "^6.4.13",
     "node-fetch": "^2.6.1",
     "pg": "^8.3.3"
   },
