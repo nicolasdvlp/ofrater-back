@@ -142,13 +142,9 @@ module.exports = class User extends CoreModel {
     };
 
     static async findByAccountValidationCrypto(account_validation_crypto) {
-        console.log('##### dans la méthode findByAccountValidationCrypto du modèle User #####');
-        console.log('account_validation_crypto :', account_validation_crypto);
-        console.log('typeof(account_validation_crypto) :', typeof(account_validation_crypto));
-        
-        //const result = db.query(`SELECT * FROM "${this.name.toLowerCase()}" where account_validation_crypto = '${$1}';`, [account_validation_crypto]);
-        const result = db.query(`SELECT * FROM "${this.name.toLowerCase()}" where account_validation_crypto = '5c';`);
-        console.log('result.rows :', result.rows);
+
+        const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" where account_validation_crypto = $1;`, [account_validation_crypto]);
+        return new this(result.rows[0]);
     }
 
     async ownShop(shopInstance) {
