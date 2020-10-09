@@ -2,9 +2,8 @@
 
 BEGIN;
 
-ALTER TABLE "appointment"
-    ADD COLUMN latitude INT ;
-    ADD COLUMN longitude INT ;
-
+ALTER TABLE "shop"
+    ADD COLUMN latitude NUMERIC(7),
+    ADD COLUMN longitude NUMERIC(7);
 
 COMMIT;

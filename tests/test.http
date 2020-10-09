@@ -79,8 +79,8 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "patrick.Le@gmail.fr",
-    "mail_confirm": "patrick.Le@gmail.fr",
+    "mail": "aadssddpatrdick.Le@gmail.fr",
+    "mail_confirm": "aadssddpatrdick.Le@gmail.fr",
     "password": "azertyA6",
     "password_confirm": "azertyA6",
     "role_id": 2,
@@ -94,6 +94,7 @@ Content-Type: application/json
     }
 }
 
+#######
 
 POST http://localhost:3001/registration
 Content-Type: application/json
