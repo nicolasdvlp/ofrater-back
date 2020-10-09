@@ -26,9 +26,7 @@ module.exports = {
 
             const { input } = request.body
             const _input = parseInt(input)
-            let longitude, latitude;
             let city = [];
-            let coordonates = [];
 
             if(!isNaN(_input) && getlength(_input) === 5 ) { //if it's a number
 
@@ -55,7 +53,6 @@ module.exports = {
         } catch (error) {
 
             console.trace(error);
-
             response.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
@@ -66,19 +63,52 @@ module.exports = {
     
     // Route "/searchProByLocation"
     async findProByLocation(request, response) {
-        
-        const { zipOrCity } = request.body
-        let findedPros;
-
-        if (!zipOrCity) { return response.status(400).json({ message: 'missing_required_parameter', info: 'zipOrCity' }); };
-
         try {
-            findedPros = await Shop.findShopByCity(zipOrCity);
+        
+            const { zipOrCity } = request.body
+            const _zipOrCity = parseInt(zipOrCity)
+            let longitude, latitude;
+            let coordonates = [];
+            let city = [];
+
+            let findedPros;
+
+            if (!zipOrCity) { return response.status(400).json({ message: 'missing_required_parameter', info: 'zipOrCity' }); };
+
+            if(!isNaN(_zipOrCity) && getlength(_zipOrCity) === 5 ) { //if it's a number
+
+                await fetch(`https://geo.api.gouv.fr/communes?codePostal=${_zipOrCity}`)
+                    .then(res => res.json())
+                    .then((json) => {if(!!json){ 
+                        json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
+                    }})
+            } else {
+
+                await fetch(`https://geo.api.gouv.fr/communes?nom=${zipOrCity}`)
+                    .then(res => res.json())
+                    .then((json) => {if(!!json){ 
+                        json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
+                    }});
+            }
+
+            findedPros = await Shop.findShopByCity(city);
+
+            response.json({
+                success: true,
+                message: 'User (and Shop) correctly created',
+                number_result: findedPros.length,
+                data: findedPros
+            });
+       
         } catch (error) {
-            console.log(error);
-            response.status(404).json(`No professional found for location : ${zipOrCity}.`)
+
+            console.trace(error);
+            res.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
         }
-        response.json(findedPros);
     },
 
     async findOnePro(request, response) {
@@ -185,17 +215,9 @@ module.exports = {
             data.user = newUser;
             !!newShop?data.shop=newShop:null;
 
-            response.json({
-                success: true,
-                message: 'User (and Shop) correctly created',
-                data
-            });
-          
             // Creation of a unique string that will be sent to the new user for user activation email
             const buffer = crypto.randomBytes(1);
             const bufferString = buffer.toString('hex');
-            console.log('bufferString :', bufferString);
-            console.log('typeof(bufferString) :', typeof(bufferString));
 
             // Storage of this unique string in db
             newUser.account_validation_crypto = bufferString;
@@ -204,10 +226,16 @@ module.exports = {
             // Send email containing the previous string to the new user for account verification
             sendmail(newUser.mail, bufferString);
 
+            response.json({
+                success: true,
+                message: 'User (and Shop) correctly created',
+                data
+            });
+
         } catch(error) {
 
             console.trace(error);
-            res.status(500).json({
+            response.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
                 error
