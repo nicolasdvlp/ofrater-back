@@ -121,13 +121,34 @@ class Shop extends CoreModel {
         return shopList;
     }
 
-    static async findShopByCity(cityOrZip) {
+    static async findShopByCity(city) {
 
-        const result = await db.query(`SELECT * FROM shop WHERE LOWER(city) LIKE LOWER($1) OR postal_code LIKE $2;`, [`%${cityOrZip}%`, `%${cityOrZip}%`]);
+        let _values = [];
 
-        if (result.rowCount===0) {
-            throw new Error(`No match found with City or Zip code  "${cityOrZip}".`);
+        let indD = 2;
+        let indM = 1+city.length
+        let indF = 2+city.length
+
+        let str1 = '';
+        let str2 = '';
+        
+        city.forEach(element => {
+            _values.push(element.cp);
+        });
+        city.forEach(element => {
+            _values.push(element.city);
+        });
+
+        for (let index = 1; index < city.length; index++) {
+            str1 +=  ` OR postal_code = $${indD}`
+            str2 +=  ` OR LOWER(city) LIKE LOWER($${indF})`
+            indD += 1;
+            indF += 1;
         }
+
+        const values = _values.map(key => `%${key}%`);
+
+        const result = await db.query(`SELECT DISTINCT * FROM shop WHERE postal_code = $1${str1} OR LOWER(city) LIKE LOWER($${indM})${str2};`, values);
 
         const shopList = [];
         for (const shop of result.rows) {
