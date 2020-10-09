@@ -79,15 +79,15 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "sssdsasa.Le@gmail.fr",
-    "mail_confirm": "sssdsasa.Le@gmail.fr",
+    "mail": "ssdsasa.Le@gmail.fr",
+    "mail_confirm": "ssdsasa.Le@gmail.fr",
     "password": "azertyA3",
     "password_confirm": "azertyA3",
     "role_id": 2,
     "shop": {
         "shop_name" : "Zizou Président",
         "opening_time" : "du lundi au dimanche 7/7! de 9h à 19h",
-        "address_name" : "h",
+        "address_name" : "Place du Champ de Foire",
         "address_number" : 16,
         "city" : "Arnac-La-Poste",
         "postal_code" : "87160"

@@ -127,9 +127,8 @@ module.exports = {
 
             if(newUser.role_id === 2) {
 
-                const adressToGeo = [address_number, address_name.split(' ').join('+'), '%2C', postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
-    
-                await fetch(`https://nominatim.openstreetmap.org/search?q=${adressToGeo}&format=geojson`)
+                const adressToGeo = [address_number, address_name.split(' ').join('+'), postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
+                await fetch(`https://api-adresse.data.gouv.fr/search/?q=${adressToGeo}`)
                 .then(res => res.json())
                 .then((json) => {
                     if(!!json.features[0].geometry.coordinates){
@@ -139,6 +138,7 @@ module.exports = {
     
                 [latitude, longitude] = coordonates;
 
+                console.log(coordonates);
                 newShop = new Shop({ 
                     shop_name, opening_time,
                     address_name, address_number,
