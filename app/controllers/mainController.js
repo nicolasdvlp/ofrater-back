@@ -127,6 +127,8 @@ module.exports = {
             newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
             await newUser.insert();
 
+            let newShop;
+
             if(newUser.role_id === 2) {
 
                 const adressToGeo = [address_number, address_name.split(' ').join('+'), postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
