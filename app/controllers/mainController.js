@@ -129,14 +129,10 @@ module.exports = {
 
                 const adressToGeo = [address_number, address_name.split(' ').join('+'), postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
                 await fetch(`https://api-adresse.data.gouv.fr/search/?q=${adressToGeo}`)
-                .then(res => res.json())
-                .then((json) => {
-                    if(!!json.features[0].geometry.coordinates){
-                        return coordonates = json.features[0].geometry.coordinates
-                    }
-                });
+                    .then(res => res.json())
+                    .then((json) => {if(!!json.features[0].geometry.coordinates){ return coordonates = json.features[0].geometry.coordinates }});
     
-                [latitude, longitude] = coordonates;
+                [longitude, latitude] = coordonates;
 
                 newShop = new Shop({ 
                     shop_name, opening_time,
