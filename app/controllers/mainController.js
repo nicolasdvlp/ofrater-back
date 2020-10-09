@@ -164,10 +164,8 @@ module.exports = {
             });
           
             // Creation of a unique string that will be sent to the new user for user activation email
-            const buffer = crypto.randomBytes(1);
+            const buffer = crypto.randomBytes(50);
             const bufferString = buffer.toString('hex');
-            console.log('bufferString :', bufferString);
-            console.log('typeof(bufferString) :', typeof(bufferString));
 
             // Storage of this unique string in db
             newUser.account_validation_crypto = bufferString;
