@@ -1,9 +1,9 @@
 ### Search shop/pro by city name or zip code
-POST http://localhost:3006/mainsearch HTTP/1.1
+POST http://localhost:3000/mainsearch HTTP/1.1
 content-type: application/json
 
 {
-    "input": "6"
+    "input": "78646"
 }
 
 ### Route to find one professional
@@ -79,8 +79,8 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "ssdsasa.Le@gmail.fr",
-    "mail_confirm": "ssdsasa.Le@gmail.fr",
+    "mail": "sasa.Le@gmail.fr",
+    "mail_confirm": "sasa.Le@gmail.fr",
     "password": "azertyA3",
     "password_confirm": "azertyA3",
     "role_id": 2,

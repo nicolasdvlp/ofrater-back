@@ -7,6 +7,7 @@ const { getShopServices } = require('../models/Service');
 const Appointment = require('../models/Appointment');
 const Service = require('../models/Service');
 const fetch = require('node-fetch');
+const { getlength } = require('../modules/mainModule')
 
 module.exports = {
 
@@ -18,16 +19,59 @@ module.exports = {
     
     // Route "/mainsearch"
     async findCityOrZip(request, response) {
+        
 
-        let searchedShops;
+        const { input } = request.body
+        const _input = parseInt(input)
+        let searchedShops, longitude, latitude;
+        let coordonates = [];
+        let data = [];
 
+        switch (_input) {
+            case !isNaN(_input) && getlength(_input) === 5 :
+                console.log('cest un code postal');
+                break;
+            
+            case !isNaN(this) :
+
+                console.log('cest un nombre inf a 5');
+                break;
+            
+            default:
+                console.table(this);
+                break;
+        }
+/*
+        if(!isNaN(_input) && getlength(_input) === 5 ) { //if it's a number
+
+            await fetch(`https://api-adresse.data.gouv.fr/search/?q=${_input}`)
+                .then(res => res.json())
+                .then((json) => {if(!!json.features.length){ return coordonates = json.features[0].geometry.coordinates }});
+
+            !!coordonates.length?[longitude, latitude] = coordonates:null;
+        
+        }
+        
+        
+        else {
+
+            console.log('its text');
+
+        }
+  */
+        return
+
+        /*
         try {
+
             searchedShops = await Shop.findShopByCity(request.body.input);
+
         } catch (error) {
             console.log(error);
             response.status(404).json(`No professional found for location : ${request.body.zipOrCity}.`)
         }
         response.json(searchedShops);
+        */
     },
     
     // Route "/searchProByLocation"
@@ -130,9 +174,9 @@ module.exports = {
                 const adressToGeo = [address_number, address_name.split(' ').join('+'), postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
                 await fetch(`https://api-adresse.data.gouv.fr/search/?q=${adressToGeo}`)
                     .then(res => res.json())
-                    .then((json) => {if(!!json.features[0].geometry.coordinates){ return coordonates = json.features[0].geometry.coordinates }});
+                    .then((json) => {if(!!json.features.length){ return coordonates = json.features[0].geometry.coordinates }});
     
-                [longitude, latitude] = coordonates;
+                !!coordonates.length?[longitude, latitude] = coordonates:null;
 
                 newShop = new Shop({ 
                     shop_name, opening_time,
@@ -219,7 +263,5 @@ module.exports = {
 
         res.json(services)
     }
-
-
 
 }
