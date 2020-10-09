@@ -6,6 +6,8 @@ const { number } = require('joi');
 const { getShopServices } = require('../models/Service');
 const Appointment = require('../models/Appointment');
 const Service = require('../models/Service');
+const sendmail = require('../mailer/mailer');
+const crypto = require('crypto');
 const fetch = require('node-fetch');
 
 module.exports = {
@@ -158,6 +160,19 @@ module.exports = {
                 message: 'User (and Shop) correctly created',
                 data
             });
+          
+            // Creation of a unique string that will be sent to the new user for user activation email
+            const buffer = crypto.randomBytes(1);
+            const bufferString = buffer.toString('hex');
+            console.log('bufferString :', bufferString);
+            console.log('typeof(bufferString) :', typeof(bufferString));
+
+            // Storage of this unique string in db
+            newUser.account_validation_crypto = bufferString;
+            newUser.update();
+
+            // Send email containing the previous string to the new user for account verification
+            sendmail(newUser.mail, bufferString);
 
         } catch(error) {
 
@@ -168,6 +183,24 @@ module.exports = {
                 error
             });
 
+        }
+    },
+
+    // Method to collect the crypto from the link the user clicked on and compare it with the one in BDD
+    // if the comparison is ok, the user is verified
+    async checkEmail(request, response) {
+
+        try {
+            const userToValidate = await User.findByAccountValidationCrypto(request.params.crypto);
+
+            if (userToValidate) {
+                userToValidate.is_validated = true;
+                userToValidate.update();
+                response.json(userToValidate);
+            }
+        } catch (error) {
+            console.trace(error);
+            response.json('The account could not have been validated.');
         }
     },
 

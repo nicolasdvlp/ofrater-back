@@ -11,6 +11,8 @@ module.exports = class User extends CoreModel {
     _password;
     _avatar;
     _role_id;
+    _is_validated;
+    _account_validation_crypto;
 
     constructor(obj) {
         
@@ -23,6 +25,8 @@ module.exports = class User extends CoreModel {
         this._password = obj.password;
         this._avatar = obj.avatar;
         this._role_id = obj.role_id;
+        this._is_validated = obj.is_validated;
+        this._account_validation_crypto = obj.account_validation_crypto;
 
     };
 
@@ -62,6 +66,14 @@ module.exports = class User extends CoreModel {
     get role_id() {
         return this._role_id;
     }
+
+    get is_validated() {
+        return this._is_validated;
+    }
+
+    get account_validation_crypto() {
+        return this._account_validation_crypto;
+    }
     
     /**
      * SETTER
@@ -99,6 +111,14 @@ module.exports = class User extends CoreModel {
         this._role_id = value;
     };
 
+    set is_validated(value) {
+        this._is_validated = value;
+    };
+
+    set account_validation_crypto(value) {
+        this._account_validation_crypto = value;
+    };
+
     static async findAllPro() {
         const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE role_id = $1;`, [1]);
 
@@ -116,6 +136,12 @@ module.exports = class User extends CoreModel {
 
         return result.rows[0];
     };
+
+    static async findByAccountValidationCrypto(account_validation_crypto) {
+
+        const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" where account_validation_crypto = $1;`, [account_validation_crypto]);
+        return new this(result.rows[0]);
+    }
 
     async ownShop(shopInstance) {
 
