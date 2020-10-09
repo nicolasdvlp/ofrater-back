@@ -2,6 +2,8 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
+ALTER TABLE "shop"
+    DROP COLUMN latitude,
+    DROP COLUMN longitude;
 
 COMMIT;

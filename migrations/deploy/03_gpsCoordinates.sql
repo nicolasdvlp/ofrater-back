@@ -2,6 +2,8 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
+ALTER TABLE "shop"
+    ADD COLUMN latitude NUMERIC(7),
+    ADD COLUMN longitude NUMERIC(7);
 
 COMMIT;
