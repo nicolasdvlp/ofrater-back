@@ -138,7 +138,6 @@ module.exports = {
     
                 [latitude, longitude] = coordonates;
 
-                console.log(coordonates);
                 newShop = new Shop({ 
                     shop_name, opening_time,
                     address_name, address_number,
