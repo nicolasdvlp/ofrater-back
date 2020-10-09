@@ -20,58 +20,46 @@ module.exports = {
     // Route "/mainsearch"
     async findCityOrZip(request, response) {
         
-
-        const { input } = request.body
-        const _input = parseInt(input)
-        let searchedShops, longitude, latitude;
-        let coordonates = [];
-        let data = [];
-
-        switch (_input) {
-            case !isNaN(_input) && getlength(_input) === 5 :
-                console.log('cest un code postal');
-                break;
-            
-            case !isNaN(this) :
-
-                console.log('cest un nombre inf a 5');
-                break;
-            
-            default:
-                console.table(this);
-                break;
-        }
-/*
-        if(!isNaN(_input) && getlength(_input) === 5 ) { //if it's a number
-
-            await fetch(`https://api-adresse.data.gouv.fr/search/?q=${_input}`)
-                .then(res => res.json())
-                .then((json) => {if(!!json.features.length){ return coordonates = json.features[0].geometry.coordinates }});
-
-            !!coordonates.length?[longitude, latitude] = coordonates:null;
-        
-        }
-        
-        
-        else {
-
-            console.log('its text');
-
-        }
-  */
-        return
-
-        /*
         try {
 
-            searchedShops = await Shop.findShopByCity(request.body.input);
+            const { input } = request.body
+            const _input = parseInt(input)
+            let longitude, latitude;
+            let city = [];
+            let coordonates = [];
 
+            if(!isNaN(_input) && getlength(_input) === 5 ) { //if it's a number
+
+                await fetch(`https://geo.api.gouv.fr/communes?codePostal=${_input}`)
+                    .then(res => res.json())
+                    .then((json) => {if(!!json){ 
+                        json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
+                    }})
+            } else {
+
+                await fetch(`https://geo.api.gouv.fr/communes?nom=${input}`)
+                    .then(res => res.json())
+                    .then((json) => {if(!!json){ 
+                        json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
+                    }});
+
+            }
+            response.json({
+                success: true,
+                message: 'City found',
+                number_result: city.length,
+                data: city
+            });
         } catch (error) {
-            console.log(error);
-            response.status(404).json(`No professional found for location : ${request.body.zipOrCity}.`)
+
+            console.trace(error);
+
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
         }
-        response.json(searchedShops);
-        */
     },
     
     // Route "/searchProByLocation"
