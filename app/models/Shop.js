@@ -24,8 +24,6 @@ class Shop extends CoreModel {
         this._avatar_shop = obj.avatar_shop;
         this._latitude = obj.latitude;
         this._longitude = obj.longitude;
-    
-
     }
 
     // *******
