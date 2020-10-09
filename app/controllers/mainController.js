@@ -79,7 +79,7 @@ module.exports = {
 
         try {
 
-            let { first_name, last_name, phone_number, birth, mail, mail_confirm, password, password_confirm, role_id } = request.body;
+            let { first_name, last_name, phone_number, birth, mail, mail_confirm, password, password_confirm, role_id} = request.body;
             let shop_name, opening_time, address_name, address_number, city, postal_code, latitude, longitude, coordonates;
             const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
             const saltRounds = 10;
@@ -124,7 +124,7 @@ module.exports = {
 
             if(!!isInDatabase) { return response.status(400).json({ message: `User already in database with this email : ${mail}`, info: 'mail'});};
 
-            newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
+            newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id, is_validated: false});
             await newUser.insert();
 
             let newShop;
