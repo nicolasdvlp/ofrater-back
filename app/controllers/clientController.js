@@ -48,7 +48,6 @@ module.exports = {
 
             client.update();
 
-            response.json('Profile Updated');
             response.json({
                 success: true,
                 message: 'Profile Updated.',
@@ -94,11 +93,8 @@ module.exports = {
 
             // new appointment reservation
             newRdv = await Appointment.findById(newAppointmentIDD);
-
-
             newRdv.user_id = userIDD;
             newRdv.service_id = serviceIDD;
-
             newRdv.update();
 
             // old appointment back to null values
@@ -106,7 +102,6 @@ module.exports = {
             _oldRDV = {...oldRdv}
             oldRdv.user_id = null;
             oldRdv.service_id = null;
-            
             oldRdv.update();
 
             response.json({
