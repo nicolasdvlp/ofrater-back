@@ -37,7 +37,7 @@ router.post('/signout', mainController.signout);
 
 
 // custom middleware to check if user is logged in
-router.use(userMiddleware);
+// router.use(userMiddleware);
 
 // 404 gestion
 // router.use(mainController.error404);

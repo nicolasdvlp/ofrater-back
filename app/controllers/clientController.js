@@ -48,12 +48,20 @@ module.exports = {
 
             client.update();
 
-            response.json('Profile Updated');
+            response.json({
+                success: true,
+                message: 'Profile Updated.',
+                data: client
+            });
 
         } catch(error) {
             
             console.trace(error);
-            response.status(404).json(`Could not find user with id ${request.body.userID};`)
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                information: `The profile User is NOT updated.`
+            });
 
         }
     },
@@ -66,76 +74,100 @@ module.exports = {
         if (!oldAappointmentID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'oldAappointmentID' }); };
         if (!userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
         if (!serviceID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
-        if (isNaN(newAppointmentID)||newAppointmentID<=0||typeof newAppointmentID !== 'number') { return response.status(400).json({ message: 'newAppointmentID must be a positive number', info: 'newAppointmentID' }); };
-        if (isNaN(oldAappointmentID)||oldAappointmentID<=0||typeof oldAappointmentID !== 'number') { return response.status(400).json({ message: 'oldAappointmentID must be a positive number', info: 'oldAappointmentID' }); };
-        if (isNaN(userID)||userID<=0||typeof userID !== 'number') { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
-        if (isNaN(serviceID)||serviceID<=0||typeof serviceID !== 'number') { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
+        
+        const newAppointmentIDD = parseInt(newAppointmentID);
+        const oldAappointmentIDD = parseInt(oldAappointmentID);
+        const userIDD = parseInt(userID);
+        const serviceIDD = parseInt(serviceID);
+
+        if (newAppointmentIDD<=0|| isNaN(newAppointmentIDD)) { return response.status(400).json({ message: 'newAppointmentID must be a positive number', info: 'newAppointmentID' }); };
+        if (oldAappointmentIDD<=0|| isNaN(oldAappointmentIDD)) { return response.status(400).json({ message: 'oldAappointmentID must be a positive number', info: 'oldAappointmentID' }); };
+        if (userIDD<=0|| isNaN(userIDD)) { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
+        if (serviceIDD<=0|| isNaN(serviceIDD)) { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
 
         let newRdv;
         let oldRdv;
+        let _oldRDV;
 
         try {
 
             // new appointment reservation
-            newRdv = await Appointment.findById(newAppointmentID);
-
-            newRdv.user_id = userID;
-            newRdv.service_id = ServiceID;
-
+            newRdv = await Appointment.findById(newAppointmentIDD);
+            newRdv.user_id = userIDD;
+            newRdv.service_id = serviceIDD;
             newRdv.update();
 
             // old appointment back to null values
-            oldRdv = await Appointment.findById(oldAappointmentID);
-
-            rdv.user_id = null;
-            rdv.service_id = null;
-            
+            oldRdv = await Appointment.findById(oldAappointmentIDD);
+            _oldRDV = {...oldRdv}
+            oldRdv.user_id = null;
+            oldRdv.service_id = null;
             oldRdv.update();
 
-            response.json('Appointment modified.');
+            response.json({
+                success: true,
+                message: 'Appointment modified.',
+                data: {
+                    new_appointment: newRdv,
+                    old_appointment: _oldRDV,
+                }
+            });
 
         } catch(error) {
-
             console.trace(error);
-            response.status(404).json(`Appointment NOT modified.`)
-
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                information: `The appointment is NOT modified.`
+            });
         }
     },
     
     async bookAnAppointement (request, response) {
 
-        const { appointment_id, user_id, service_id } = request.body;
+        const { id, user_id, service_id } = request.body;
 
-        if (!appointment_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'appointment_id' }); };
+        if (!id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'id (appointment id)' }); };
         if (!user_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
-        if (!service_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
+        // if (!service_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
 
-        if (isNaN(appointment_id)||appointment_id<0||typeof appointment_id !== 'number') { return response.status(400).json({ message: 'appointment_id must be a positive number', info: 'appointment_id' }); };
-        if (isNaN(user_id)||user_id<0||typeof user_id !== 'number') { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
-        if (isNaN(service_id)||service_id<0||typeof service_id !== 'number') { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
+        appointment_idd = parseInt(id);
+        user_idd = parseInt(user_id);
+        // service_idd = parseInt(service_id);
+
+        if (appointment_idd<=0|| isNaN(appointment_idd)) { return response.status(400).json({ message: 'appointment_id must be a positive number', info: 'appointment_id' }); };
+        if (user_idd<=0|| isNaN(user_idd)) { return response.status(400).json({ message: 'user_id must be a positive number', info: 'user_id' }); };
+        // if (service_idd<=0|| isNaN(service_idd)) { return response.status(400).json({ message: 'service_id must be a positive number', info: 'service_id' }); };
         
-        let rdv;
+        let appointment;
 
         try {
 
-            rdv = await Appointment.findById(appointment_id);
+            appointment = await Appointment.findById(id);
 
             for (const key of Object.keys(request.body)) {
-                if (key !== "appointment_id") {
-                    rdv[key] = request.body[key];
+                if (key !== "id"|| /*FIXME: Temporary mod for front*/key !== "service_id") {
+                    appointment[key] = request.body[key];
                 };
-
             }
 
-            rdv.update();
+            appointment.update();
 
-            response.json(rdv);
+            response.json({
+                success: true,
+                message: 'Appointment correctly booked',
+                data: appointment
+            });
 
         } catch(error) {
 
             console.trace(error);
-            response.status(404).json(`Can not book`)
 
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                information: `The appointment ${request.body.id} is not booked.`
+            });
         }
     },
 
@@ -154,12 +186,12 @@ module.exports = {
             response.json({
                 success: true,
                 message: 'Appointment correctly cancelled',
-                appointment
+                data: appointment
             });
 
         } catch(error) {
             console.trace(error);
-            return response.status(500).json({
+            response.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
                 information: `The appointment ${request.body.id} couldn't have been cancelled.`
@@ -182,13 +214,21 @@ module.exports = {
             shop = await Shop.findById(shopID);
             availableAppointments = await Appointment.getAppointmentsClient(dateStart, dateEnd, shopID);
 
-            response.json({shop, availableAppointments});
+            response.json({
+                success: true,
+                message: 'Available appointment(s) correctly inserted',
+                data:{
+                    shop, 
+                    availableAppointments
+                }
+            });
 
         } catch (error) {
             console.trace(error);
-            return response.status(500).json({
+            response.status(500).json({
                 success: false,
-                message: 'Internal Server Error'
+                message: 'Internal Server Error',
+                error
             });
         }
     }

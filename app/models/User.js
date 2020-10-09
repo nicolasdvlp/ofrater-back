@@ -134,10 +134,6 @@ module.exports = class User extends CoreModel {
 
         const result = await db.query(`select * from "${this.name.toLowerCase()}" where mail=$1;`, [mail]);
 
-        if (result.rowCount===0) {
-            throw new Error(`No match found with mail "${mail}" for table "${this.name.toLowerCase()}".`);
-        }
-
         return result.rows[0];
     };
 
@@ -155,6 +151,8 @@ module.exports = class User extends CoreModel {
             };
 
         const result = await db.query(query); 
+
+        return result.rowCount;
 
     };
 }

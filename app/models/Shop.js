@@ -10,6 +10,8 @@ class Shop extends CoreModel {
     _city;
     _postal_code;
     _avatar_shop;
+    _latitude
+    _longitude
 
     constructor(obj) {
         super(obj);
@@ -20,7 +22,8 @@ class Shop extends CoreModel {
         this._city = obj.city;
         this._postal_code = obj.postal_code;
         this._avatar_shop = obj.avatar_shop;
-
+        this._latitude = obj.latitude;
+        this._longitude = obj.longitude;
     }
 
     // *******
@@ -54,6 +57,14 @@ class Shop extends CoreModel {
         return this._avatar_shop;
     }
 
+    get latitude() {
+        return this._latitude;
+    }
+
+    get longitude() {
+        return this._longitude;
+    }
+
     // *******
     // SETTERS
     // *******
@@ -83,6 +94,14 @@ class Shop extends CoreModel {
 
     set avatar_shop(value) {
         this._avatar_shop = value;
+    }
+
+    set latitude(value) {
+        this._latitude = value;
+    }
+
+    set longitude(value) {
+        this._longitude = value;
     }
 
     // Méthode pour la page d'accueil qui retourne uniquement les CP et les villes pour la recherche "prédictive"

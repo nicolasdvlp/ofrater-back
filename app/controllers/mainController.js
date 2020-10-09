@@ -8,6 +8,7 @@ const Appointment = require('../models/Appointment');
 const Service = require('../models/Service');
 const sendmail = require('../mailer/mailer');
 const crypto = require('crypto');
+const fetch = require('node-fetch');
 
 module.exports = {
 
@@ -53,8 +54,7 @@ module.exports = {
         const proId = parseInt(request.body.id);
         
         if (!request.body.id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'id' }); };
-        if (isNaN(proId)||proId<=0||typeof proId !== 'number') { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'id' }); };
-        
+        if (proId<=0|| isNaN(proId)) { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'id' }); };
         
         let pro;
         let category;
@@ -70,91 +70,97 @@ module.exports = {
             response.status(404).json(`No professional found for id ${proId}.`)
         }
 
-
-
         response.json({...pro, category, service});
     },
 
     async register(request, response) {
-        const { first_name, last_name, phone_number, birth, mail, mail_confirm, password, password_confirm, role_id } = request.body;
-        let shop_name, opening_time, address_name, address_number, city, postal_code;
 
-        if (!first_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'first_name' }); };
-        if (!last_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'last_name' }); };
-        if (!phone_number) { return response.status(400).json({ message: 'missing_required_parameter', info: 'phone_number' }); };
-        if (!birth) { return response.status(400).json({ message: 'missing_required_parameter', info: 'birth' }); };
-        if (!mail) { return response.status(400).json({ message: 'missing_required_parameter', info: 'mail' }); };
-        if (!mail_confirm) { return response.status(400).json({ message: 'missing_required_parameter', info: 'mail_confirm' }); };
-        if (!password) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password' }); };
-        if (!password_confirm) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password_confirm' }); };
-        if (!role_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'role_id' }); };
-
-        if (request.body.shop) {
-
-            shop_name = request.body.shop.shop_name;
-            opening_time = request.body.shop.opening_time;
-            address_name = request.body.shop.address_name;
-            address_number = request.body.shop.address_number;
-            city = request.body.shop.city;
-            postal_code = request.body.shop.postal_code;
-
-            if (!shop_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shop_name' }); };
-            if (!opening_time) { return response.status(400).json({ message: 'missing_required_parameter', info: 'opening_time' }); };
-            if (!address_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'address_name' }); };
-            if (!address_number) { return response.status(400).json({ message: 'missing_required_parameter', info: 'address_number' }); };
-            if (!city) { return response.status(400).json({ message: 'missing_required_parameter', info: 'city' }); };
-            if (!postal_code) { return response.status(400).json({ message: 'missing_required_parameter', info: 'postal_code' }); };
-
-        }
-
-        const _shop = {}
-
-        if(request.body.shop) {
-
-            _shop.shop_name = request.body.shop.shop_name;
-            _shop.opening_time = request.body.shop.opening_time;
-            _shop.address_name = request.body.shop.address_name;
-            _shop.address_number = request.body.shop.address_number;
-            _shop.city = request.body.shop.city;
-            _shop.postal_code = request.body.shop.postal_code;
-           
-        }
-        const saltRounds = 10;
         let newUser;
 
         try {
 
+            let { first_name, last_name, phone_number, birth, mail, mail_confirm, password, password_confirm, role_id } = request.body;
+            let shop_name, opening_time, address_name, address_number, city, postal_code, latitude, longitude, coordonates;
             const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
+            const saltRounds = 10;
             const hash = bcrypt.hashSync(password, saltRounds);
 
-            if (passwordRegex.test(password)) {
-                if (password === password_confirm && mail === mail_confirm) {
-                    newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
-                    await newUser.insert();
-                } else if (password !== password_confirm) {
-                    return response.json(`Your password could not be checked.`);
-                } else if (mail !== mail_confirm) {
-                    return response.json(`Your mail address could not be checked.`)
-                }
-            } else if (!passwordRegex.test(password)) {
-                return response.json(`Your password must contain at least one lowercase letter, one uppercase letter, one digit and be composed of minimum 6 characters.`);
+            if (!first_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'first_name' }); };
+            if (!last_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'last_name' }); };
+            if (!phone_number) { return response.status(400).json({ message: 'missing_required_parameter', info: 'phone_number' }); };
+            if (!birth) { return response.status(400).json({ message: 'missing_required_parameter', info: 'birth' }); };
+            if (!mail) { return response.status(400).json({ message: 'missing_required_parameter', info: 'mail' }); };
+            if (!mail_confirm) { return response.status(400).json({ message: 'missing_required_parameter', info: 'mail_confirm' }); };
+            if (!password) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password' }); };
+            if (!password_confirm) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password_confirm' }); };
+            if (!role_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'role_id' }); };
+    
+            if (request.body.shop) {
+
+                shop_name = request.body.shop.shop_name;
+                opening_time = request.body.shop.opening_time;
+                address_name = request.body.shop.address_name;
+                address_number = request.body.shop.address_number;
+                city = request.body.shop.city;
+                postal_code = request.body.shop.postal_code;
+                latitude = request.body.shop.latitude;
+                longitude = request.body.shop.longitude;
+                coordonates = request.body.shop.coordonates;
+
+                if (!shop_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shop_name' }); };
+                if (!opening_time) { return response.status(400).json({ message: 'missing_required_parameter', info: 'opening_time' }); };
+                if (!address_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'address_name' }); };
+                if (!address_number) { return response.status(400).json({ message: 'missing_required_parameter', info: 'address_number' }); };
+                if (!city) { return response.status(400).json({ message: 'missing_required_parameter', info: 'city' }); };
+                if (!postal_code) { return response.status(400).json({ message: 'missing_required_parameter', info: 'postal_code' }); };
+
             }
 
+            if (!passwordRegex.test(password)) { return response.status(400).json({ message: 'Your password must contain at least one lowercase letter, one uppercase letter, one digit and be composed of minimum 6 characters.', info: 'password'});};
+            if (password !== password_confirm) { return response.status(400).json({ message: 'The two passwords are different', info: 'password' }); };
+            if (mail !== mail_confirm) { return response.status(400).json({ message: 'The two mails are different', info: 'mail' }); };
+
+            const isInDatabase = await User.findByMail(mail);
+
+            if(!!isInDatabase) { return response.status(400).json({ message: `User already in database with this email : ${mail}`, info: 'mail'});};
+
+            newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id});
+            await newUser.insert();
+
             if(newUser.role_id === 2) {
-                newShop = new Shop({ 
-                    shop_name: _shop.shop_name,
-                    opening_time: _shop.opening_time,
-                    address_name: _shop.address_name,
-                    address_number: _shop.address_number,
-                    city: _shop.city,
-                    postal_code: _shop.postal_code
+
+                const adressToGeo = [address_number, address_name.split(' ').join('+'), postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
+                await fetch(`https://api-adresse.data.gouv.fr/search/?q=${adressToGeo}`)
+                .then(res => res.json())
+                .then((json) => {
+                    if(!!json.features[0].geometry.coordinates){
+                        return coordonates = json.features[0].geometry.coordinates
+                    }
                 });
+    
+                [latitude, longitude] = coordonates;
 
+                newShop = new Shop({ 
+                    shop_name, opening_time,
+                    address_name, address_number,
+                    city, postal_code,
+                    latitude: latitude,
+                    longitude: longitude
+                });
                 await newShop.insert();
-
                 await newUser.ownShop(newShop);
             }
 
+            let data = {};
+            data.user = newUser;
+            !!newShop?data.shop=newShop:null;
+
+            response.json({
+                success: true,
+                message: 'User (and Shop) correctly created',
+                data
+            });
+          
             // Creation of a unique string that will be sent to the new user for user activation email
             const buffer = crypto.randomBytes(1);
             const bufferString = buffer.toString('hex');
@@ -171,11 +177,13 @@ module.exports = {
         } catch(error) {
 
             console.trace(error);
-            response.status(404).json(`New user could not have been created.`);
+            res.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
 
         }
-
-        response.json(newUser);
     },
 
     // Method to collect the crypto from the link the user clicked on and compare it with the one in BDD
@@ -210,14 +218,13 @@ module.exports = {
                 request.session.user = userToConnect;
             }
 
+            response.json(userToConnect)
+
         } catch (error) {
 
             console.log(error);    
 
         }
-
-        response.json('Logged in.')
-
     },
 
     async signout(req, res) {

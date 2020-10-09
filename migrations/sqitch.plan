@@ -4,3 +4,4 @@
 
 01_init 2020-09-23T13:57:17Z "Etudiant O'clock",,, <etudiant@teleporteur> # Mise de la structure de base de ofrater
 02_user_verification 2020-10-08T09:43:40Z "Etudiant O'clock",,, <etudiant@teleporteur> # Add two columns in table user for account verification when a user registers
+03_gpsCoordinates 2020-10-08T16:11:53Z Nicolas,,, <nicolas@nicolas-Buntu> # adding gps coordinates in adress shop

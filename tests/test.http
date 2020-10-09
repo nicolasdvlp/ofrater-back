@@ -79,10 +79,10 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "zizoupresident@zizou.fr",
-    "mail_confirm": "zizoupresident@zizou.fr",
-    "password": "azertyA6",
-    "password_confirm": "azertyA6",
+    "mail": "ssdsasa.Le@gmail.fr",
+    "mail_confirm": "ssdsasa.Le@gmail.fr",
+    "password": "azertyA3",
+    "password_confirm": "azertyA3",
     "role_id": 2,
     "shop": {
         "shop_name" : "Zizou Président",
@@ -94,8 +94,9 @@ Content-Type: application/json
     }
 }
 
-### 
-POST http://localhost:3001/registration
+#######
+
+POST http://localhost:3000/registration
 Content-Type: application/json
 
 {
@@ -103,8 +104,8 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "toto@tata.fr",
-    "mail_confirm": "toto@tata.fr",
+    "mail": "dtorfto@tata.fr",
+    "mail_confirm": "dtorfto@tata.fr",
     "password": "azertyA6",
     "password_confirm": "azertyA6",
     "role_id": 1
@@ -112,13 +113,13 @@ Content-Type: application/json
 
 
 ### test
-POST http://localhost:3003/pro/availableappointment
+POST http://localhost:3000/pro/availableappointment
 Content-Type: application/json
 
 {
     "shopID": 1,
-    "dateStart": "2020-10-24",
-    "dateEnd": "2020-10-24",
+    "dateStart": "2020-10-04",
+    "dateEnd": "2019-10-24",
     "days": {
         "monday":{
             "amStart": "08:00",
@@ -269,22 +270,23 @@ Content-Type: application/json
 }
 
 ### Methode pour décaler un RDV
-PUT http://localhost:3002/client/bookmodify
+PUT http://localhost:3000/client/bookmodify
 Content-Type: application/json
 
 {
 
-    "newAppointmentID": 2, 
-    "oldAappointmentID": 1, 
+    "newAppointmentID": 5174, 
+    "oldAappointmentID": 5175, 
     "userID": 2, 
     "serviceID": 1
+}
 
 ### Book an appointment
-PUT http://localhost:3003/client/book
+PUT http://localhost:3000/client/book
 Content-Type: application/json
 
 {
-    "appointment_id": 1,
+    "id": 5174,
     "user_id": 2,
     "service_id": 2
 }

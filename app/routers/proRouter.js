@@ -5,7 +5,7 @@ const proController = require('../controllers/proController');
 /**
  * Routes /pro
  */
-router.get('/profile', proController.getProfile);
+router.post('/profile', proController.getProfile);
 router.put('/profile', proController.updateProfile);
 
 // send available appointment in database
