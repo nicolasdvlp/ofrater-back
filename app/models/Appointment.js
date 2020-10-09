@@ -130,7 +130,7 @@ class Appointment extends CoreModel {
             // with services JOIN 
             // text: `SELECT appointment.*, shop.shop_name, shop.opening_time, shop.avatar_shop, shop.is_active, shop.address_name, shop.address_number, shop.city, shop.postal_code, service.price, service.duration, service.name FROM appointment JOIN shop ON appointment.shop_id = shop.id JOIN service ON appointment.service_id = service.id WHERE user_id = $1 AND appointment.slot_start < now() ORDER BY appointment.slot_start DESC ;`,
             
-            text: `SELECT appointment.*, shop.shop_name, shop.opening_time, shop.avatar_shop, shop.is_active, shop.address_name, shop.address_number, shop.city, shop.postal_code FROM appointment WHERE user_id = $1 AND appointment.slot_start < now() ORDER BY appointment.slot_start DESC ;`,
+            text: `SELECT appointment.*, shop.shop_name, shop.opening_time, shop.avatar_shop, shop.is_active, shop.address_name, shop.address_number, shop.city, shop.postal_code FROM appointment JOIN shop ON appointment.shop_id = shop.id WHERE user_id = $1 AND appointment.slot_start < now() ORDER BY appointment.slot_start DESC ;`,
             values: [userID],
         };
 
