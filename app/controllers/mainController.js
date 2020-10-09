@@ -181,9 +181,19 @@ module.exports = {
     // Method to collect the crypto from the link the user clicked on and compare it with the one in BDD
     // if the comparison is ok, the user is verified
     async checkEmail(request, response) {
-        console.log('request.params :', request.params);
-        console.log('request.params.crypto :', request.params.crypto);
-        const userToValidate = await User.findByAccountValidationCrypto(request.params.crypto);
+
+        try {
+            const userToValidate = await User.findByAccountValidationCrypto(request.params.crypto);
+
+            if (userToValidate) {
+                userToValidate.is_validated = true;
+                userToValidate.update();
+                response.json(userToValidate);
+            }
+        } catch (error) {
+            console.trace(error);
+            response.json('The account could not have been validated.');
+        }
     },
 
     async postLogin(request, response) {
