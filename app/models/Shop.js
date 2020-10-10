@@ -113,18 +113,11 @@ class Shop extends CoreModel {
 
     static async findNearest(lon48, lat2) {
 
-        try {
-
             let coordJoin = 'POINT(' + lon48 + ' ' + lat2 + ')' ;
 
             const result = await db.query(`SELECT shop.*, ST_X(shop.geo::geometry), ST_Y(shop.geo::geometry), ST_Distance(shop.geo, ST_GeographyFromText($1)) AS distance FROM shop ORDER BY distance ASC;`, [coordJoin]);
             
             return result;
-                
-        } catch (error) {
-
-            console.trace('y',error);
-        }
     }
 
     static async findShopByCity(city) {
