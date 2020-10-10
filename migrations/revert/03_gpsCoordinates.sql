@@ -3,7 +3,9 @@
 BEGIN;
 
 ALTER TABLE "shop"
-    DROP COLUMN latitude,
-    DROP COLUMN longitude;
+    DROP COLUMN geo;
+
+DROP EXTENSION postgis;
+
 
 COMMIT;

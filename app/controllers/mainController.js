@@ -66,6 +66,7 @@ module.exports = {
         try {
         
             const { zipOrCity } = request.body
+            console.log(zipOrCity);
             const _zipOrCity = parseInt(zipOrCity)
             let longitude, latitude;
             let coordonates = [];
@@ -91,11 +92,17 @@ module.exports = {
                     }});
             }
 
-            findedPros = await Shop.findShopByCity(city);
+            await  fetch(`https://api-adresse.data.gouv.fr/search/?q=${city[0].cp}`)
+                .then(res => res.json())
+                .then((json) => {if(!!json && !!json.features){ 
+                [latitude, longitude] = json.features[0].geometry.coordinates }});
+                
+            if(!latitude || !longitude) {return response.status(400).json({ message: 'geocode from city not found', info: 'zipOrCity' });}
+            findedPros = await Shop.findNearest(longitude, latitude);
 
             response.json({
                 success: true,
-                message: 'User (and Shop) correctly created',
+                message: 'Shop founded',
                 number_result: findedPros.length,
                 data: findedPros
             });
@@ -204,8 +211,7 @@ module.exports = {
                     shop_name, opening_time,
                     address_name, address_number,
                     city, postal_code,
-                    latitude: latitude,
-                    longitude: longitude
+                    geo: (longitude,latitude)
                 });
                 await newShop.insert();
                 await newUser.ownShop(newShop);

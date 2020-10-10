@@ -10,8 +10,7 @@ class Shop extends CoreModel {
     _city;
     _postal_code;
     _avatar_shop;
-    _latitude
-    _longitude
+    _geo
 
     constructor(obj) {
         super(obj);
@@ -22,8 +21,7 @@ class Shop extends CoreModel {
         this._city = obj.city;
         this._postal_code = obj.postal_code;
         this._avatar_shop = obj.avatar_shop;
-        this._latitude = obj.latitude;
-        this._longitude = obj.longitude;
+        this._geo = obj.geo;
     }
 
     // *******
@@ -57,12 +55,8 @@ class Shop extends CoreModel {
         return this._avatar_shop;
     }
 
-    get latitude() {
-        return this._latitude;
-    }
-
-    get longitude() {
-        return this._longitude;
+    get _geo() {
+        return this.__geo;
     }
 
     // *******
@@ -96,12 +90,8 @@ class Shop extends CoreModel {
         this._avatar_shop = value;
     }
 
-    set latitude(value) {
-        this._latitude = value;
-    }
-
-    set longitude(value) {
-        this._longitude = value;
+    set geo(value) {
+        this._geo = value;
     }
 
     // Méthode pour la page d'accueil qui retourne uniquement les CP et les villes pour la recherche "prédictive"
@@ -119,6 +109,22 @@ class Shop extends CoreModel {
         }
 
         return shopList;
+    }
+
+    static async findNearest(lon48, lat2) {
+
+        try {
+
+            let coordJoin = 'POINT(' + lon48 + ' ' + lat2 + ')' ;
+
+            const result = await db.query(`SELECT shop.*, ST_X(shop.geo::geometry), ST_Y(shop.geo::geometry), ST_Distance(shop.geo, ST_GeographyFromText($1)) AS distance FROM shop ORDER BY distance ASC;`, [coordJoin]);
+            
+            return result;
+                
+        } catch (error) {
+
+            console.trace('y',error);
+        }
     }
 
     static async findShopByCity(city) {

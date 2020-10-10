@@ -15,11 +15,11 @@ Content-Type: application/json
 }
 
 ### Route to find professionnals by location
-GET http://localhost:3000/searchprobylocation
+POST http://localhost:3000/searchprobylocation
 Content-Type: application/json
 
 {
-    "zipOrCity": "4"
+    "zipOrCity": "69350"
 }
 
 ### Route to find professionnals by location
