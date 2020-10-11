@@ -10,8 +10,7 @@ class Shop extends CoreModel {
     _city;
     _postal_code;
     _avatar_shop;
-    _latitude
-    _longitude
+    _geo
 
     constructor(obj) {
         super(obj);
@@ -22,8 +21,7 @@ class Shop extends CoreModel {
         this._city = obj.city;
         this._postal_code = obj.postal_code;
         this._avatar_shop = obj.avatar_shop;
-        this._latitude = obj.latitude;
-        this._longitude = obj.longitude;
+        this._geo = obj.geo;
     }
 
     // *******
@@ -57,12 +55,8 @@ class Shop extends CoreModel {
         return this._avatar_shop;
     }
 
-    get latitude() {
-        return this._latitude;
-    }
-
-    get longitude() {
-        return this._longitude;
+    get _geo() {
+        return this.__geo;
     }
 
     // *******
@@ -96,12 +90,8 @@ class Shop extends CoreModel {
         this._avatar_shop = value;
     }
 
-    set latitude(value) {
-        this._latitude = value;
-    }
-
-    set longitude(value) {
-        this._longitude = value;
+    set geo(value) {
+        this._geo = value;
     }
 
     // Méthode pour la page d'accueil qui retourne uniquement les CP et les villes pour la recherche "prédictive"
@@ -121,13 +111,51 @@ class Shop extends CoreModel {
         return shopList;
     }
 
-    static async findShopByCity(cityOrZip) {
+    static async findNearest(lon48, lat2) {
 
-        const result = await db.query(`SELECT * FROM shop WHERE LOWER(city) LIKE LOWER($1) OR postal_code LIKE $2;`, [`%${cityOrZip}%`, `%${cityOrZip}%`]);
+            let coordJoin = 'POINT(' + lon48 + ' ' + lat2 + ')' ;
 
-        if (result.rowCount===0) {
-            throw new Error(`No match found with City or Zip code  "${cityOrZip}".`);
+            const result = await db.query(
+                `SELECT 
+                shop.*, 
+                ST_X(shop.geo::geometry), 
+                ST_Y(shop.geo::geometry), 
+                ST_Distance(shop.geo, ST_GeographyFromText($1)) AS distance 
+                FROM shop ORDER BY distance ASC
+                LIMIT 12;`, 
+                [coordJoin]);
+            
+            return result.rows;
+    }
+
+    static async findShopByCity(city) {
+
+        let _values = [];
+
+        let indD = 2;
+        let indM = 1+city.length
+        let indF = 2+city.length
+
+        let str1 = '';
+        let str2 = '';
+        
+        city.forEach(element => {
+            _values.push(element.cp);
+        });
+        city.forEach(element => {
+            _values.push(element.city);
+        });
+
+        for (let index = 1; index < city.length; index++) {
+            str1 +=  ` OR postal_code = $${indD}`
+            str2 +=  ` OR LOWER(city) LIKE LOWER($${indF})`
+            indD += 1;
+            indF += 1;
         }
+
+        const values = _values.map(key => `%${key}%`);
+
+        const result = await db.query(`SELECT DISTINCT * FROM shop WHERE postal_code = $1${str1} OR LOWER(city) LIKE LOWER($${indM})${str2};`, values);
 
         const shopList = [];
         for (const shop of result.rows) {

@@ -216,7 +216,6 @@ module.exports = {
         } catch (error) {
 
             console.trace(error);
-
             res.status(500).json({
                 success: false,
                 message: 'Internal Server Error',

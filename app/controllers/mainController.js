@@ -9,6 +9,7 @@ const Service = require('../models/Service');
 const sendmail = require('../mailer/mailer');
 const crypto = require('crypto');
 const fetch = require('node-fetch');
+const { getlength } = require('../modules/mainModule')
 
 module.exports = {
 
@@ -20,33 +21,101 @@ module.exports = {
     
     // Route "/mainsearch"
     async findCityOrZip(request, response) {
-
-        let searchedShops;
-
+        
         try {
-            searchedShops = await Shop.findShopByCity(request.body.input);
+
+            const { input } = request.body
+            const _input = parseInt(input)
+            let city = [];
+
+            if(!isNaN(_input) && getlength(_input) === 5 ) { //if it's a number
+
+                await fetch(`https://geo.api.gouv.fr/communes?codePostal=${_input}`)
+                    .then(res => res.json())
+                    .then((json) => {if(!!json){ 
+                        json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
+                    }})
+            } else {
+
+                await fetch(`https://geo.api.gouv.fr/communes?nom=${input}`)
+                    .then(res => res.json())
+                    .then((json) => {if(!!json){ 
+                        json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
+                    }});
+
+            }
+            response.json({
+                success: true,
+                message: 'City found',
+                number_result: city.length,
+                data: city
+            });
         } catch (error) {
-            console.log(error);
-            response.status(404).json(`No professional found for location : ${request.body.zipOrCity}.`)
+
+            console.trace(error);
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
         }
-        response.json(searchedShops);
     },
     
     // Route "/searchProByLocation"
     async findProByLocation(request, response) {
-        
-        const { zipOrCity } = request.body
-        let findedPros;
-
-        if (!zipOrCity) { return response.status(400).json({ message: 'missing_required_parameter', info: 'zipOrCity' }); };
-
         try {
-            findedPros = await Shop.findShopByCity(zipOrCity);
+        
+            const { zipOrCity } = request.body
+            console.log(zipOrCity);
+            const _zipOrCity = parseInt(zipOrCity)
+            let longitude, latitude;
+            let coordonates = [];
+            let city = [];
+
+            let findedPros;
+
+            if (!zipOrCity) { return response.status(400).json({ message: 'missing_required_parameter', info: 'zipOrCity' }); };
+
+            if(!isNaN(_zipOrCity) && getlength(_zipOrCity) === 5 ) { //if it's a number
+
+                await fetch(`https://geo.api.gouv.fr/communes?codePostal=${_zipOrCity}`)
+                    .then(res => res.json())
+                    .then((json) => {if(!!json){ 
+                        json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
+                    }})
+            } else {
+
+                await fetch(`https://geo.api.gouv.fr/communes?nom=${zipOrCity}`)
+                    .then(res => res.json())
+                    .then((json) => {if(!!json){ 
+                        json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
+                    }});
+            }
+
+            await  fetch(`https://api-adresse.data.gouv.fr/search/?q=${city[0].cp}`)
+                .then(res => res.json())
+                .then((json) => {if(!!json && !!json.features){ 
+                [latitude, longitude] = json.features[0].geometry.coordinates }});
+                
+            if(!latitude || !longitude) {return response.status(400).json({ message: 'geocode from city not found', info: 'zipOrCity' });}
+            findedPros = await Shop.findNearest(longitude, latitude);
+
+            response.json({
+                success: true,
+                message: 'Shop founded',
+                number_result: findedPros.length,
+                data: findedPros
+            });
+       
         } catch (error) {
-            console.log(error);
-            response.status(404).json(`No professional found for location : ${zipOrCity}.`)
+
+            console.trace(error);
+            res.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
         }
-        response.json(findedPros);
     },
 
     async findOnePro(request, response) {
@@ -133,21 +202,16 @@ module.exports = {
 
                 const adressToGeo = [address_number, address_name.split(' ').join('+'), postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
                 await fetch(`https://api-adresse.data.gouv.fr/search/?q=${adressToGeo}`)
-                .then(res => res.json())
-                .then((json) => {
-                    if(!!json.features[0].geometry.coordinates){
-                        return coordonates = json.features[0].geometry.coordinates
-                    }
-                });
+                    .then(res => res.json())
+                    .then((json) => {if(!!json.features.length){ return coordonates = json.features[0].geometry.coordinates }});
     
-                [latitude, longitude] = coordonates;
+                !!coordonates.length?[longitude, latitude] = coordonates:null;
 
                 newShop = new Shop({ 
                     shop_name, opening_time,
                     address_name, address_number,
                     city, postal_code,
-                    latitude: latitude,
-                    longitude: longitude
+                    geo: (longitude,latitude)
                 });
                 await newShop.insert();
                 await newUser.ownShop(newShop);
@@ -157,12 +221,6 @@ module.exports = {
             data.user = newUser;
             !!newShop?data.shop=newShop:null;
 
-            response.json({
-                success: true,
-                message: 'User (and Shop) correctly created',
-                data
-            });
-          
             // Creation of a unique string that will be sent to the new user for user activation email
             const buffer = crypto.randomBytes(50);
             const bufferString = buffer.toString('hex');
@@ -174,10 +232,16 @@ module.exports = {
             // Send email containing the previous string to the new user for account verification
             sendmail(newUser.mail, bufferString);
 
+            response.json({
+                success: true,
+                message: 'User (and Shop) correctly created',
+                data
+            });
+
         } catch(error) {
 
             console.trace(error);
-            res.status(500).json({
+            response.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
                 error
@@ -256,7 +320,5 @@ module.exports = {
 
         res.json(services)
     }
-
-
 
 }
