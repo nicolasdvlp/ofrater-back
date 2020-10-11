@@ -211,7 +211,7 @@ module.exports = {
                     shop_name, opening_time,
                     address_name, address_number,
                     city, postal_code,
-                    geo: `point(${longitude},${latitude})`
+                    geo: `point(${latitude} ${longitude})`
                 });
                 await newShop.insert();
                 await newUser.ownShop(newShop);

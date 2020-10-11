@@ -10,7 +10,7 @@ class Shop extends CoreModel {
     _city;
     _postal_code;
     _avatar_shop;
-    _geo
+    _geo;
 
     constructor(obj) {
         super(obj);
@@ -55,8 +55,8 @@ class Shop extends CoreModel {
         return this._avatar_shop;
     }
 
-    get _geo() {
-        return this.__geo;
+    get geo() {
+        return this._geo;
     }
 
     // *******
