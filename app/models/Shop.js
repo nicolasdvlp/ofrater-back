@@ -56,7 +56,7 @@ class Shop extends CoreModel {
     }
 
     get _geo() {
-        return this.__geo;
+        return this._geo;
     }
 
     // *******
