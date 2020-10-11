@@ -121,7 +121,8 @@ class Shop extends CoreModel {
                 ST_X(shop.geo::geometry), 
                 ST_Y(shop.geo::geometry), 
                 ST_Distance(shop.geo, ST_GeographyFromText($1)) AS distance 
-                FROM shop ORDER BY distance ASC;`, 
+                FROM shop ORDER BY distance ASC
+                LIMIT 12;`, 
                 [coordJoin]);
             
             return result.rows;
