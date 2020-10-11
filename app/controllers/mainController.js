@@ -148,21 +148,10 @@ module.exports = {
 
         try {
 
-            let { first_name, last_name, phone_number, birth, mail, mail_confirm, password, password_confirm, role_id} = request.body;
+            let { first_name, last_name, phone_number, birth, mail, password, role_id} = request.body;
             let shop_name, opening_time, address_name, address_number, city, postal_code, latitude, longitude, coordonates;
-            const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
             const saltRounds = 10;
             const hash = bcrypt.hashSync(password, saltRounds);
-
-            if (!first_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'first_name' }); };
-            if (!last_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'last_name' }); };
-            if (!phone_number) { return response.status(400).json({ message: 'missing_required_parameter', info: 'phone_number' }); };
-            if (!birth) { return response.status(400).json({ message: 'missing_required_parameter', info: 'birth' }); };
-            if (!mail) { return response.status(400).json({ message: 'missing_required_parameter', info: 'mail' }); };
-            if (!mail_confirm) { return response.status(400).json({ message: 'missing_required_parameter', info: 'mail_confirm' }); };
-            if (!password) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password' }); };
-            if (!password_confirm) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password_confirm' }); };
-            if (!role_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'role_id' }); };
     
             if (request.body.shop) {
 
@@ -184,10 +173,6 @@ module.exports = {
                 if (!postal_code) { return response.status(400).json({ message: 'missing_required_parameter', info: 'postal_code' }); };
 
             }
-
-            if (!passwordRegex.test(password)) { return response.status(400).json({ message: 'Your password must contain at least one lowercase letter, one uppercase letter, one digit and be composed of minimum 6 characters.', info: 'password'});};
-            if (password !== password_confirm) { return response.status(400).json({ message: 'The two passwords are different', info: 'password' }); };
-            if (mail !== mail_confirm) { return response.status(400).json({ message: 'The two mails are different', info: 'mail' }); };
 
             const isInDatabase = await User.findByMail(mail);
 
