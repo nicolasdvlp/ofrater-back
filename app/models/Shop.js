@@ -115,9 +115,16 @@ class Shop extends CoreModel {
 
             let coordJoin = 'POINT(' + lon48 + ' ' + lat2 + ')' ;
 
-            const result = await db.query(`SELECT shop.*, ST_X(shop.geo::geometry), ST_Y(shop.geo::geometry), ST_Distance(shop.geo, ST_GeographyFromText($1)) AS distance FROM shop ORDER BY distance ASC;`, [coordJoin]);
+            const result = await db.query(
+                `SELECT 
+                shop.*, 
+                ST_X(shop.geo::geometry), 
+                ST_Y(shop.geo::geometry), 
+                ST_Distance(shop.geo, ST_GeographyFromText($1)) AS distance 
+                FROM shop ORDER BY distance ASC;`, 
+                [coordJoin]);
             
-            return result;
+            return result.rows;
     }
 
     static async findShopByCity(city) {
