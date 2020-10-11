@@ -19,7 +19,7 @@ POST http://localhost:3000/searchprobylocation
 Content-Type: application/json
 
 {
-    "zipOrCity": "69350"
+    "zipOrCity": "77600"
 }
 
 ### Route to find professionnals by location
@@ -71,7 +71,7 @@ Content-Type: application/json
 
 
 ### Route to create a new user and shop (user registration)
-POST http://localhost:3003/registration
+POST http://localhost:3000/registration
 Content-Type: application/json
 
 {
@@ -79,8 +79,8 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "ssssssasda.Le@gmail.fr",
-    "mail_confirm": "ssssssasda.Le@gmail.fr",
+    "mail": "sssssssasda.Le@gmail.fr",
+    "mail_confirm": "sssssssasda.Le@gmail.fr",
     "password": "azertyA3",
     "password_confirm": "azertyA3",
     "role_id": 2,
