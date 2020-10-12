@@ -41,19 +41,19 @@ Content-Type: application/json
 }
 
 ### Route to create a new user (user registration)
-POST http://localhost:3003/registration
+POST http://localhost:3000/registration
 Content-Type: application/json
 
 {
-    "first_name": "Patrick",
+    "first_name": "Pyytryr",
     "last_name": "L'étoile de mer",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "patrick.Le04@yopmail.com",
-    "mail_confirm": "patrick.Le04@yopmail.com",
-    "password": "azertyA6",
-    "password_confirm": "azertyA6",
-    "role_id": 1
+    "mail": "patrckss.Le04@yopmail.com",
+    "mail_confirm": "patrckss.Le04@yopmail.com",
+    "password": "azerty6dA",
+    "password_confirm": "azerty6dA",
+    "role_id": 2
 }
 
 ### Route to create a new user (user registration)
