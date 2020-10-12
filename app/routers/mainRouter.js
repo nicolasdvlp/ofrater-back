@@ -4,7 +4,7 @@ const mainController = require('../controllers/mainController');
 const userMiddleware = require('../middlewares/userMiddleware');
 
 
-const { registerSchema } = require('../validations/schema');
+const { registerSchema, loginSchema } = require('../validations/schema');
 const { validateBody } = require('../validations/validate');
 
 /**
@@ -32,11 +32,9 @@ router.post('/services', mainController.getShopServices);
  * Routes Login/signin/signout
  */
 
-router.route('/registration')
-    .post(validateBody(registerSchema), mainController.register);
-
+router.post('/registration', validateBody(registerSchema), mainController.register);
 router.get('/checkEmail/:crypto', mainController.checkEmail);
-router.post('/login', mainController.postLogin);
+router.post('/login', validateBody(loginSchema), mainController.postLogin);
 router.post('/signout', mainController.signout);
 
 

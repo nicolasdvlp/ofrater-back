@@ -12,4 +12,23 @@ const registerSchema = Joi.object({
     role_id: Joi.required()
 });
 
-module.exports = { registerSchema };
+const loginSchema = Joi.object({
+    mail: Joi.string().required(),
+    password: Joi.string().required().min(6)
+});
+
+const postAvailableAppointmentSchema = Joi.object({
+    shopID: Joi.required(),
+    dateStart: Joi.string().required().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
+    dateEnd: Joi.string().required().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
+    days: Joi.required()
+});
+
+const getappointmentsSchema = Joi.object({
+    shopID: Joi.required(),
+    dateStart: Joi.string().required().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
+    dateEnd: Joi.string().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
+});
+
+
+module.exports = { registerSchema, loginSchema, postAvailableAppointmentSchema, getappointmentsSchema };
