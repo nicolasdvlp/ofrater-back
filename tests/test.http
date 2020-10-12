@@ -104,7 +104,7 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "dtorfto@tata.fr",
+    "mail": "ddd@tata.fr",
     "mail_confirm": "dtorfto@tata.fr",
     "password": "azertyA6",
     "password_confirm": "azertyA6",
@@ -202,7 +202,7 @@ Content-Type: application/json
         "monday":{
             "amStart": "08:00",
             "amEnd": "09:00",
-            "pmStart":"",
+            "pmStart":"0",
             "pmEnd":""
         },
         "tuesday":{
@@ -260,13 +260,13 @@ Content-Type: application/json
 }
 
 ### get pro appointments
-POST http://localhost:3002/pro/getappointments
+POST http://localhost:3000/pro/getappointments
 Content-Type: application/json
 
 {
     "shopID": 1,
     "dateStart": "2019-10-18",
-    "dateEnd": "2020-10-30"
+    "dateEnd": ""
 }
 
 ### Methode pour décaler un RDV
@@ -300,11 +300,11 @@ Content-Type: application/json
 }
 
 ### Consult a shop info with its available appointments for a client
-POST http://localhost:3003/client/shop
+POST http://localhost:3000/client/shop
 Content-Type: application/json
 
 {
     "dateStart": "2019-10-18",
-    "dateEnd": "2020-10-30",
-    "shopID": 4
+    "dateEnd": "2019-10-20",
+    "shopID": 2
 }
