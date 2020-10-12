@@ -113,43 +113,43 @@ Content-Type: application/json
 
 
 ### test
-POST http://localhost:3000/pro/availableappointment
+POST http://localhost:3001/pro/availableappointment
 Content-Type: application/json
 
 {
-    "shopID": 1,
+    "shopID": 11,
     "dateStart": "2020-10-04",
-    "dateEnd": "2020-10-24",
+    "dateEnd": "2020-10-25",
     "days": {
         "monday":{
             "amStart": "08:00",
             "amEnd": "09:00",
-            "pmStart":"",
-            "pmEnd":""
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
         },
         "tuesday":{
-            "amStart": "",
-            "amEnd": "",
-            "pmStart":"",
-            "pmEnd":""
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
         },
         "wednesday":{
-            "amStart": "",
-            "amEnd": "",
-            "pmStart":"",
-            "pmEnd":""
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
         },
         "thursday":{
-            "amStart": "",
-            "amEnd": "",
-            "pmStart":"",
-            "pmEnd":"1"
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
         },
         "friday":{
-            "amStart": "",
-            "amEnd": "",
-            "pmStart":"",
-            "pmEnd":""
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
         },
         "saturday":{
             "amStart": "09:00",
