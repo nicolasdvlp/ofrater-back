@@ -165,13 +165,6 @@ module.exports = {
                 longitude = request.body.shop.longitude;
                 coordonates = request.body.shop.coordonates;
 
-                if (!shop_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shop_name' }); };
-                if (!opening_time) { return response.status(400).json({ message: 'missing_required_parameter', info: 'opening_time' }); };
-                if (!address_name) { return response.status(400).json({ message: 'missing_required_parameter', info: 'address_name' }); };
-                if (!address_number) { return response.status(400).json({ message: 'missing_required_parameter', info: 'address_number' }); };
-                if (!city) { return response.status(400).json({ message: 'missing_required_parameter', info: 'city' }); };
-                if (!postal_code) { return response.status(400).json({ message: 'missing_required_parameter', info: 'postal_code' }); };
-
             }
 
             const isInDatabase = await User.findByMail(mail);
@@ -240,6 +233,7 @@ module.exports = {
     async checkEmail(request, response) {
 
         try {
+
             const userToValidate = await User.findByAccountValidationCrypto(request.params.crypto);
 
             if (userToValidate) {
@@ -248,8 +242,10 @@ module.exports = {
                 response.json(userToValidate);
             }
         } catch (error) {
+
             console.trace(error);
             response.json('The account could not have been validated.');
+            
         }
     },
 

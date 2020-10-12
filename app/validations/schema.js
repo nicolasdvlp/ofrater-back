@@ -6,10 +6,16 @@ const registerSchema = Joi.object({
     phone_number: Joi.required(),
     birth: Joi.required(),
     mail: Joi.string().required(),
-    mail_confirm :Joi.string().required(),
+    mail_confirm :Joi.ref('mail'),
     password: Joi.string().required().min(6).pattern(new RegExp('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$')),
     password_confirm: Joi.ref('password'),
-    role_id: Joi.required()
+    role_id: Joi.required(),
+    shop_name: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().min(2).required()}),
+    opening_time: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().required()}),
+    address_name: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().min(2).required()}),
+    address_number: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.required()}),
+    city: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().min(2).required()}),
+    postal_code: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().required()})
 });
 
 const loginSchema = Joi.object({
@@ -19,15 +25,15 @@ const loginSchema = Joi.object({
 
 const postAvailableAppointmentSchema = Joi.object({
     shopID: Joi.required(),
-    dateStart: Joi.string().required().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
-    dateEnd: Joi.string().required().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
+    // dateStart: Joi.string().required().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
+    // dateEnd: Joi.string().required().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
     days: Joi.required()
 });
 
 const getappointmentsSchema = Joi.object({
     shopID: Joi.required(),
-    dateStart: Joi.string().required().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
-    dateEnd: Joi.string().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
+    // dateStart: Joi.string().required().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
+    // dateEnd: Joi.string().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
 });
 
 const updateProProfileSchema = Joi.object({
