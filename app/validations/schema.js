@@ -77,10 +77,10 @@ const postAvailableAppointmentSchema = Joi.object({
     })
 });
 
-const getappointmentsSchema = Joi.object({
+const getAppointmentsSchema = Joi.object({
     shopID: Joi.required(),
     dateStart: Joi.string().required().pattern(new RegExp(patternDate)),
-    dateEnd: Joi.string().pattern(new RegExp(patternDate))
+    dateEnd: Joi.string().allow('').pattern(new RegExp(patternDate))
 });
 
 const updateProProfileSchema = Joi.object({
@@ -89,4 +89,4 @@ const updateProProfileSchema = Joi.object({
 
 
 
-module.exports = { registerSchema, loginSchema, postAvailableAppointmentSchema, getappointmentsSchema, updateProProfileSchema };
+module.exports = { registerSchema, loginSchema, postAvailableAppointmentSchema, getAppointmentsSchema, updateProProfileSchema };
