@@ -1,4 +1,5 @@
 const { Appointment, User, Shop } = require('../models/');
+const { generateNewAppointment } = require('../modules/appointmentModule');
 const moment = require('moment'); 
 moment().format(); 
 
@@ -105,17 +106,6 @@ module.exports = {
                 for (let index = 0; index < startTimestampArray.length; index++) {
                     await generateNewAppointment(shopID, startTimestampArray[index], endTimestampArray[index]); 
                 };
-            };
-
-            // function to add one appointment
-            const generateNewAppointment = async function (shopIDD, slotStart, slotEnd) {
-            
-                let newAppointment = new Appointment({
-                    slot_start: slotStart, 
-                    slot_end: slotEnd, 
-                    shop_id: shopIDD,
-                })
-                await newAppointment.insert()
             };
 
            let dateToCible = moment(dateStart, "YYYY-MM-DD").add(0, "day").format("YYYY-MM-DD").toString();
