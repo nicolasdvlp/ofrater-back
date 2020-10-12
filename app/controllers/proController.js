@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Shop = require('../models/Shop');
 const Appointment = require('../models/Appointment');
 const moment = require('moment'); 
 moment().format(); 
@@ -29,9 +30,7 @@ module.exports = {
 
         try {
 
-            if (!request.body.shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
-
-            pro = await User.findById(request.body.shopID);
+            pro = await Shop.findById(request.body.shopID);
 
             for (const key of Object.keys(request.body)) {
                 if (key !== "shopID") {
