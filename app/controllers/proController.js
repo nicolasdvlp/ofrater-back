@@ -57,7 +57,7 @@ module.exports = {
         
         try {
 
-            const { shopID, dateStart, dateEnd, days } = req.body
+            const { shopID, dateStart, dateEnd, days } = req.body;
 
             const shopIDD = parseInt(shopID);
             if (shopIDD<=0|| isNaN(shopIDD)) { return response.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
