@@ -4,7 +4,7 @@ const Shop = require('../models/Shop');
 
 module.exports = {
 
-    async getProfile (request, response) {
+    async getUserProfile (request, response) {
 
         const { userID } = request.body
         let client, upcomingAppointment, historyAppointment;
@@ -27,7 +27,7 @@ module.exports = {
         }
     },
 
-    async updateProfile (request, response) {
+    async updateUserProfile (request, response) {
 
         let client;
 
