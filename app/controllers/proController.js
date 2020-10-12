@@ -43,10 +43,17 @@ module.exports = {
                 if (key !== "shopID") {
                     pro[key] = request.body[key];
                 };
-
             }
 
-            pro.update();
+            pro.update();                
+            
+            response.json({
+                success: true,
+                message: `Shop updated`,
+                data:{
+                    pro
+                }
+            });
 
         } catch(error) {
 
@@ -55,7 +62,6 @@ module.exports = {
 
         }
 
-        response.json(pro);
     },
 
     async postAvailableAppointment (req, res) {
