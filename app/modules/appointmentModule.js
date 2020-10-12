@@ -56,7 +56,7 @@ const generateNewAppointmentForADay = async function (date, startHour, endHour, 
         await generateNewAppointment(shopID, startTimestampArray[index], endTimestampArray[index]); 
     };
 
-    await callback([alreadyInDatabaseArray, startTimestampArray])
+    await callback(alreadyInDatabaseArray, startTimestampArray)
 };
 
 

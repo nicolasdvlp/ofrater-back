@@ -64,11 +64,6 @@ module.exports = {
             if (typeof days !== 'object') { return res.status(400).json({ message: 'days must be an object with {monday: {amStart: HH:mm, amEnd: HH:mm, pmStart: HH:mm, pmEnd: HH:mm}, tuesday: {...}', info: 'days' }); };
             if ((moment(dateEnd ,"YYYY-MM-DD")<moment(dateStart,"YYYY-MM-DD"))) {return res.status(400).json({ message: 'dateStart must be after dateEnd', info: 'dateStart/dateEnd' });};
 
-            await generateNewAppointmentForADay('2020-10-22', '09:00', '20:30', 3, (resultArr => { 
-                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                }));
-
             let dateToCible = moment(dateStart, "YYYY-MM-DD").add(0, "day").format("YYYY-MM-DD").toString();
             // loop to add appointments in a day
             for (let index = 0 ; dateToCible !== dateEnd; index++) {
@@ -79,106 +74,106 @@ module.exports = {
                 switch (jourDeDateCible) {
                     case "monday":
                         if(!!days.monday.amStart && !!days.monday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.monday.amStart, days.monday.amEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.monday.amStart, days.monday.amEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         if(!!days.monday.pmStart && !!days.monday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.monday.pmStart, days.monday.pmEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.monday.pmStart, days.monday.pmEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         break;
 
                     case "tuesday":
                         if(!!days.tuesday.amStart && !!days.tuesday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.tuesday.amStart, days.tuesday.amEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.tuesday.amStart, days.tuesday.amEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         if(!!days.tuesday.pmStart && !!days.tuesday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.tuesday.pmStart, days.tuesday.pmEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.tuesday.pmStart, days.tuesday.pmEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         break;
 
                     case "wednesday":
                         if(!!days.wednesday.amStart && !!days.wednesday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.wednesday.amStart, days.wednesday.amEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.wednesday.amStart, days.wednesday.amEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         if(!!days.wednesday.pmStart && !!days.wednesday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.wednesday.pmStart, days.wednesday.pmEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.wednesday.pmStart, days.wednesday.pmEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         break;
 
                     case "thursday":
                         if(!!days.thursday.amStart && !!days.thursday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.thursday.amStart, days.thursday.amEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.thursday.amStart, days.thursday.amEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         if(!!days.thursday.pmStart && !!days.thursday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.thursday.pmStart, days.thursday.pmEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.thursday.pmStart, days.thursday.pmEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         break;
 
                     case "friday":
                         if(!!days.friday.amStart && !!days.friday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.friday.amStart, days.friday.amEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.friday.amStart, days.friday.amEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         if(!!days.friday.pmStart && !!days.friday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.friday.pmStart, days.friday.pmEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.friday.pmStart, days.friday.pmEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         break;
 
                     case "saturday":
                         if(!!days.saturday.amStart && !!days.saturday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.saturday.amStart, days.saturday.amEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.saturday.amStart, days.saturday.amEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         if(!!days.saturday.pmStart && !!days.saturday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.saturday.pmStart, days.saturday.pmEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.saturday.pmStart, days.saturday.pmEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         break;
 
                     case "sunday":
                         if(!!days.sunday.amStart && !!days.sunday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         if(!!days.sunday.pmStart && !!days.sunday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd, shopIDD, (resultArr => { 
-                                startTimestampArray = [...startTimestampArray, resultArr[0]];
-                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, resultArr[1]];
-                            }))
+                            await generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd, shopIDD, (resAlreadyInDB, resInserted) => { 
+                                startTimestampArray = [...startTimestampArray, ...resInserted];
+                                alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resAlreadyInDB];
+                            })
                         };
                         break;
 

@@ -117,9 +117,9 @@ POST http://localhost:3001/pro/availableappointment
 Content-Type: application/json
 
 {
-    "shopID": 1,
+    "shopID": 11,
     "dateStart": "2020-10-04",
-    "dateEnd": "2020-10-24",
+    "dateEnd": "2020-10-25",
     "days": {
         "monday":{
             "amStart": "08:00",
