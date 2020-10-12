@@ -30,5 +30,10 @@ const getappointmentsSchema = Joi.object({
     dateEnd: Joi.string().pattern(new RegExp('^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$')),
 });
 
+const updateProProfileSchema = Joi.object({
+    shopID: Joi.required(),
+});
 
-module.exports = { registerSchema, loginSchema, postAvailableAppointmentSchema, getappointmentsSchema };
+
+
+module.exports = { registerSchema, loginSchema, postAvailableAppointmentSchema, getappointmentsSchema, updateProProfileSchema };
