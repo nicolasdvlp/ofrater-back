@@ -1,10 +1,8 @@
-const Appointment = require('../models/Appointment');
-const User = require('../models/User');
-const Shop = require('../models/Shop');
+const { Appointment, User, Shop } = require('../models/');
 
 module.exports = {
 
-    async getProfile (request, response) {
+    async getUserProfile (request, response) {
 
         const { userID } = request.body
 
@@ -13,8 +11,6 @@ module.exports = {
         let historyAppointment;
 
         try {
-
-            if (!userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
 
             client = await User.findById(userID);
             upcomingAppointment = await Appointment.getUpcomingUserAppointment(userID);
@@ -30,7 +26,7 @@ module.exports = {
         }
     },
 
-    async updateProfile (request, response) {
+    async updateUserProfile (request, response) {
 
         let client;
 
@@ -70,9 +66,6 @@ module.exports = {
 
         const { newAppointmentID, oldAappointmentID, userID, serviceID  } = request.body;
 
-        if (!newAppointmentID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'newAppointmentID' }); };
-        if (!oldAappointmentID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'oldAappointmentID' }); };
-        if (!userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
         if (!serviceID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
         
         const newAppointmentIDD = parseInt(newAppointmentID);
@@ -127,8 +120,6 @@ module.exports = {
 
         const { id, user_id, service_id } = request.body;
 
-        if (!id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'id (appointment id)' }); };
-        if (!user_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
         // if (!service_id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
 
         appointment_idd = parseInt(id);
@@ -203,16 +194,15 @@ module.exports = {
 
         const { dateStart, dateEnd, shopID } = request.body;
 
-        if (!dateStart) { return response.status(400).json({ message: 'missing_required_parameter', info: 'dateStart' }); };
-        if (!dateEnd) {  dateEnd = dateStart; };
-        if (!shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
-
         let availableAppointments;
         let shop;
+        let _dateEnd;
+
+        !!dateEnd ? _dateEnd = dateEnd : _dateEnd = dateStart ;
 
         try {
             shop = await Shop.findById(shopID);
-            availableAppointments = await Appointment.getAppointmentsClient(dateStart, dateEnd, shopID);
+            availableAppointments = await Appointment.getAppointmentsClient(dateStart, _dateEnd, shopID);
 
             response.json({
                 success: true,

@@ -27,11 +27,29 @@ psql -U barbeapapa -d ofrater -f chemin_du_fichier
 ```
 
 
+## Installation de Postgis
+
+```
+## You can do APT package list update and system upgrade before you get started.
+sudo apt update
+sudo apt -y upgrade
+## A reboot is required
+sudo reboot
+
+Add PostgreSQL repository
+sudo apt -y install gnupg2
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+
+## For Postgres 12
+sudo apt install postgis postgresql-12-postgis-3
+```
+
 ## Creation de BDD
 
 1. `createdb ofrater`
 2. `sqitch deploy`
 
 
-TODO LIST
 
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO someuser;

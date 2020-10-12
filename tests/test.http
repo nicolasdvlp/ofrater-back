@@ -1,9 +1,9 @@
 ### Search shop/pro by city name or zip code
-POST http://localhost:3006/mainsearch HTTP/1.1
+POST http://localhost:3000/mainsearch HTTP/1.1
 content-type: application/json
 
 {
-    "input": "6"
+    "input": "78646"
 }
 
 ### Route to find one professional
@@ -15,11 +15,11 @@ Content-Type: application/json
 }
 
 ### Route to find professionnals by location
-GET http://localhost:3000/searchprobylocation
+POST http://localhost:3000/searchprobylocation
 Content-Type: application/json
 
 {
-    "zipOrCity": "4"
+    "zipOrCity": "77600"
 }
 
 ### Route to find professionnals by location
@@ -45,12 +45,12 @@ POST http://localhost:3003/registration
 Content-Type: application/json
 
 {
-    "first_name": "Patrick",
-    "last_name": "L'étoile de mer",
+    "first_name": "Ronald",
+    "last_name": "McDonald",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "patrick.Le04@yopmail.com",
-    "mail_confirm": "patrick.Le04@yopmail.com",
+    "mail": "ronald.md01@yopmail.com",
+    "mail_confirm": "ronald.md01@yopmail.com",
     "password": "azertyA6",
     "password_confirm": "azertyA6",
     "role_id": 1
@@ -71,7 +71,7 @@ Content-Type: application/json
 
 
 ### Route to create a new user and shop (user registration)
-POST http://localhost:3003/registration
+POST http://localhost:3000/registration
 Content-Type: application/json
 
 {
@@ -79,18 +79,18 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "ssdsasa.Le@gmail.fr",
-    "mail_confirm": "ssdsasa.Le@gmail.fr",
+    "mail": "sssssssasda.Le@gmail.fr",
+    "mail_confirm": "sssssssasda.Le@gmail.fr",
     "password": "azertyA3",
     "password_confirm": "azertyA3",
     "role_id": 2,
     "shop": {
         "shop_name" : "Zizou Président",
         "opening_time" : "du lundi au dimanche 7/7! de 9h à 19h",
-        "address_name" : "Place du Champ de Foire",
+        "address_name" : "5 avenue des petites ecuries",
         "address_number" : 16,
-        "city" : "Arnac-La-Poste",
-        "postal_code" : "87160"
+        "city" : "lognes",
+        "postal_code" : "77185"
     }
 }
 
@@ -104,7 +104,7 @@ Content-Type: application/json
     "last_name": "fdsf",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "dtorfto@tata.fr",
+    "mail": "ddd@tata.fr",
     "mail_confirm": "dtorfto@tata.fr",
     "password": "azertyA6",
     "password_confirm": "azertyA6",
@@ -113,43 +113,43 @@ Content-Type: application/json
 
 
 ### test
-POST http://localhost:3000/pro/availableappointment
+POST http://localhost:3001/pro/availableappointment
 Content-Type: application/json
 
 {
-    "shopID": 1,
+    "shopID": 11,
     "dateStart": "2020-10-04",
-    "dateEnd": "2019-10-24",
+    "dateEnd": "2020-10-25",
     "days": {
         "monday":{
             "amStart": "08:00",
             "amEnd": "09:00",
-            "pmStart":"",
-            "pmEnd":""
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
         },
         "tuesday":{
-            "amStart": "",
-            "amEnd": "",
-            "pmStart":"",
-            "pmEnd":""
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
         },
         "wednesday":{
-            "amStart": "",
-            "amEnd": "",
-            "pmStart":"",
-            "pmEnd":""
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
         },
         "thursday":{
-            "amStart": "",
-            "amEnd": "",
-            "pmStart":"",
-            "pmEnd":"1"
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
         },
         "friday":{
-            "amStart": "",
-            "amEnd": "",
-            "pmStart":"",
-            "pmEnd":""
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
         },
         "saturday":{
             "amStart": "09:00",
@@ -186,23 +186,23 @@ POST http://localhost:3003/login
 Content-Type: application/json
 
 {
-    "mail": "zizoupresident@zizou.fr",
-    "password": "azertyA6"
+    "mail": "ronald.md01@yopmail.com",
+    "password": "azehkgjh"
 }
 
 ### test
-POST http://localhost:3003/pro/availableappointment
+POST http://localhost:3000/pro/availableappointment
 Content-Type: application/json
 
 {
-    "shopID": 1,
-    "dateStart": "2020-10-29",
-    "dateEnd": "2020-10-29",
+    "shopID": 4,
+    "dateStart": "2019-10-12",
+    "dateEnd": "2019-10-14"
     "days": {
         "monday":{
             "amStart": "08:00",
             "amEnd": "09:00",
-            "pmStart":"",
+            "pmStart":"0",
             "pmEnd":""
         },
         "tuesday":{
@@ -260,13 +260,13 @@ Content-Type: application/json
 }
 
 ### get pro appointments
-POST http://localhost:3002/pro/getappointments
+POST http://localhost:3000/pro/getappointments
 Content-Type: application/json
 
 {
-    "shopID": 1,
-    "dateStart": "2019-10-18",
-    "dateEnd": "2020-10-30"
+    "shopID": 4,
+    "dateStart": "2019-10-12",
+    "dateEnd": "2019-10-14"
 }
 
 ### Methode pour décaler un RDV
@@ -300,11 +300,11 @@ Content-Type: application/json
 }
 
 ### Consult a shop info with its available appointments for a client
-POST http://localhost:3003/client/shop
+POST http://localhost:3000/client/shop
 Content-Type: application/json
 
 {
     "dateStart": "2019-10-18",
-    "dateEnd": "2020-10-30",
-    "shopID": 4
+    "dateEnd": "2019-10-20",
+    "shopID": 2
 }

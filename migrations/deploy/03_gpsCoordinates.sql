@@ -2,8 +2,9 @@
 
 BEGIN;
 
+CREATE EXTENSION postgis;
+
 ALTER TABLE "shop"
-    ADD COLUMN latitude NUMERIC(7),
-    ADD COLUMN longitude NUMERIC(7);
+    ADD COLUMN geo GEOGRAPHY(Point);
 
 COMMIT;
