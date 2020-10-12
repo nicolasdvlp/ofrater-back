@@ -14,12 +14,14 @@ const registerSchema = Joi.object({
     password: Joi.string().required().min(6).pattern(new RegExp(patternPassword)),
     password_confirm: Joi.ref('password'),
     role_id: Joi.required(),
-    shop_name: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().min(2).required()}),
-    opening_time: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().required()}),
-    address_name: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().min(2).required()}),
-    address_number: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.required()}),
-    city: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().min(2).required()}),
-    postal_code: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().required()})
+    shop: Joi.object({
+        shop_name: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().min(2).required()}),
+        opening_time: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().required()}),
+        address_name: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().min(2).required()}),
+        address_number: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.required()}),
+        city: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().min(2).required()}),
+        postal_code: Joi.when('role_id', {is: [ 2, "2" ], then: Joi.string().required()})
+    })
 });
 
 const loginSchema = Joi.object({

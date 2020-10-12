@@ -128,6 +128,15 @@ class Shop extends CoreModel {
             return result.rows;
     }
 
+    static async ownedByUser(UserID) {
+
+        const result = await db.query(
+            `select shop.* from shop JOIN "user_owns_shop" ON user_owns_shop.shop_id = shop.id JOIN "user" ON "user_owns_shop".user_id = "user".id where user_owns_shop.user_id = $1 ;`, 
+            [UserID]);
+        
+        return result.rows;
+}
+
     static async findShopByCity(city) {
 
         let _values = [];

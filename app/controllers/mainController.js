@@ -247,6 +247,7 @@ module.exports = {
     async postLogin(request, response) {
 
         const { mail, password } = request.body
+        let shop, _shop;
 
         try {
 
@@ -254,9 +255,15 @@ module.exports = {
 
             if(!userToConnect) {return response.status(404).json({message: `No user found for email ${mail}.`, info: 'mail'})};
 
+            if(userToConnect.role_id === 2) {
+                shop = await Shop.ownedByUser(userToConnect.id);
+            };
+
+            !!shop ? _shop = shop : null ;
+
             if(await bcrypt.compare(password, userToConnect.password)) {
                 request.session.user = userToConnect;
-                return response.json({success: true, message: 'User logged in', data: userToConnect});
+                return response.json({success: true, message: 'User logged in', data: userToConnect, owned_shop: _shop});
             }
 
             response.status(401).json({success: false, message: 'Impossible to log in. Wrong password.'})
