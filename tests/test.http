@@ -49,8 +49,8 @@ Content-Type: application/json
     "last_name": "L'étoile de mer",
     "phone_number": "0679958989",
     "birth": "12/01/1985",
-    "mail": "patrckss.Le04@yopmail.com",
-    "mail_confirm": "patrckss.Le04@yopmail.com",
+    "mail": "ddspatrckssss.Le04@yopmail.com",
+    "mail_confirm": "ddspatrckssss.Le04@yopmail.com",
     "password": "azerty6dA",
     "password_confirm": "azerty6dA",
     "role_id": 2
@@ -119,7 +119,7 @@ Content-Type: application/json
 {
     "shopID": 1,
     "dateStart": "2020-10-04",
-    "dateEnd": "2019-10-24",
+    "dateEnd": "2020-10-24",
     "days": {
         "monday":{
             "amStart": "08:00",
@@ -191,13 +191,13 @@ Content-Type: application/json
 }
 
 ### test
-POST http://localhost:3003/pro/availableappointment
+POST http://localhost:3000/pro/availableappointment
 Content-Type: application/json
 
 {
     "shopID": 1,
     "dateStart": "2020-10-29",
-    "dateEnd": "2020-10-29",
+    "dateEnd": "2020-11-29",
     "days": {
         "monday":{
             "amStart": "08:00",
