@@ -247,6 +247,5 @@ module.exports = {
                 error
             });
         }
-
     },
 }

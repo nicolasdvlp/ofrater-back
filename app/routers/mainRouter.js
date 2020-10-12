@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mainController = require('../controllers/mainController');
 const userMiddleware = require('../middlewares/userMiddleware');
-
-
-const { registerSchema, loginSchema } = require('../validations/schema');
+const { getShopServicesSchema, registerSchema, loginSchema } = require('../validations/schema');
 const { validateBody } = require('../validations/validate');
 
 /**
@@ -25,7 +23,7 @@ router.post('/searchprobylocation', mainController.findProByLocation);
 /**
  * To get service's shop
  */
-router.post('/services', mainController.getShopServices);
+router.post('/services', validateBody(getShopServicesSchema), mainController.getShopServices);
 
 
 /**

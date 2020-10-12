@@ -87,6 +87,37 @@ const updateProProfileSchema = Joi.object({
     shopID: Joi.required()
 });
 
+const modifyAnAppointmentSchema = Joi.object({
+    newAppointmentID:  Joi.required(),
+    oldAappointmentID: Joi.required(),
+    userID: Joi.required(),
+});
 
+const bookAnAppointementSchema = Joi.object({
+    id: Joi.required(),
+    user_id: Joi.required(),
+});
 
-module.exports = { registerSchema, loginSchema, postAvailableAppointmentSchema, getAppointmentsSchema, updateProProfileSchema };
+const cancelAppointmentSchema = Joi.object({
+    id: Joi.required(),
+});
+
+const getShopPageAndAgendaSchema = Joi.object({
+    dateStart: Joi.string().required().pattern(new RegExp(patternDate)),
+    dateEnd: Joi.string().allow('').pattern(new RegExp(patternDate)),
+    shopID: Joi.required()
+});
+
+const getUserProfileSchema = Joi.object({
+    userID: Joi.required(),
+});
+
+const getShopServicesSchema = Joi.object({
+    shopID: Joi.required(),
+});
+
+// const updateUserProfileSchema = Joi.object({
+//     userID: Joi.required(),
+// });
+
+module.exports = { getShopServicesSchema, getUserProfileSchema, getShopPageAndAgendaSchema, registerSchema, loginSchema, postAvailableAppointmentSchema, getAppointmentsSchema, updateProProfileSchema, modifyAnAppointmentSchema, bookAnAppointementSchema, cancelAppointmentSchema };

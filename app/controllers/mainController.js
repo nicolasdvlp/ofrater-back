@@ -2,9 +2,6 @@ const Shop = require('../models/Shop');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const Role = require('../models/Role');
-const { number } = require('joi');
-const { getShopServices } = require('../models/Service');
-const Appointment = require('../models/Appointment');
 const Service = require('../models/Service');
 const sendmail = require('../mailer/mailer');
 const crypto = require('crypto');
@@ -66,7 +63,6 @@ module.exports = {
         try {
         
             const { zipOrCity } = request.body
-            console.log(zipOrCity);
             const _zipOrCity = parseInt(zipOrCity)
             let longitude, latitude;
             let coordonates = [];
@@ -285,18 +281,19 @@ module.exports = {
 
         const { shopID } = req.body;
         let services = [];
-        if (!shopID) { return res.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
         
         try {
 
             services = await Service.getShopServices(shopID);
+
+            res.json(services)
+
 
         } catch (error) {
 
             console.log(error);    
         }
 
-        res.json(services)
     }
 
 }
