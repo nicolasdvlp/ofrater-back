@@ -7,10 +7,7 @@ module.exports = {
     async getProfile (request, response) {
 
         const { userID } = request.body
-
-        let client;
-        let upcomingAppointment;
-        let historyAppointment;
+        let client, upcomingAppointment, historyAppointment;
 
         try {
 
