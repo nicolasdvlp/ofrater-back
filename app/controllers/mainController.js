@@ -232,12 +232,14 @@ module.exports = {
             if (userToValidate) {
                 userToValidate.is_validated = true;
                 userToValidate.update();
-                response.json(userToValidate);
+                return response.json({success: true, message: 'Account validated.'});
+            } else {
+                return response.status(500).json({success: false, message: 'The account could not be validated.'});
             }
         } catch (error) {
 
             console.trace(error);
-            response.json('The account could not have been validated.');
+            response.status(500).json('The account could not have been validated.');
             
         }
     },
