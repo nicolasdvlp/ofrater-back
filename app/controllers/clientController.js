@@ -173,9 +173,16 @@ module.exports = {
         try {
             appointment = await Appointment.findById(request.body.id);
 
+            if(!appointment) {
+                return response.json({
+                    success: false,
+                    message: `No Appointment found with id ${request.body.id}`,
+                    data:{}
+                });
+            };
+
             appointment.user_id = null;
             appointment.service_id = null;
-
             appointment.update();
 
             response.json({
