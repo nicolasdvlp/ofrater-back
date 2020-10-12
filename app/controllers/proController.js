@@ -1,6 +1,4 @@
-const User = require('../models/User');
-const Shop = require('../models/Shop');
-const Appointment = require('../models/Appointment');
+const { Appointment, User, Shop } = require('../models/');
 const moment = require('moment'); 
 moment().format(); 
 

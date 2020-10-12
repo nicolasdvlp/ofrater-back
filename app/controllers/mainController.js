@@ -1,8 +1,5 @@
-const Shop = require('../models/Shop');
-const User = require('../models/User');
+const { Role, User, Shop, Service } = require('../models/');
 const bcrypt = require('bcrypt');
-const Role = require('../models/Role');
-const Service = require('../models/Service');
 const sendmail = require('../mailer/mailer');
 const crypto = require('crypto');
 const fetch = require('node-fetch');
