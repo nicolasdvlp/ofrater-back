@@ -8,7 +8,7 @@ const router = express.Router();
 /**
  * Routes /client
  */
-router.post('/profile', validateBody(getUserProfileSchema),clientController.getUserProfile);
+router.post('/profile', validateBody(getUserProfileSchema), clientController.getUserProfile);
 router.put('/profile', clientController.updateUserProfile);
 
 // to book an appointment

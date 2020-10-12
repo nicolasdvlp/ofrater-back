@@ -31,6 +31,14 @@ module.exports = {
 
             pro = await Shop.findById(request.body.shopID);
 
+            if(!pro) {
+                return response.json({
+                    success: false,
+                    message: `No shop found for update with id ${request.body.shopID}`,
+                    data:{}
+                });
+            };
+
             for (const key of Object.keys(request.body)) {
                 if (key !== "shopID") {
                     pro[key] = request.body[key];

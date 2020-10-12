@@ -1,6 +1,4 @@
-const Appointment = require('../models/Appointment');
-const User = require('../models/User');
-const Shop = require('../models/Shop');
+const { Appointment, User, Shop } = require('../models');
 
 module.exports = {
 

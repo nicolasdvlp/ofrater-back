@@ -33,11 +33,11 @@ Content-Type: application/json
 
 ### get Profile client
 
-POST http://localhost:3000/client/profile
+POST http://localhost:3001/client/profile
 Content-Type: application/json
 
 {
-    "userID": "2"
+    "userID": "3"
 }
 
 ### Route to create a new user (user registration)
