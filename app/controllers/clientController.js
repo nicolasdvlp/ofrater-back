@@ -69,33 +69,30 @@ module.exports = {
     async modifyAnAppointment (request, response) {
 
         const { newAppointmentID, oldAappointmentID, userID, serviceID  } = request.body;
+        let newRdv, oldRdv, _oldRDV;
 
         if (!serviceID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'serviceID' }); };
         
-        const newAppointmentIDD = parseInt(newAppointmentID);
-        const oldAappointmentIDD = parseInt(oldAappointmentID);
-        const userIDD = parseInt(userID);
-        const serviceIDD = parseInt(serviceID);
+        const _newAppointmentID = parseInt(newAppointmentID);
+        const _oldAappointmentID = parseInt(oldAappointmentID);
+        const _userID = parseInt(userID);
+        const _serviceID = parseInt(serviceID);
 
-        if (newAppointmentIDD<=0|| isNaN(newAppointmentIDD)) { return response.status(400).json({ message: 'newAppointmentID must be a positive number', info: 'newAppointmentID' }); };
-        if (oldAappointmentIDD<=0|| isNaN(oldAappointmentIDD)) { return response.status(400).json({ message: 'oldAappointmentID must be a positive number', info: 'oldAappointmentID' }); };
-        if (userIDD<=0|| isNaN(userIDD)) { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
-        if (serviceIDD<=0|| isNaN(serviceIDD)) { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
-
-        let newRdv;
-        let oldRdv;
-        let _oldRDV;
+        if (_newAppointmentID<=0|| isNaN(_newAppointmentID)) { return response.status(400).json({ message: 'newAppointmentID must be a positive number', info: 'newAppointmentID' }); };
+        if (_oldAappointmentID<=0|| isNaN(_oldAappointmentID)) { return response.status(400).json({ message: 'oldAappointmentID must be a positive number', info: 'oldAappointmentID' }); };
+        if (_userID<=0|| isNaN(_userID)) { return response.status(400).json({ message: 'userID must be a positive number', info: 'userID' }); };
+        if (_serviceID<=0|| isNaN(_serviceID)) { return response.status(400).json({ message: 'serviceID must be a positive number', info: 'serviceID' }); };
 
         try {
 
             // new appointment reservation
-            newRdv = await Appointment.findById(newAppointmentIDD);
-            newRdv.user_id = userIDD;
-            newRdv.service_id = serviceIDD;
+            newRdv = await Appointment.findById(_newAppointmentID);
+            newRdv.user_id = _userID;
+            newRdv.service_id = _serviceID;
             newRdv.update();
 
             // old appointment back to null values
-            oldRdv = await Appointment.findById(oldAappointmentIDD);
+            oldRdv = await Appointment.findById(_oldAappointmentID);
             _oldRDV = {...oldRdv}
             oldRdv.user_id = null;
             oldRdv.service_id = null;
