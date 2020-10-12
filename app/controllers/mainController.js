@@ -256,11 +256,15 @@ module.exports = {
         try {
 
             const userToConnect = await User.findByMail(mail);
+
+            if(!userToConnect) {return response.status(404).json({message: `No user found for email ${mail}.`, info: 'mail'})};
+
             if(await bcrypt.compare(password, userToConnect.password)) {
                 request.session.user = userToConnect;
+                return response.json({success: true, message: 'User logged in', data: userToConnect});
             }
 
-            response.json(userToConnect)
+            response.status(401).json({success: false, message: 'Impossible to log in. Wrong password.'})
 
         } catch (error) {
 
