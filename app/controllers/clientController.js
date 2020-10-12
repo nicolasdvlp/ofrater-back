@@ -1,8 +1,10 @@
-const { Appointment, User, Shop } = require('../models/');
+const Appointment = require('../models/Appointment');
+const User = require('../models/User');
+const Shop = require('../models/Shop');
 
 module.exports = {
 
-    async getUserProfile (request, response) {
+    async getProfile (request, response) {
 
         const { userID } = request.body
 
@@ -11,6 +13,8 @@ module.exports = {
         let historyAppointment;
 
         try {
+
+            if (!userID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'userID' }); };
 
             client = await User.findById(userID);
             upcomingAppointment = await Appointment.getUpcomingUserAppointment(userID);
@@ -26,7 +30,7 @@ module.exports = {
         }
     },
 
-    async updateUserProfile (request, response) {
+    async updateProfile (request, response) {
 
         let client;
 
@@ -194,15 +198,21 @@ module.exports = {
 
         const { dateStart, dateEnd, shopID } = request.body;
 
-        let availableAppointments;
-        let shop;
-        let _dateEnd;
+        let _dateEnd, availableAppointments, shop;
 
         !!dateEnd ? _dateEnd = dateEnd : _dateEnd = dateStart ;
 
         try {
             shop = await Shop.findById(shopID);
             availableAppointments = await Appointment.getAppointmentsClient(dateStart, _dateEnd, shopID);
+
+            if(!shop) {
+                return response.json({
+                    success: false,
+                    message: `No shop found with id ${shopID}`,
+                    data:{}
+                });
+            };
 
             response.json({
                 success: true,
