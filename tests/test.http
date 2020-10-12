@@ -195,9 +195,9 @@ POST http://localhost:3000/pro/availableappointment
 Content-Type: application/json
 
 {
-    "shopID": 1,
-    "dateStart": "2020-10-29",
-    "dateEnd": "2020-11-29",
+    "shopID": 4,
+    "dateStart": "2019-10-12",
+    "dateEnd": "2019-10-14"
     "days": {
         "monday":{
             "amStart": "08:00",
@@ -264,9 +264,9 @@ POST http://localhost:3000/pro/getappointments
 Content-Type: application/json
 
 {
-    "shopID": 1,
-    "dateStart": "2019-10-18",
-    "dateEnd": ""
+    "shopID": 4,
+    "dateStart": "2019-10-12",
+    "dateEnd": "2019-10-14"
 }
 
 ### Methode pour décaler un RDV
