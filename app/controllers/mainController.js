@@ -253,9 +253,6 @@ module.exports = {
 
         const { mail, password } = request.body
 
-        if (!mail) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shop_name' }); };
-        if (!password) { return response.status(400).json({ message: 'missing_required_parameter', info: 'password' }); };
-
         try {
 
             const userToConnect = await User.findByMail(mail);

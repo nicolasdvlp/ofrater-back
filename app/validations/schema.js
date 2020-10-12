@@ -9,7 +9,7 @@ const registerSchema = Joi.object({
     last_name: Joi.string().required().min(2),
     phone_number: Joi.required(),
     birth: Joi.required(),
-    mail: Joi.string().required(),
+    mail: Joi.string().email().required(),
     mail_confirm :Joi.ref('mail'),
     password: Joi.string().required().min(6).pattern(new RegExp(patternPassword)),
     password_confirm: Joi.ref('password'),
@@ -23,7 +23,7 @@ const registerSchema = Joi.object({
 });
 
 const loginSchema = Joi.object({
-    mail: Joi.string().required(),
+    mail: Joi.string().email().required(),
     password: Joi.string().required().min(6)
 });
 
