@@ -1,6 +1,6 @@
 const { Role, User, Shop, Service } = require('../models/');
-const bcrypt = require('bcrypt');
 const sendmail = require('../mailer/mailer');
+const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const fetch = require('node-fetch');
 const { getlength } = require('../modules/mainModule')
@@ -62,9 +62,8 @@ module.exports = {
             const { zipOrCity } = request.body
             const _zipOrCity = parseInt(zipOrCity)
             let longitude, latitude;
+            let findedPros = [];
             let city = [];
-
-            let findedPros;
 
             if(!isNaN(_zipOrCity) && getlength(_zipOrCity) === 5 ) { //if it's a number
 
@@ -73,7 +72,7 @@ module.exports = {
                     .then((json) => {if(!!json){ 
                         json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
                     }})
-                    
+
             } else {
 
                 await fetch(`https://geo.api.gouv.fr/communes?nom=${zipOrCity}`)
@@ -81,6 +80,7 @@ module.exports = {
                     .then((json) => {if(!!json){ 
                         json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
                     }});
+
             }
 
             if (!!city[0].cp) {
@@ -91,7 +91,15 @@ module.exports = {
                     [latitude, longitude] = json.features[0].geometry.coordinates }});
                     
                 if(!latitude || !longitude) {return response.status(400).json({ success: false, message: 'geocode from city not found', info: 'zipOrCity' });}
+                
                 findedPros = await Shop.findNearest(longitude, latitude);
+
+                return response.json({
+                    success: true,
+                    message: 'Shop founded',
+                    number_result: findedPros.length,
+                    data: findedPros
+                });
 
             }
 
@@ -116,13 +124,10 @@ module.exports = {
     async findOnePro(request, response) {
         
         const proId = parseInt(request.body.id);
+        let pro, category, service;
         
         if (!request.body.id) { return response.status(400).json({ success: false, message: 'missing_required_parameter', info: 'id' }); };
         if (proId<=0|| isNaN(proId)) { return response.status(400).json({ success: false, message: 'ShopID must be a positive number', info: 'id' }); };
-        
-        let pro;
-        let category;
-        let service;
 
         try {
             pro = await Shop.findById(proId);
