@@ -251,7 +251,6 @@ module.exports = {
 
     // Method to confirm that a client attended an appointment
     async confirmAttendance(request, response) {
-        console.log('méthode confirmAttendance');
 
         try {
             const appointment = await Appointment.findById(request.body.appointmentId);
