@@ -9,6 +9,7 @@ const generateNewAppointment = async function (shopID, slotStart, slotEnd) {
         slot_start: slotStart, 
         slot_end: slotEnd, 
         shop_id: shopID,
+        is_attended: false
     })
     await newAppointment.insert()
 };
