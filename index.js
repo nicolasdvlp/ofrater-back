@@ -5,6 +5,7 @@ const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { requireHTTPS } = require('./app/middlewares')
 const routers = require('./app/routers');
 const cors = require('cors');
 
@@ -45,6 +46,7 @@ app.use(cors())
 //   next();
 // });
 
+app.use(requireHTTPS);
 // router
 app.use(routers);
 
