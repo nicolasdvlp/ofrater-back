@@ -113,7 +113,7 @@ module.exports = {
         } catch (error) {
 
             console.trace(error);
-            res.status(500).json({
+            response.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
                 error
@@ -148,10 +148,12 @@ module.exports = {
 
         try {
 
-            let { first_name, last_name, phone_number, birth, mail, password, role_id} = request.body;
-            let shop_name, opening_time, address_name, address_number, city, postal_code, latitude, longitude;
-            const saltRounds = 10;
-            const hash = bcrypt.hashSync(password, saltRounds);
+            let { first_name, last_name, phone_number, birth, mail, password, role_id } = request.body;
+            let shop_name, opening_time, address_name, address_number, city, postal_code, latitude, longitude ;
+            let data = {} ;
+            let newShop ;
+            const saltRounds = 10 ;
+            const hash = bcrypt.hashSync(password, saltRounds) ;
     
             if (request.body.shop) {
 
@@ -173,8 +175,6 @@ module.exports = {
             newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id, is_validated: false});
             await newUser.insert();
 
-            let newShop;
-
             if(newUser.role_id === 2) {
 
                 const adressToGeo = [address_number, address_name.split(' ').join('+'), postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
@@ -192,7 +192,6 @@ module.exports = {
                 await newUser.ownShop(newShop);
             }
 
-            let data = {};
             data.user = newUser;
             !!newShop?data.shop=newShop:null;
 
