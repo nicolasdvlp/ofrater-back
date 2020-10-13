@@ -257,7 +257,7 @@ module.exports = {
             const appointment = await Appointment.findById(request.body.appointmentId);
             appointment.is_attended = true;
             appointment.update();
-            response.json({success: true, message: 'Change successfully registered.', data: appointment});
+            response.json({success: true, message: 'Attendace confirmation successfully registered.', data: appointment});
         } catch(error) {
             console.trace(error);
             response.json({success: false, message: 'Attendance confirmation could not be registered.'});
