@@ -1,6 +1,6 @@
 const { Role, User, Shop, Service } = require('../models/');
-const bcrypt = require('bcrypt');
 const sendmail = require('../mailer/mailer');
+const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const fetch = require('node-fetch');
 const { getlength } = require('../modules/mainModule')
@@ -62,12 +62,8 @@ module.exports = {
             const { zipOrCity } = request.body
             const _zipOrCity = parseInt(zipOrCity)
             let longitude, latitude;
-            let coordonates = [];
+            let findedPros = [];
             let city = [];
-
-            let findedPros;
-
-            if (!zipOrCity) { return response.status(400).json({ message: 'missing_required_parameter', info: 'zipOrCity' }); };
 
             if(!isNaN(_zipOrCity) && getlength(_zipOrCity) === 5 ) { //if it's a number
 
@@ -76,6 +72,7 @@ module.exports = {
                     .then((json) => {if(!!json){ 
                         json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
                     }})
+
             } else {
 
                 await fetch(`https://geo.api.gouv.fr/communes?nom=${zipOrCity}`)
@@ -83,15 +80,28 @@ module.exports = {
                     .then((json) => {if(!!json){ 
                         json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
                     }});
+
             }
 
-            await  fetch(`https://api-adresse.data.gouv.fr/search/?q=${city[0].cp}`)
-                .then(res => res.json())
-                .then((json) => {if(!!json && !!json.features){ 
-                [latitude, longitude] = json.features[0].geometry.coordinates }});
+            if (!!city[0].cp) {
+
+                await  fetch(`https://api-adresse.data.gouv.fr/search/?q=${city[0].cp}`)
+                    .then(res => res.json())
+                    .then((json) => {if(!!json && !!json.features){ 
+                    [latitude, longitude] = json.features[0].geometry.coordinates }});
+                    
+                if(!latitude || !longitude) {return response.status(400).json({ success: false, message: 'geocode from city not found', info: 'zipOrCity' });}
                 
-            if(!latitude || !longitude) {return response.status(400).json({ message: 'geocode from city not found', info: 'zipOrCity' });}
-            findedPros = await Shop.findNearest(longitude, latitude);
+                findedPros = await Shop.findNearest(longitude, latitude);
+
+                return response.json({
+                    success: true,
+                    message: 'Shop founded',
+                    number_result: findedPros.length,
+                    data: findedPros
+                });
+
+            }
 
             response.json({
                 success: true,
@@ -103,7 +113,7 @@ module.exports = {
         } catch (error) {
 
             console.trace(error);
-            res.status(500).json({
+            response.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
                 error
@@ -114,13 +124,10 @@ module.exports = {
     async findOnePro(request, response) {
         
         const proId = parseInt(request.body.id);
+        let pro, category, service;
         
-        if (!request.body.id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'id' }); };
-        if (proId<=0|| isNaN(proId)) { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'id' }); };
-        
-        let pro;
-        let category;
-        let service;
+        if (!request.body.id) { return response.status(400).json({ success: false, message: 'missing_required_parameter', info: 'id' }); };
+        if (proId<=0|| isNaN(proId)) { return response.status(400).json({ success: false, message: 'ShopID must be a positive number', info: 'id' }); };
 
         try {
             pro = await Shop.findById(proId);
@@ -141,10 +148,12 @@ module.exports = {
 
         try {
 
-            let { first_name, last_name, phone_number, birth, mail, password, role_id} = request.body;
-            let shop_name, opening_time, address_name, address_number, city, postal_code, latitude, longitude, coordonates;
-            const saltRounds = 10;
-            const hash = bcrypt.hashSync(password, saltRounds);
+            let { first_name, last_name, phone_number, birth, mail, password, role_id } = request.body;
+            let shop_name, opening_time, address_name, address_number, city, postal_code, latitude, longitude ;
+            let data = {} ;
+            let newShop ;
+            const saltRounds = 10 ;
+            const hash = bcrypt.hashSync(password, saltRounds) ;
     
             if (request.body.shop) {
 
@@ -156,28 +165,23 @@ module.exports = {
                 postal_code = request.body.shop.postal_code;
                 latitude = request.body.shop.latitude;
                 longitude = request.body.shop.longitude;
-                coordonates = request.body.shop.coordonates;
 
             }
 
             const isInDatabase = await User.findByMail(mail);
 
-            if(!!isInDatabase) { return response.status(400).json({ message: `User already in database with this email : ${mail}`, info: 'mail'});};
+            if(!!isInDatabase) { return response.status(400).json({ success: false, message: `User already in database with this email : ${mail}`, info: 'mail'});};
 
             newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id, is_validated: false});
             await newUser.insert();
-
-            let newShop;
 
             if(newUser.role_id === 2) {
 
                 const adressToGeo = [address_number, address_name.split(' ').join('+'), postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
                 await fetch(`https://api-adresse.data.gouv.fr/search/?q=${adressToGeo}`)
                     .then(res => res.json())
-                    .then((json) => {if(!!json.features.length){ return coordonates = json.features[0].geometry.coordinates }});
+                    .then((json) => {if(!!json.features.length){ return [longitude, latitude] = json.features[0].geometry.coordinates }});
     
-                !!coordonates.length?[longitude, latitude] = coordonates:null;
-
                 newShop = new Shop({ 
                     shop_name, opening_time,
                     address_name, address_number,
@@ -188,7 +192,6 @@ module.exports = {
                 await newUser.ownShop(newShop);
             }
 
-            let data = {};
             data.user = newUser;
             !!newShop?data.shop=newShop:null;
 
@@ -250,7 +253,7 @@ module.exports = {
         let shop, _shop;
 
         try {
-
+            ADC5DBD083ADC5DBD083ADC5DBD083ADC5DBD083ADC5DBD083ADC5DBD083
             const userToConnect = await User.findByMail(mail);
 
             if(!userToConnect) {return response.status(404).json({message: `No user found for email ${mail}.`, info: 'mail'})};
