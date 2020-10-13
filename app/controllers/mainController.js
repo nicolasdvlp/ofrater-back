@@ -62,12 +62,9 @@ module.exports = {
             const { zipOrCity } = request.body
             const _zipOrCity = parseInt(zipOrCity)
             let longitude, latitude;
-            let coordonates = [];
             let city = [];
 
             let findedPros;
-
-            if (!zipOrCity) { return response.status(400).json({ success: false, message: 'missing_required_parameter', info: 'zipOrCity' }); };
 
             if(!isNaN(_zipOrCity) && getlength(_zipOrCity) === 5 ) { //if it's a number
 
@@ -76,6 +73,7 @@ module.exports = {
                     .then((json) => {if(!!json){ 
                         json.forEach(ville => {city.push({ city: ville.nom, cp: ville.codesPostaux[0] })});
                     }})
+                    
             } else {
 
                 await fetch(`https://geo.api.gouv.fr/communes?nom=${zipOrCity}`)
@@ -85,13 +83,17 @@ module.exports = {
                     }});
             }
 
-            await  fetch(`https://api-adresse.data.gouv.fr/search/?q=${city[0].cp}`)
-                .then(res => res.json())
-                .then((json) => {if(!!json && !!json.features){ 
-                [latitude, longitude] = json.features[0].geometry.coordinates }});
-                
-            if(!latitude || !longitude) {return response.status(400).json({ success: false, message: 'geocode from city not found', info: 'zipOrCity' });}
-            findedPros = await Shop.findNearest(longitude, latitude);
+            if (!!city[0].cp) {
+
+                await  fetch(`https://api-adresse.data.gouv.fr/search/?q=${city[0].cp}`)
+                    .then(res => res.json())
+                    .then((json) => {if(!!json && !!json.features){ 
+                    [latitude, longitude] = json.features[0].geometry.coordinates }});
+                    
+                if(!latitude || !longitude) {return response.status(400).json({ success: false, message: 'geocode from city not found', info: 'zipOrCity' });}
+                findedPros = await Shop.findNearest(longitude, latitude);
+
+            }
 
             response.json({
                 success: true,
@@ -142,7 +144,7 @@ module.exports = {
         try {
 
             let { first_name, last_name, phone_number, birth, mail, password, role_id} = request.body;
-            let shop_name, opening_time, address_name, address_number, city, postal_code, latitude, longitude, coordonates;
+            let shop_name, opening_time, address_name, address_number, city, postal_code, latitude, longitude;
             const saltRounds = 10;
             const hash = bcrypt.hashSync(password, saltRounds);
     
@@ -156,7 +158,6 @@ module.exports = {
                 postal_code = request.body.shop.postal_code;
                 latitude = request.body.shop.latitude;
                 longitude = request.body.shop.longitude;
-                coordonates = request.body.shop.coordonates;
 
             }
 
@@ -174,10 +175,8 @@ module.exports = {
                 const adressToGeo = [address_number, address_name.split(' ').join('+'), postal_code, city.split('-').join('+').split(' ').join('+')].join('+').toLowerCase();
                 await fetch(`https://api-adresse.data.gouv.fr/search/?q=${adressToGeo}`)
                     .then(res => res.json())
-                    .then((json) => {if(!!json.features.length){ return coordonates = json.features[0].geometry.coordinates }});
+                    .then((json) => {if(!!json.features.length){ return [longitude, latitude] = json.features[0].geometry.coordinates }});
     
-                !!coordonates.length?[longitude, latitude] = coordonates:null;
-
                 newShop = new Shop({ 
                     shop_name, opening_time,
                     address_name, address_number,
