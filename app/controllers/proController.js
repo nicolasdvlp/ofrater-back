@@ -256,7 +256,7 @@ module.exports = {
             const appointment = await Appointment.findById(request.body.appointmentId);
 
             if (appointment.user_id === null) {
-                return response.json({success: false, message: 'Attendance registration impossible. This appointment is not booked by any client.'});
+                return response.status(400).json({success: false, message: 'Attendance registration impossible. This appointment is not booked by any client.'});
             }
 
             appointment.is_attended = true;
@@ -264,7 +264,7 @@ module.exports = {
             response.json({success: true, message: 'Attendance confirmation successfully registered.', data: appointment});
         } catch(error) {
             console.trace(error);
-            response.json({success: false, message: 'Attendance confirmation could not be registered.'});
+            response.status(500).json({success: false, message: 'Attendance confirmation could not be registered.'});
         }
     }
 }
