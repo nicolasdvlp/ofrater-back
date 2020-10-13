@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const { Appointment, User, Shop } = require('../models');
 
 module.exports = {
@@ -36,9 +37,14 @@ module.exports = {
             client = await User.findById(request.body.userID);
 
             for (const key of Object.keys(request.body)) {
-                if (key !== "userID") {
+                if (key !== "userID" && key !== "password") {
                     client[key] = request.body[key];
                 };
+                if (key === "password") {
+                    const saltRounds = 10;
+                    const hash = bcrypt.hashSync(request.body[key], saltRounds);
+                    client.password = hash;
+                }
             }
 
             client.update();
