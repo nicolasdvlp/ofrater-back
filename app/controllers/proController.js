@@ -11,7 +11,7 @@ module.exports = {
 
         try {
     
-            if (!request.body.shopID) { return response.status(400).json({ message: 'missing_required_parameter', info: 'shopID' }); };
+            if (!request.body.shopID) { return response.status(400).json({ success: false, message: 'missing_required_parameter', info: 'shopID' }); };
 
             pro = await User.findById(request.body.shopID);
     
@@ -74,9 +74,9 @@ module.exports = {
             const { shopID, dateStart, dateEnd, days } = req.body;
 
             const shopIDD = parseInt(shopID);
-            if (shopIDD<=0|| isNaN(shopIDD)) { return response.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
-            if (typeof days !== 'object') { return res.status(400).json({ message: 'days must be an object with {monday: {amStart: HH:mm, amEnd: HH:mm, pmStart: HH:mm, pmEnd: HH:mm}, tuesday: {...}', info: 'days' }); };
-            if ((moment(dateEnd ,"YYYY-MM-DD")<moment(dateStart,"YYYY-MM-DD"))) {return res.status(400).json({ message: 'dateStart must be after dateEnd', info: 'dateStart/dateEnd' });};
+            if (shopIDD<=0|| isNaN(shopIDD)) { return response.status(400).json({ success: false, message: 'shopID must be a positive number', info: 'shopID' }); };
+            if (typeof days !== 'object') { return res.status(400).json({ success: false, message: 'days must be an object with {monday: {amStart: HH:mm, amEnd: HH:mm, pmStart: HH:mm, pmEnd: HH:mm}, tuesday: {...}', info: 'days' }); };
+            if ((moment(dateEnd ,"YYYY-MM-DD")<moment(dateStart,"YYYY-MM-DD"))) {return res.status(400).json({ success: false, message: 'dateStart must be after dateEnd', info: 'dateStart/dateEnd' });};
 
             let dateToCible = moment(dateStart, "YYYY-MM-DD").add(0, "day").format("YYYY-MM-DD").toString();
             // loop to add appointments in a day
@@ -224,7 +224,7 @@ module.exports = {
 
             let { shopID, dateStart, dateEnd } = request.body
             const shopIDD = parseInt(shopID);
-            if (shopIDD<=0|| isNaN(shopIDD)) { return response.status(400).json({ message: 'shopID must be a positive number', info: 'shopID' }); };
+            if (shopIDD<=0|| isNaN(shopIDD)) { return response.status(400).json({ success: false, message: 'shopID must be a positive number', info: 'shopID' }); };
 
             if (!dateEnd) { dateEnd = dateStart };
             

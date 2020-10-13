@@ -67,7 +67,7 @@ module.exports = {
 
             let findedPros;
 
-            if (!zipOrCity) { return response.status(400).json({ message: 'missing_required_parameter', info: 'zipOrCity' }); };
+            if (!zipOrCity) { return response.status(400).json({ success: false, message: 'missing_required_parameter', info: 'zipOrCity' }); };
 
             if(!isNaN(_zipOrCity) && getlength(_zipOrCity) === 5 ) { //if it's a number
 
@@ -90,7 +90,7 @@ module.exports = {
                 .then((json) => {if(!!json && !!json.features){ 
                 [latitude, longitude] = json.features[0].geometry.coordinates }});
                 
-            if(!latitude || !longitude) {return response.status(400).json({ message: 'geocode from city not found', info: 'zipOrCity' });}
+            if(!latitude || !longitude) {return response.status(400).json({ success: false, message: 'geocode from city not found', info: 'zipOrCity' });}
             findedPros = await Shop.findNearest(longitude, latitude);
 
             response.json({
@@ -115,8 +115,8 @@ module.exports = {
         
         const proId = parseInt(request.body.id);
         
-        if (!request.body.id) { return response.status(400).json({ message: 'missing_required_parameter', info: 'id' }); };
-        if (proId<=0|| isNaN(proId)) { return response.status(400).json({ message: 'ShopID must be a positive number', info: 'id' }); };
+        if (!request.body.id) { return response.status(400).json({ success: false, message: 'missing_required_parameter', info: 'id' }); };
+        if (proId<=0|| isNaN(proId)) { return response.status(400).json({ success: false, message: 'ShopID must be a positive number', info: 'id' }); };
         
         let pro;
         let category;
@@ -162,7 +162,7 @@ module.exports = {
 
             const isInDatabase = await User.findByMail(mail);
 
-            if(!!isInDatabase) { return response.status(400).json({ message: `User already in database with this email : ${mail}`, info: 'mail'});};
+            if(!!isInDatabase) { return response.status(400).json({ success: false, message: `User already in database with this email : ${mail}`, info: 'mail'});};
 
             newUser = new User({first_name, last_name, phone_number, birth, mail, password: hash, role_id, is_validated: false});
             await newUser.insert();
@@ -250,7 +250,7 @@ module.exports = {
         let shop, _shop;
 
         try {
-
+            ADC5DBD083ADC5DBD083ADC5DBD083ADC5DBD083ADC5DBD083ADC5DBD083
             const userToConnect = await User.findByMail(mail);
 
             if(!userToConnect) {return response.status(404).json({message: `No user found for email ${mail}.`, info: 'mail'})};
