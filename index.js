@@ -24,6 +24,8 @@ const options = { key, cert, ca };
 // body-parson json
 app.use(express.json());
 
+app.use(express.static('public'));
+
 // session
 app.use(session({
   secret: 'Une super phrase de chiffrement de ouf Iliade 4 Life',

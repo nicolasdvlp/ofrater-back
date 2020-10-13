@@ -5,6 +5,11 @@ const userMiddleware = require('../middlewares/userMiddleware');
 const { searchprobylocationSchema, getShopServicesSchema, registerSchema, loginSchema } = require('../validations/schema');
 const { validateBody } = require('../validations/validate');
 
+
+
+router.get('/', (req, res) => {
+    res.sendFile('index.html');
+})
 /**
  * Test route
  */
