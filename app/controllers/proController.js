@@ -248,4 +248,17 @@ module.exports = {
             });
         }
     },
+
+    // Method to confirm that a client attended an appointment
+    async confirmAttendance(request, response) {
+        console.log('méthode confirmAttendance');
+
+        try {
+        const appointment = await Appointment.findById(request.body.appointmentId);
+        console.log('appointment :', appointment);
+        } catch(error) {
+            console.trace(error);
+            response.json({success: false, message: 'Ca a planté!!!'});
+        }
+    }
 }
