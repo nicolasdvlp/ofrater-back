@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const proController = require('../controllers/proController');
-const { postAvailableAppointmentSchema, getAppointmentsSchema } = require('../validations/schema');
+const { confirmAttendanceSchema, postAvailableAppointmentSchema, getAppointmentsSchema } = require('../validations/schema');
 const { validateBody } = require('../validations/validate');
 
 /**
@@ -17,6 +17,6 @@ router.post('/availableappointment', validateBody(postAvailableAppointmentSchema
 router.post('/getappointments', validateBody(getAppointmentsSchema), proController.getAppointmentsPro);
 
 // confirm that a client attended an appointment
-router.put('/confirmAttendance', proController.confirmAttendance);
+router.put('/confirmAttendance', validateBody(confirmAttendanceSchema), proController.confirmAttendance);
 
 module.exports = router;

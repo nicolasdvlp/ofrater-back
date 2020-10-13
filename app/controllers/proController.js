@@ -85,7 +85,6 @@ module.exports = {
             const _shopID = parseInt(shopID);
             
             if (_shopID<=0|| isNaN(_shopID)) { return response.status(400).json({ success: false, message: 'shopID must be a positive number', info: 'shopID' }); };
-            if (typeof days !== 'object') { return res.status(400).json({ success: false, message: 'days must be an object with {monday: {amStart: HH:mm, amEnd: HH:mm, pmStart: HH:mm, pmEnd: HH:mm}, tuesday: {...}', info: 'days' }); };
             if ((moment(dateEnd ,"YYYY-MM-DD")<moment(dateStart,"YYYY-MM-DD"))) {return res.status(400).json({ success: false, message: 'dateStart must be after dateEnd', info: 'dateStart/dateEnd' });};
 
             let dateToCible = moment(dateStart, "YYYY-MM-DD").add(0, "day").format("YYYY-MM-DD").toString();
@@ -250,7 +249,6 @@ module.exports = {
         } catch(error) {
 
             console.trace(error);
-
             return response.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
@@ -262,8 +260,14 @@ module.exports = {
     // Method to confirm that a client attended an appointment
     async confirmAttendance(request, response) {
 
+        const appointmentId = request.body ;
+
         try {
-            const appointment = await Appointment.findById(request.body.appointmentId);
+            const appointment = await Appointment.findById(appointmentId);
+
+            if (!appointment.user_id) {
+                return response.status(400).json({success: false, message: 'Appointment not found.'});
+            }
 
             if (appointment.user_id === null) {
                 return response.status(400).json({success: false, message: 'Attendance registration impossible. This appointment is not booked by any client.'});
@@ -272,6 +276,7 @@ module.exports = {
             appointment.is_attended = true;
             appointment.update();
             response.json({success: true, message: 'Attendance confirmation successfully registered.', data: appointment});
+
         } catch(error) {
             console.trace(error);
             response.status(500).json({success: false, message: 'Attendance confirmation could not be registered.'});
