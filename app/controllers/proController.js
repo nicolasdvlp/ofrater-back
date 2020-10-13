@@ -14,13 +14,25 @@ module.exports = {
             if (!request.body.shopID) { return response.status(400).json({ success: false, message: 'missing_required_parameter', info: 'shopID' }); };
 
             pro = await User.findById(request.body.shopID);
+
+            if(!pro) { return response.json({
+                success: false,
+                message: `No shop found for update with id ${request.body.shopID}`,
+                data:{}
+            })};
+
+            response.json({
+                success: true,
+                message: `Shop founded`,
+                data:{
+                    pro
+                }
+            });
     
         } catch(error) {
             console.trace(error);
             response.status(404).json(`No shop found for id ${request.params.shopID}.`);
         }
-
-        response.json(pro);
     },
 
     async updateProfile (request, response) {
@@ -31,13 +43,11 @@ module.exports = {
 
             pro = await Shop.findById(request.body.shopID);
 
-            if(!pro) {
-                return response.json({
-                    success: false,
-                    message: `No shop found for update with id ${request.body.shopID}`,
-                    data:{}
-                });
-            };
+            if(!pro) { return response.json({
+                success: false,
+                message: `No shop found for update with id ${request.body.shopID}`,
+                data:{}
+            })};
 
             for (const key of Object.keys(request.body)) {
                 if (key !== "shopID") {
@@ -72,9 +82,9 @@ module.exports = {
         try {
 
             const { shopID, dateStart, dateEnd, days } = req.body;
-
-            const shopIDD = parseInt(shopID);
-            if (shopIDD<=0|| isNaN(shopIDD)) { return response.status(400).json({ success: false, message: 'shopID must be a positive number', info: 'shopID' }); };
+            const _shopID = parseInt(shopID);
+            
+            if (_shopID<=0|| isNaN(_shopID)) { return response.status(400).json({ success: false, message: 'shopID must be a positive number', info: 'shopID' }); };
             if (typeof days !== 'object') { return res.status(400).json({ success: false, message: 'days must be an object with {monday: {amStart: HH:mm, amEnd: HH:mm, pmStart: HH:mm, pmEnd: HH:mm}, tuesday: {...}', info: 'days' }); };
             if ((moment(dateEnd ,"YYYY-MM-DD")<moment(dateStart,"YYYY-MM-DD"))) {return res.status(400).json({ success: false, message: 'dateStart must be after dateEnd', info: 'dateStart/dateEnd' });};
 
@@ -88,13 +98,13 @@ module.exports = {
                 switch (jourDeDateCible) {
                     case "monday":
                         if(!!days.monday.amStart && !!days.monday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.monday.amStart, days.monday.amEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.monday.amStart, days.monday.amEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
                         };
                         if(!!days.monday.pmStart && !!days.monday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.monday.pmStart, days.monday.pmEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.monday.pmStart, days.monday.pmEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
@@ -103,13 +113,13 @@ module.exports = {
 
                     case "tuesday":
                         if(!!days.tuesday.amStart && !!days.tuesday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.tuesday.amStart, days.tuesday.amEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.tuesday.amStart, days.tuesday.amEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
                         };
                         if(!!days.tuesday.pmStart && !!days.tuesday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.tuesday.pmStart, days.tuesday.pmEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.tuesday.pmStart, days.tuesday.pmEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
@@ -118,13 +128,13 @@ module.exports = {
 
                     case "wednesday":
                         if(!!days.wednesday.amStart && !!days.wednesday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.wednesday.amStart, days.wednesday.amEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.wednesday.amStart, days.wednesday.amEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
                         };
                         if(!!days.wednesday.pmStart && !!days.wednesday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.wednesday.pmStart, days.wednesday.pmEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.wednesday.pmStart, days.wednesday.pmEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
@@ -133,13 +143,13 @@ module.exports = {
 
                     case "thursday":
                         if(!!days.thursday.amStart && !!days.thursday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.thursday.amStart, days.thursday.amEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.thursday.amStart, days.thursday.amEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
                         };
                         if(!!days.thursday.pmStart && !!days.thursday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.thursday.pmStart, days.thursday.pmEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.thursday.pmStart, days.thursday.pmEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
@@ -148,13 +158,13 @@ module.exports = {
 
                     case "friday":
                         if(!!days.friday.amStart && !!days.friday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.friday.amStart, days.friday.amEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.friday.amStart, days.friday.amEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
                         };
                         if(!!days.friday.pmStart && !!days.friday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.friday.pmStart, days.friday.pmEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.friday.pmStart, days.friday.pmEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
@@ -163,13 +173,13 @@ module.exports = {
 
                     case "saturday":
                         if(!!days.saturday.amStart && !!days.saturday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.saturday.amStart, days.saturday.amEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.saturday.amStart, days.saturday.amEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
                         };
                         if(!!days.saturday.pmStart && !!days.saturday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.saturday.pmStart, days.saturday.pmEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.saturday.pmStart, days.saturday.pmEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
@@ -178,13 +188,13 @@ module.exports = {
 
                     case "sunday":
                         if(!!days.sunday.amStart && !!days.sunday.amEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
                         };
                         if(!!days.sunday.pmStart && !!days.sunday.pmEnd) {
-                            await generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd, shopIDD, (resInDB, resInsert) => { 
+                            await generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd, _shopID, (resInDB, resInsert) => { 
                                 startTimestampArray = [...startTimestampArray, ...resInsert];
                                 alreadyInDatabaseArray = [...alreadyInDatabaseArray, ...resInDB];
                             })
@@ -223,12 +233,12 @@ module.exports = {
         try {
 
             let { shopID, dateStart, dateEnd } = request.body
-            const shopIDD = parseInt(shopID);
-            if (shopIDD<=0|| isNaN(shopIDD)) { return response.status(400).json({ success: false, message: 'shopID must be a positive number', info: 'shopID' }); };
+            const _shopID = parseInt(shopID);
+            if (_shopID<=0|| isNaN(_shopID)) { return response.status(400).json({ success: false, message: 'shopID must be a positive number', info: 'shopID' }); };
 
             if (!dateEnd) { dateEnd = dateStart };
             
-            appointments = await Appointment.getAppointmentShop(dateStart, dateEnd, shopIDD);
+            appointments = await Appointment.getAppointmentShop(dateStart, dateEnd, _shopID);
 
             response.json({
                 success: true,
