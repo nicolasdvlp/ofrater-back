@@ -308,3 +308,11 @@ Content-Type: application/json
     "dateEnd": "2019-10-20",
     "shopID": 2
 }
+
+###
+PUT http://localhost:3003/pro/confirmAttendance
+Content-Type: application/json
+
+{
+    "appointmentId": 6
+}
