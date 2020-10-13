@@ -118,8 +118,12 @@ const getShopServicesSchema = Joi.object({
     shopID: Joi.required(),
 });
 
+const searchprobylocationSchema = Joi.object({
+    zipOrCity: Joi.string().required().allow('')
+});
+
 // const updateUserProfileSchema = Joi.object({
 //     userID: Joi.required(),
 // });
 
-module.exports = { getShopServicesSchema, getUserProfileSchema, getShopPageAndAgendaSchema, registerSchema, loginSchema, postAvailableAppointmentSchema, getAppointmentsSchema, updateProProfileSchema, modifyAnAppointmentSchema, bookAnAppointementSchema, cancelAppointmentSchema };
+module.exports = { searchprobylocationSchema, getShopServicesSchema, getUserProfileSchema, getShopPageAndAgendaSchema, registerSchema, loginSchema, postAvailableAppointmentSchema, getAppointmentsSchema, updateProProfileSchema, modifyAnAppointmentSchema, bookAnAppointementSchema, cancelAppointmentSchema };
