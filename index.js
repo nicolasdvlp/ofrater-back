@@ -5,9 +5,7 @@ const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const mainRouter = require('./app/routers/mainRouter');
-const clientRouter = require('./app/routers/clientRouter');
-const proRouter = require('./app/routers/proRouter');
+const routers = require('./app/routers');
 const cors = require('cors');
 
 const app = express();
@@ -23,6 +21,8 @@ const options = { key, cert, ca };
  */
 // body-parson json
 app.use(express.json());
+
+app.use(express.static('public'));
 
 // session
 app.use(session({
@@ -45,15 +45,8 @@ app.use(cors())
 //   next();
 // });
 
-
-
-/**
- * Routers
- */
-app.use(mainRouter);
-app.use('/client', clientRouter);
-app.use('/pro', proRouter);
-// app.use(mainController.error404);
+// router
+app.use(routers);
 
 // ### Serveur Listener ###
 
