@@ -260,7 +260,7 @@ module.exports = {
             response.json({success: true, message: 'Change successfully registered.', data: appointment});
         } catch(error) {
             console.trace(error);
-            response.json({success: false, message: 'Ca a planté!!!'});
+            response.json({success: false, message: 'Attendance confirmation could not be registered.'});
         }
     }
 }
