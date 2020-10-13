@@ -254,8 +254,12 @@ module.exports = {
         console.log('méthode confirmAttendance');
 
         try {
-        const appointment = await Appointment.findById(request.body.appointmentId);
-        console.log('appointment :', appointment);
+            const appointment = await Appointment.findById(request.body.appointmentId);
+            console.log('appointment :', appointment);
+            appointment.is_attended = true;
+            console.log('appointment après modification :', appointment);
+            appointment.update();
+            response.json({success: true, message: 'Change successfully registered.', data: appointment});
         } catch(error) {
             console.trace(error);
             response.json({success: false, message: 'Ca a planté!!!'});
