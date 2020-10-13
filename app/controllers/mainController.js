@@ -253,7 +253,7 @@ module.exports = {
         let shop, _shop;
 
         try {
-            ADC5DBD083ADC5DBD083ADC5DBD083ADC5DBD083ADC5DBD083ADC5DBD083
+            
             const userToConnect = await User.findByMail(mail);
 
             if(!userToConnect) {return response.status(404).json({message: `No user found for email ${mail}.`, info: 'mail'})};
