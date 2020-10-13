@@ -122,8 +122,12 @@ const searchprobylocationSchema = Joi.object({
     zipOrCity: Joi.string().required().allow('')
 });
 
+const confirmAttendanceSchema = Joi.object({
+    appointmentId: Joi.required()
+})
+
 // const updateUserProfileSchema = Joi.object({
 //     userID: Joi.required(),
 // });
 
-module.exports = { searchprobylocationSchema, getShopServicesSchema, getUserProfileSchema, getShopPageAndAgendaSchema, registerSchema, loginSchema, postAvailableAppointmentSchema, getAppointmentsSchema, updateProProfileSchema, modifyAnAppointmentSchema, bookAnAppointementSchema, cancelAppointmentSchema };
+module.exports = { confirmAttendanceSchema, searchprobylocationSchema, getShopServicesSchema, getUserProfileSchema, getShopPageAndAgendaSchema, registerSchema, loginSchema, postAvailableAppointmentSchema, getAppointmentsSchema, updateProProfileSchema, modifyAnAppointmentSchema, bookAnAppointementSchema, cancelAppointmentSchema };
