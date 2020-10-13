@@ -16,4 +16,7 @@ router.post('/availableappointment', validateBody(postAvailableAppointmentSchema
 // get appointment in database between to dates or a single date
 router.post('/getappointments', validateBody(getAppointmentsSchema), proController.getAppointmentsPro);
 
+// confirm that a client attended an appointment
+router.put('/confirmAttendance', proController.confirmAttendance);
+
 module.exports = router;

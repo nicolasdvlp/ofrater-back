@@ -248,4 +248,23 @@ module.exports = {
             });
         }
     },
+
+    // Method to confirm that a client attended an appointment
+    async confirmAttendance(request, response) {
+
+        try {
+            const appointment = await Appointment.findById(request.body.appointmentId);
+
+            if (appointment.user_id === null) {
+                return response.status(400).json({success: false, message: 'Attendance registration impossible. This appointment is not booked by any client.'});
+            }
+
+            appointment.is_attended = true;
+            appointment.update();
+            response.json({success: true, message: 'Attendance confirmation successfully registered.', data: appointment});
+        } catch(error) {
+            console.trace(error);
+            response.status(500).json({success: false, message: 'Attendance confirmation could not be registered.'});
+        }
+    }
 }
