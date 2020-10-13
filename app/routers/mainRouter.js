@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mainController = require('../controllers/mainController');
-const userMiddleware = require('../middlewares/userMiddleware');
+const { userConnect } = require('../middlewares');
 const { searchprobylocationSchema, getShopServicesSchema, registerSchema, loginSchema } = require('../validations/schema');
 const { validateBody } = require('../validations/validate');
 
@@ -42,7 +42,7 @@ router.post('/signout', mainController.signout);
 
 
 // custom middleware to check if user is logged in
-// router.use(userMiddleware);
+// router.use(userConnect);
 
 // 404 gestion
 // router.use(mainController.error404);
