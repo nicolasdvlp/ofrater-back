@@ -254,6 +254,11 @@ module.exports = {
 
         try {
             const appointment = await Appointment.findById(request.body.appointmentId);
+
+            if (appointment.user_id === null) {
+                return response.json({success: false, message: 'Attendance registration impossible. This appointment is not booked by any client.'});
+            }
+
             appointment.is_attended = true;
             appointment.update();
             response.json({success: true, message: 'Attendance confirmation successfully registered.', data: appointment});
