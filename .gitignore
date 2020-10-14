@@ -3,3 +3,4 @@ node_modules
 certificate/ofrater_me.ca-bundle
 certificate/private.key
 certificate/ofrater_me.crt
+public/*
