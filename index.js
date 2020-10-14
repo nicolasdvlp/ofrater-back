@@ -17,12 +17,12 @@ const cert = fs.readFileSync(path.join(__dirname, 'certificate', 'ofrater_me.crt
 const ca = fs.readFileSync(path.join(__dirname, 'certificate', 'ofrater_me.ca-bundle'));
 const options = { key, cert, ca };
 
-/**
- * Middlewares
- */
+// ### Middlewares ###
+
 // body-parson json
 app.use(express.json());
 
+// dossier static
 app.use(express.static('public'));
 
 // session
@@ -36,27 +36,22 @@ app.use(session({
    } 
 }))
 
+// cors
 app.use(cors())
 
-// check session 
-// app.use((req, _, next) => {
-//   console.log('=== SESSION CHECKER ===');
-//   console.table(req.session);
-//   console.log('=== END OF SESSION CHECKER ===');
-//   next();
-// });
-
+// force https
 app.use(requireHTTPS);
-// router
+
+// ### routers ###
 app.use(routers);
 
 // ### Serveur Listener ###
 
+https
+.createServer(options, app).listen(PORT, () => {
+  console.log(`App is running ! Go to https://localhost:${PORT}`);
+});
+
 // app.listen(PORT, () => {
     // console.log(`Listening on ${PORT}`);
 // });
-
-https
-  .createServer(options, app).listen(PORT, () => {
-    console.log(`App is running ! Go to https://localhost:${PORT}`);
-});
