@@ -17,9 +17,6 @@ router.use('/api/pro', proRouter);
 // 404 api
 router.use('/api/', (_, res) => { res.status(404).json('API route not found - 404'); });
 
-// 404 web
-// router.use((_, res) => { res.redirect('/not-found'); });
-
 // route /
 router.use('*', (_, res) => { res.sendFile(path.join(__dirname, '../..', 'public', 'index.html')); });
 
