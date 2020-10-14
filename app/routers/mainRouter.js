@@ -5,16 +5,6 @@ const { userConnect } = require('../middlewares');
 const { searchprobylocationSchema, getShopServicesSchema, registerSchema, loginSchema } = require('../validations/schema');
 const { validateBody } = require('../validations/validate');
 
-
-
-router.get('/', (req, res) => {
-    res.sendFile('index.html');
-})
-/**
- * Test route
- */
-router.get('/hello', (req, res) => {res.json("Hello Wordl!");})
-
 /**
  * Routes Search
  */
@@ -43,9 +33,6 @@ router.post('/signout', mainController.signout);
 
 // custom middleware to check if user is logged in
 // router.use(userConnect);
-
-// 404 gestion
-// router.use(mainController.error404);
 
 
 module.exports = router;

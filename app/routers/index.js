@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const mainRouter = require('./mainRouter');
 const clientRouter = require('./clientRouter');
 const proRouter = require('./proRouter');
-const path = require('path');
 
-
-// route test
-router.get('/hello', (req, res) => {res.json("Hello Wordl!");})
+// route api test
+router.get('/api/hello', (req, res) => { res.json("Hello Wordl!");})
 
 // route api
 router.use('/api', mainRouter);
