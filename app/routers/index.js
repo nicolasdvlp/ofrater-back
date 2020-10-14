@@ -4,8 +4,6 @@ const mainRouter = require('./mainRouter');
 const clientRouter = require('./clientRouter');
 const proRouter = require('./proRouter');
 
-// route /
-router.get('/', (req, res) => { res.sendFile('index.html') ; });
 
 // route test
 router.get('/hello', (req, res) => {res.json("Hello Wordl!");})
@@ -20,5 +18,8 @@ router.use('/api/', (_, res) => { res.status(404).json('API route not found - 40
 
 // 404 web
 // router.use((_, res) => { res.redirect('/not-found'); });
+
+// route /
+router.get('*', (_, res) => { res.sendFile('index.html') ; });
 
 module.exports = router;
