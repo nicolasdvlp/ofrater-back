@@ -15,4 +15,10 @@ router.use('/api', mainRouter);
 router.use('/api/client', clientRouter);
 router.use('/api/pro', proRouter);
 
+// 404 api
+router.use('/api/', (_, res) => { res.status(404).json('Route Api non trouvée'); });
+
+// 404 web
+router.use((_, res) => { res.status(404).json('Page not found'); });
+
 module.exports = router;
