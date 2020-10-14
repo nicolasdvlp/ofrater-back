@@ -3,6 +3,7 @@ const router = express.Router();
 const mainRouter = require('./mainRouter');
 const clientRouter = require('./clientRouter');
 const proRouter = require('./proRouter');
+const path = require('path');
 
 
 // route test
@@ -20,6 +21,6 @@ router.use('/api/', (_, res) => { res.status(404).json('API route not found - 40
 // router.use((_, res) => { res.redirect('/not-found'); });
 
 // route /
-router.get('*', (_, res) => { path.join(__dirname, 'public', 'index.html') ; });
+router.get('*', (_, res) => { res.sendFile( path.join(__dirname, 'public', 'index.html') ; });
 
 module.exports = router;
