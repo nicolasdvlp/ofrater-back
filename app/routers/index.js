@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const mainRouter = require('./mainRouter');
+import mainRouter from './mainRouter';
 const clientRouter = require('./clientRouter');
 const proRouter = require('./proRouter');
 
@@ -19,6 +19,6 @@ router.use('/api/pro', proRouter);
 router.use('/api/', (_, res) => { res.status(404).json('API route not found - 404'); });
 
 // 404 web
-router.use((_, res) => { res.status(404).json('Page not found - 404'); });
+router.use((_, res) => { res.redirect('/not-found'); });
 
 module.exports = router;
