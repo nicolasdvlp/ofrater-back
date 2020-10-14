@@ -39,14 +39,6 @@ app.use(session({
 // cors
 app.use(cors())
 
-// check session 
-// app.use((req, _, next) => {
-//   console.log('=== SESSION CHECKER ===');
-//   console.table(req.session);
-//   console.log('=== END OF SESSION CHECKER ===');
-//   next();
-// });
-
 // force https
 app.use(requireHTTPS);
 
