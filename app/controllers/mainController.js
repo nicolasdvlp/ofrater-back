@@ -7,12 +7,6 @@ const { getlength } = require('../modules/mainModule')
 
 module.exports = {
 
-    error404(_, response) {
-        response
-            .status(404)
-            .json('Page not found');
-    },
-    
     // Route "/mainsearch"
     async findCityOrZip(request, response) {
         
