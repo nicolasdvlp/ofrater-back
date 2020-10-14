@@ -19,6 +19,6 @@ router.use('/api/pro', proRouter);
 router.use('/api/', (_, res) => { res.status(404).json('API route not found - 404'); });
 
 // 404 web
-router.use((_, res) => { res.redirect('/not-found'); });
+// router.use((_, res) => { res.redirect('/not-found'); });
 
 module.exports = router;
