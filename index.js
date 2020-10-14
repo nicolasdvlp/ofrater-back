@@ -27,7 +27,7 @@ app.use(express.static('public'));
 
 // session
 app.use(session({
-  // secret: 'Une super phrase de chiffrement de ouf Iliade 4 Life',
+  secret: 'Une super phrase de chiffrement de ouf Iliade 4 Life',
   resave: false,
   saveUninitialized: true,
   cookie: { 
