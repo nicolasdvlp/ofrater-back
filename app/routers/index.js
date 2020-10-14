@@ -1,6 +1,6 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import mainRouter from './mainRouter';
+const mainRouter = require('./mainRouter');
 const clientRouter = require('./clientRouter');
 const proRouter = require('./proRouter');
 
