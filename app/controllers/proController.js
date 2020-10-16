@@ -1,4 +1,4 @@
-const { Appointment, User, Shop } = require('../models/');
+const { Appointment, Shop } = require('../models/');
 const { generateNewAppointmentForADay } = require('../modules/appointmentModule');
 const moment = require('moment'); 
 moment().format(); 
