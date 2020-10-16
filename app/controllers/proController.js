@@ -13,7 +13,7 @@ module.exports = {
     
             if (!request.body.shopID) { return response.status(400).json({ success: false, message: 'missing_required_parameter', info: 'shopID' }); };
 
-            pro = await User.findById(request.body.shopID);
+            pro = await Shop.findById(request.body.shopID);
 
             if(!pro) { return response.json({
                 success: false,
