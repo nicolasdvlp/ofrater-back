@@ -1,0 +1,318 @@
+### Search shop/pro by city name or zip code
+POST http://localhost:3000/mainsearch HTTP/1.1
+content-type: application/json
+
+{
+    "input": "78646"
+}
+
+### Route to find one professional
+POST  http://localhost:3000/searchonepro
+Content-Type: application/json
+
+{
+    "id": "2"
+}
+
+### Route to find professionnals by location
+POST http://localhost:3000/searchprobylocation
+Content-Type: application/json
+
+{
+    "zipOrCity": "77600"
+}
+
+### Route to find professionnals by location
+POST http://localhost:3000/services
+Content-Type: application/json
+
+{
+    "shopID": "2"
+}
+
+
+### get Profile client
+
+POST http://localhost:3001/client/profile
+Content-Type: application/json
+
+{
+    "userID": "3"
+}
+
+### Route to create a new user (user registration)
+POST http://localhost:3003/registration
+Content-Type: application/json
+
+{
+    "first_name": "Ronald",
+    "last_name": "McDonald",
+    "phone_number": "0679958989",
+    "birth": "12/01/1985",
+    "mail": "ronald.md01@yopmail.com",
+    "mail_confirm": "ronald.md01@yopmail.com",
+    "password": "azertyA6",
+    "password_confirm": "azertyA6",
+    "role_id": 1
+}
+
+### Route to create a new user (user registration)
+PUT http://localhost:3003/client/profile
+Content-Type: application/json
+
+{
+    "userID": 1,
+    "first_name": "rene",
+    "phone_number": "0679958989",
+    "birth": "12/01/1985",
+    "role_id": 1
+}
+
+
+
+### Route to create a new user and shop (user registration)
+POST http://localhost:3001/registration
+Content-Type: application/json
+
+{
+    "first_name": "zizou",
+    "last_name": "fdsf",
+    "phone_number": "0679958989",
+    "birth": "12/01/1985",
+    "mail": "ssssssssasda.Le@gmail.fr",
+    "mail_confirm": "ssssssssasda.Le@gmail.fr",
+    "password": "azertyA3",
+    "password_confirm": "azertyA3",
+    "role_id": 2,
+    "shop": {
+        "shop_name" : "Zizdou Président",
+        "opening_time" : "du lundi au dimanche 7/7! de 9h à 19h",
+        "address_name" : "5 avenue des petites ecuries",
+        "address_number" : 16,
+        "city" : "lognes",
+        "postal_code" : "77185"
+    }
+}
+
+#######
+
+POST http://localhost:3000/registration
+Content-Type: application/json
+
+{
+    "first_name": "dsf",
+    "last_name": "fdsf",
+    "phone_number": "0679958989",
+    "birth": "12/01/1985",
+    "mail": "ddd@tata.fr",
+    "mail_confirm": "dtorfto@tata.fr",
+    "password": "azertyA6",
+    "password_confirm": "azertyA6",
+    "role_id": 1
+}
+
+
+### test
+POST http://localhost:3001/pro/availableappointment
+Content-Type: application/json
+
+{
+    "shopID": 11,
+    "dateStart": "2020-10-04",
+    "dateEnd": "2020-10-25",
+    "days": {
+        "monday":{
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
+        },
+        "tuesday":{
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
+        },
+        "wednesday":{
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
+        },
+        "thursday":{
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
+        },
+        "friday":{
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"15:00",
+            "pmEnd":"15:30"
+        },
+        "saturday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"",
+            "pmEnd":""
+        },
+        "sunday":{
+            "amStart": "",
+            "amEnd": "",
+            "pmStart":"",
+            "pmEnd":""
+        }
+    }
+}
+
+### Generate appointement
+
+POST http://localhost:3000/pro/availableappointment
+Content-Type: application/json
+
+{
+    "dateStart": "2020-12-01",
+    "dateEnd": "2020-12-05",
+    "starthour": "09:00",
+    "endHour": "17:00",
+    "shopID": 2,
+    "slotStart": "2020-10-20 22:00:0+02",
+    "slotEnd": "2020-10-20 22:29:59+02"
+}
+
+### LOGIN 
+POST http://localhost:3001/login
+Content-Type: application/json
+
+{
+    "mail": "ssssssssasda.Le@gmail.fr",
+    "password": "azertyA3"
+}
+
+### test
+POST http://localhost:3000/pro/availableappointment
+Content-Type: application/json
+
+{
+    "shopID": 4,
+    "dateStart": "2019-10-12",
+    "dateEnd": "2019-10-14"
+    "days": {
+        "monday":{
+            "amStart": "08:00",
+            "amEnd": "09:00",
+            "pmStart":"0",
+            "pmEnd":""
+        },
+        "tuesday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"14:00",
+            "pmEnd":"15:00"
+        },
+        "wednesday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"14:00",
+            "pmEnd":"15:00"
+        },
+        "thursday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"14:00",
+            "pmEnd":"15:00"
+        },
+        "friday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"14:00",
+            "pmEnd":"15:00"
+        },
+        "saturday":{
+            "amStart": "09:00",
+            "amEnd": "10:00",
+            "pmStart":"",
+            "pmEnd":""
+        },
+        "sunday":{
+            "amStart": "",
+            "amEnd": "",
+            "pmStart":"",
+            "pmEnd":""
+        }
+    }
+}
+
+### Generate appointement
+
+POST http://localhost:3000/pro/availableappointment
+Content-Type: application/json
+
+{
+    "dateStart": "2020-12-01",
+    "dateEnd": "2020-12-05",
+    "starthour": "09:00",
+    "endHour": "17:00",
+    "shopID": 2,
+    "slotStart": "2020-10-20 22:00:0+02",
+    "slotEnd": "2020-10-20 22:29:59+02"
+}
+
+### get pro appointments
+POST http://localhost:3000/pro/getappointments
+Content-Type: application/json
+
+{
+    "shopID": 4,
+    "dateStart": "2019-10-12",
+    "dateEnd": "2019-10-14"
+}
+
+### Methode pour décaler un RDV
+PUT http://localhost:3000/client/bookmodify
+Content-Type: application/json
+
+{
+
+    "newAppointmentID": 5174, 
+    "oldAappointmentID": 5175, 
+    "userID": 2, 
+    "serviceID": 1
+}
+
+### Book an appointment
+PUT http://localhost:3000/client/book
+Content-Type: application/json
+
+{
+    "id": 5174,
+    "user_id": 2,
+    "service_id": 2
+}
+
+###  Cancel an appointment for a client
+PUT http://localhost:3003/client/deleteappointment
+Content-Type: application/json
+
+{
+    "id": 1
+}
+
+### Consult a shop info with its available appointments for a client
+POST http://localhost:3000/client/shop
+Content-Type: application/json
+
+{
+    "dateStart": "2019-10-18",
+    "dateEnd": "2019-10-20",
+    "shopID": 2
+}
+
+###
+PUT http://localhost:3003/pro/confirmAttendance
+Content-Type: application/json
+
+{
+    "appointmentId": 6
+}

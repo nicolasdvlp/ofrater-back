@@ -1,0 +1,10 @@
+node_modules
+.env
+certificate/ofrater_me.ca-bundle
+certificate/private.key
+certificate/ofrater_me.crt
+<<<<<<< HEAD
+public/
+=======
+public/*
+>>>>>>> a3728127e6d54b0828c97d372ac41457b884afd6
