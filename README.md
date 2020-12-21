@@ -4,7 +4,7 @@
 
 ### Clonage le repo
 ``` bash
-git clone git@github.com:O-clock-Iliade/projet-ofrater-back.git
+git clone git@github.com:XXX
 ```
 ### Installation les modules nécessaires
 
