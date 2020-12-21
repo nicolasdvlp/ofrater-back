@@ -1,20 +1,20 @@
-# ofrater-back
+# 💈🧔 ofrater-back 🧔💈
 
 ## Pour utiliser l'API
 
-### Clôner le repo
+### Clonage le repo
 ``` bash
 git clone git@github.com:O-clock-Iliade/projet-ofrater-back.git
 ```
-### Installer les modules nécessaires
+### Installation les modules nécessaires
 
 ``` bash
-npm i
+npm install
 ```
 
 Créer le fichier `.env` à la racine du projet et le compléter avec les variables d'environnement (un exemple est donné dans le fichier `.env.example`).
 
-### Installer de Postgis
+### Installation de [Postgis](https://postgis.net/)
 
 ```
 ## You can do APT package list update and system upgrade before you get started.
@@ -32,23 +32,24 @@ echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" 
 sudo apt install postgis postgresql-13-postgis-3
 ```
 
-### Installer Sqitch pour le versioning de BDD
+### Installation Sqitch pour le versioning de BDD
 
 ``` bash
 sudo apt-get install sqitch libdbd-pg-perl postgresql-client
 ```
 
-### Creation de la base de données
+### Création de la base de données
 ```
 createdb ofrater
 ```
 
-### Déployer les migrations
+### Déploiement des migrations
 ``` bash
 sqitch deploy
 ```
 
-### Importer le fichier contenant les fausses données dans la BDD
+### Import le fichier contenant les fausses données dans la BDD
+
 ``` bash
 psql -U votreUser -d ofrater(la bdd) -f chemin_du_fichier
 ```
