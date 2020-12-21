@@ -121,7 +121,6 @@ module.exports = {
     async bookAnAppointement (request, response) {
 
         const { id, user_id, service_id } = request.body;
-
         // if (!service_id) { return response.status(400).json({ success: false, message: 'missing_required_parameter', info: 'serviceID' }); };
 
         appointment_idd = parseInt(id);
@@ -195,45 +194,6 @@ module.exports = {
                 success: false,
                 message: 'Internal Server Error',
                 information: `The appointment ${request.body.id} couldn't have been cancelled.`
-            });
-        }
-    },
-
-    async getShopPage(request, response) {
-
-        const { dateStart, dateEnd, shopID } = request.body;
-
-        let _dateEnd, availableAppointments, shop;
-
-        !!dateEnd ? _dateEnd = dateEnd : _dateEnd = dateStart ;
-
-        try {
-            shop = await Shop.findById(shopID);
-            availableAppointments = await Appointment.getAppointmentsClient(dateStart, _dateEnd, shopID);
-
-            if(!shop) {
-                return response.json({
-                    success: false,
-                    message: `No shop found with id ${shopID}`,
-                    data:{}
-                });
-            };
-
-            response.json({
-                success: true,
-                message: 'Available appointment(s) correctly inserted',
-                data:{
-                    shop, 
-                    availableAppointments
-                }
-            });
-
-        } catch (error) {
-            console.trace(error);
-            response.status(500).json({
-                success: false,
-                message: 'Internal Server Error',
-                error
             });
         }
     }

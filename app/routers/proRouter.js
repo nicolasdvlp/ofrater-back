@@ -7,16 +7,15 @@ const { validateBody } = require('../validations/validate');
 /**
  * Routes /pro
  */
+    // Route to get user profile 
 router.post('/profile', proController.getProfile);
+    // Route to update user profile 
 router.put('/profile', proController.updateProfile);
-
-// send available appointments in database
-router.post('/availableappointment', validateBody(postAvailableAppointmentSchema), proController.postAvailableAppointment);
-
-// get appointment in database between to dates or a single date
+    // create available appointments in database
+router.post('/createappointments', validateBody(postAvailableAppointmentSchema), proController.postAvailableAppointment);
+    // get appointment in database between to dates or a single date
 router.post('/getappointments', validateBody(getAppointmentsSchema), proController.getAppointmentsPro);
-
-// confirm that a client attended an appointment
-router.put('/confirmAttendance', validateBody(confirmAttendanceSchema), proController.confirmAttendance);
+    // confirm that a client attended an appointment
+router.put('/confirmattendance', validateBody(confirmAttendanceSchema), proController.confirmAttendance);
 
 module.exports = router;
