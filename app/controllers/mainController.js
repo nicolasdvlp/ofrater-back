@@ -115,7 +115,7 @@ module.exports = {
         }
     },
 
-    async findOnePro(request, response) {
+    async getProDetailsById(request, response) {
         
         const proId = parseInt(request.body.id);
         let pro, category, service;
@@ -134,6 +134,45 @@ module.exports = {
         }
 
         response.json({...pro, category, service});
+    },
+    
+    async getShopPage(request, response) {
+
+        const { dateStart, dateEnd, shopID } = request.body;
+
+        let _dateEnd, availableAppointments, shop;
+
+        !!dateEnd ? _dateEnd = dateEnd : _dateEnd = dateStart ;
+
+        try {
+            shop = await Shop.findById(shopID);
+            availableAppointments = await Appointment.getAppointmentsClient(dateStart, _dateEnd, shopID);
+
+            if(!shop) {
+                return response.json({
+                    success: false,
+                    message: `No shop found with id ${shopID}`,
+                    data:{}
+                });
+            };
+
+            response.json({
+                success: true,
+                message: 'Available appointment(s) correctly inserted',
+                data:{
+                    shop, 
+                    availableAppointments
+                }
+            });
+
+        } catch (error) {
+            console.trace(error);
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
+        }
     },
 
     async register(request, response) {
@@ -272,7 +311,7 @@ module.exports = {
         }
     },
 
-    async signout(req, res) {
+    async logout(req, res) {
 
         try {
             await req.session.destroy();
