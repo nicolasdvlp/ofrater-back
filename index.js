@@ -4,18 +4,18 @@ const express = require('express');
 const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
 const { requireHTTPS } = require('./app/middlewares')
 const routers = require('./app/routers');
 const cors = require('cors');
+    // const https = require('https');
 
 const app = express();
 
-// SSH files
-const key = fs.readFileSync(path.join(__dirname, 'certificate', 'private.key'));
-const cert = fs.readFileSync(path.join(__dirname, 'certificate', 'ofrater_me.crt'));
-const ca = fs.readFileSync(path.join(__dirname, 'certificate', 'ofrater_me.ca-bundle'));
-const options = { key, cert, ca };
+    // SSH files
+    // const key = fs.readFileSync(path.join(__dirname, 'certificate', 'private.key'));
+    // const cert = fs.readFileSync(path.join(__dirname, 'certificate', 'ofrater_me.crt'));
+    // const ca = fs.readFileSync(path.join(__dirname, 'certificate', 'ofrater_me.ca-bundle'));
+    // const options = { key, cert, ca };
 
 // ### Middlewares ###
 
@@ -39,19 +39,19 @@ app.use(session({
 // cors
 app.use(cors())
 
-// force https
-app.use(requireHTTPS);
+    // force https
+    // app.use(requireHTTPS);
 
 // ### routers ###
 app.use(routers);
 
-// ### Serveur Listener ###
+    // ### Serveur Listener ###
 
-https
-.createServer(options, app).listen(PORT, () => {
-  console.log(`App is running ! Go to https://localhost:${PORT}`);
+    // https
+    // .createServer(options, app).listen(PORT, () => {
+      // console.log(`App is running ! Go to https://localhost:${PORT}`);
+    // });
+
+app.listen(PORT, () => {
+    console.log(`Listening on ${PORT}`);
 });
-
-// app.listen(PORT, () => {
-    // console.log(`Listening on ${PORT}`);
-// });
