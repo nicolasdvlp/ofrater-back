@@ -115,7 +115,7 @@ module.exports = {
         }
     },
 
-    async findOnePro(request, response) {
+    async getProDetails(request, response) {
         
         const proId = parseInt(request.body.id);
         let pro, category, service;
@@ -272,7 +272,7 @@ module.exports = {
         }
     },
 
-    async signout(req, res) {
+    async logout(req, res) {
 
         try {
             await req.session.destroy();
