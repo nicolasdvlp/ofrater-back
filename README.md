@@ -51,7 +51,7 @@ sqitch deploy
 ### Import le fichier contenant les fausses données dans la BDD
 
 ``` bash
-psql -U votreUser -d ofrater(la bdd) -f chemin_du_fichier
+psql -U votreUser -d ofrater(la bdd) -f data/data.sql 
 ```
 
 
