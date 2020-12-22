@@ -39,11 +39,17 @@ app.use(session({
 // cors
 app.use(cors())
 
+// Doc for API
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
     // force https
     // app.use(requireHTTPS);
 
 // ### routers ###
-app.use(routers);
+app.use('/api/v1', routers);
 
     // ### Serveur Listener ###
 

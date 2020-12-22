@@ -9,14 +9,14 @@ const proRouter = require('./proRouter');
 router.get('/api/hello', (req, res) => { res.json("Hello Wordl!");})
 
 //-- route api
-router.use('/api', mainRouter);
+router.use('/main', mainRouter);
 // connected user route
-router.use('/api/user', userRouter);
+router.use('/user', userRouter);
 // connected profesionnal route
-router.use('/api/pro', proRouter);
+router.use('/pro', proRouter);
 
 // 404 api
-router.use('/api/', (_, res) => { res.status(404).json('API route not found - 404'); });
+router.use('/', (_, res) => { res.status(404).json('API route not found - 404'); });
 
 // route / for react front
 router.use('*', (_, res) => { res.sendFile(path.join(__dirname, '../..', 'public', 'index.html')); });

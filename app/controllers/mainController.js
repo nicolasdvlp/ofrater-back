@@ -1,4 +1,4 @@
-const { Role, User, Shop, Service } = require('../models/');
+const { Role, User, Shop, Service, Appointment } = require('../models/');
 const sendmail = require('../mailer/mailer');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
@@ -78,7 +78,6 @@ module.exports = {
             }
 
             if (!!city[0].cp) {
-
                 await  fetch(`https://api-adresse.data.gouv.fr/search/?q=${city[0].cp}`)
                     .then(res => res.json())
                     .then((json) => {if(!!json && !!json.features){ 
@@ -158,7 +157,7 @@ module.exports = {
 
             response.json({
                 success: true,
-                message: 'Available appointment(s) correctly inserted',
+                message: 'Shop found',
                 data:{
                     shop, 
                     availableAppointments
