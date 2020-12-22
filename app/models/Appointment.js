@@ -3,22 +3,22 @@ const CoreModel = require('./CoreModel');
 
 class Appointment extends CoreModel {
 
-    _slot_start;
-    _slot_end;
-    _is_attended;
-    _shop_id;
-    _user_id;
-    _service_id;
+    slot_start;
+    slot_end;
+    is_attended;
+    shop_id;
+    user_id;
+    service_id;
 
     constructor(obj) {
         
         super(obj);
-        this._slot_start = obj.slot_start;
-        this._slot_end = obj.slot_end;
-        this._is_attended = obj.is_attended;
-        this._shop_id = obj.shop_id;
-        this._user_id = obj.user_id;
-        this._service_id = obj.service_id;
+        this.slot_start = obj.slot_start;
+        this.slot_end = obj.slot_end;
+        this.is_attended = obj.is_attended;
+        this.shop_id = obj.shop_id;
+        this.user_id = obj.user_id;
+        this.service_id = obj.service_id;
 
     }
 
@@ -27,27 +27,27 @@ class Appointment extends CoreModel {
      */
 
     get slot_start() {
-        return this._slot_start;
+        return this.slot_start;
     }
     
     get slot_end() {
-        return this._slot_end;
+        return this.slot_end;
     }
     
     get is_attended() {
-        return this._is_attended;
+        return this.is_attended;
     }
     
     get shop_id() {
-        return this._shop_id;
+        return this.shop_id;
     }
     
     get user_id() {
-        return this._user_id;
+        return this.user_id;
     }
     
     get service_id() {
-        return this._service_id;
+        return this.service_id;
     }
 
     /**
@@ -55,27 +55,27 @@ class Appointment extends CoreModel {
      */
 
     set slot_start(value) {
-        this._slot_start = value;
+        this.slot_start = value;
     };
 
     set slot_end(value) {
-        this._slot_end = value;
+        this.slot_end = value;
     };
 
     set is_attended(value) {
-        this._is_attended = value;
+        this.is_attended = value;
     };
 
     set shop_id(value) {
-        this._shop_id = value;
+        this.shop_id = value;
     };
 
     set user_id(value) {
-        this._user_id = value;
+        this.user_id = value;
     };
 
     set service_id(value) {
-        this._service_id = value;
+        this.service_id = value;
     };    
 
     // route pro pour afficher les rendez vous du professionnel (pour l'agenda) TODO: Ajouter les infos des user ayant pris RDV

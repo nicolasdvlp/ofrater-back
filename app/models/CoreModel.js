@@ -2,24 +2,24 @@ const db = require('../database');
 
 class CoreModel {
 
-    _id
+    id
 
     constructor(obj) {
-        this._id = obj.id;
+        this.id = obj.id;
     }
 
     // ******
     // GETTER
     // ******
     get id() {
-        return this._id;
+        return this.id;
     }
 
     // ******
     // SETTER
     // ******
     set id(value) {
-        this._id = value;
+        this.id = value;
     }
 
     static async findAll() {

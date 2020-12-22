@@ -3,95 +3,95 @@ const CoreModel = require('./CoreModel');
 
 class Shop extends CoreModel {
 
-    _shop_name;
-    _opening_time;
-    _address_name;
-    _address_number;
-    _city;
-    _postal_code;
-    _avatar_shop;
-    _geo;
+    shop_name;
+    opening_time;
+    address_name;
+    address_number;
+    city;
+    postal_code;
+    avatar_shop;
+    geo;
 
     constructor(obj) {
         super(obj);
-        this._shop_name = obj.shop_name;
-        this._opening_time = obj.opening_time;
-        this._address_name = obj.address_name;
-        this._address_number = obj.address_number;
-        this._city = obj.city;
-        this._postal_code = obj.postal_code;
-        this._avatar_shop = obj.avatar_shop;
-        this._geo = obj.geo;
+        this.shop_name = obj.shop_name;
+        this.opening_time = obj.opening_time;
+        this.address_name = obj.address_name;
+        this.address_number = obj.address_number;
+        this.city = obj.city;
+        this.postal_code = obj.postal_code;
+        this.avatar_shop = obj.avatar_shop;
+        this.geo = obj.geo;
     }
 
     // *******
     // GETTERS
     // *******
     get shop_name() {
-        return this._shop_name;
+        return this.shop_name;
     }
 
     get opening_time() {
-        return this._opening_time;
+        return this.opening_time;
     }
 
     get address_name() {
-        return this._address_name;
+        return this.address_name;
     }
 
     get address_number() {
-        return this._address_number;
+        return this.address_number;
     }
 
     get city() {
-        return this._city;
+        return this.city;
     }
 
     get postal_code() {
-        return this._postal_code;
+        return this.postal_code;
     }
 
     get avatar_shop() {
-        return this._avatar_shop;
+        return this.avatar_shop;
     }
 
     get geo() {
-        return this._geo;
+        return this.geo;
     }
 
     // *******
     // SETTERS
     // *******
     set shop_name(value) {
-        this._shop_name = value;
+        this.shop_name = value;
     }
 
     set opening_time(value) {
-        this._opening_time = value;
+        this.opening_time = value;
     }
 
     set address_name(value) {
-        this._address_name = value;
+        this.address_name = value;
     }
 
     set address_number(value) {
-        this._address_number = value;
+        this.address_number = value;
     }
 
     set city(value) {
-        this._city = value;
+        this.city = value;
     }
 
     set postal_code(value) {
-        this._postal_code = value;
+        this.postal_code = value;
     }
 
     set avatar_shop(value) {
-        this._avatar_shop = value;
+        this.avatar_shop = value;
     }
 
     set geo(value) {
-        this._geo = value;
+        this.geo = value;
     }
 
     // Méthode pour la page d'accueil qui retourne uniquement les CP et les villes pour la recherche "prédictive"
