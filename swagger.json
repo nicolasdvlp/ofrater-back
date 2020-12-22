@@ -1,0 +1,685 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters.",
+    "version": "1.0.0",
+    "title": "Swagger Petstore",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "ofrater.me",
+  "basePath": "/api/v1/",
+  "tags": [
+    {
+      "name": "main",
+      "description": "Access for visitors",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "user",
+      "description": "Access for connected users"
+    },
+    {
+      "name": "pro",
+      "description": "Access for profesional users"
+    },
+    {
+      "name": "swag",
+      "description": "swagger example",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://ofrater.me"
+      }
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/main/mainsearch": {
+      "post": {
+        "tags": [
+          "main"
+        ],
+        "summary": "Search cities name by zip code or zip code by city name",
+        "description": "",
+        "operationId": "searchzipcity",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "input"
+              ],
+              "properties": {
+                "input": {
+                  "type": "string",
+                  "example": "Roissy"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/MainSearch"
+            }
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      }
+    },
+    "/main/searchbylocation": {
+      "post": {
+        "tags": [
+          "main"
+        ],
+        "summary": "Find shops by location",
+        "description": "",
+        "operationId": "searchbylocation",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "zipOrCity"
+              ],
+              "properties": {
+                "zipOrCity": {
+                  "type": "string",
+                  "example": "94350"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/SearchByLocation"
+            }
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      }
+    },
+    "/main/shop": {
+      "post": {
+        "tags": [
+          "main"
+        ],
+        "summary": "Shop details and available appointments",
+        "description": "",
+        "operationId": "mainShop",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "shopID": {
+                  "type": "integer",
+                  "example": 11
+                },
+                "dateStart": {
+                  "type": "string",
+                  "example": "2020-10-18"
+                },
+                "dateEnd": {
+                  "type": "string",
+                  "example": "2020-10-22"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Shop"
+            }
+          },
+          "400": {
+            "description": "Invalid tag value"
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      }
+    },
+    "/pro/createappointments": {
+      "post": {
+        "tags": [
+          "pro"
+        ],
+        "summary": "Generate appointments in DB",
+        "description": "",
+        "operationId": "createappointments",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "shopID": {
+                  "type": "integer"
+                },
+                "dateStart": {
+                  "type": "string"
+                },
+                "dateEnd": {
+                  "type": "string"
+                },
+                "days": {
+                  "type": "object",
+                  "properties": {
+                    "monday": {
+                      "type": "object",
+                      "properties": {
+                        "amStart": {
+                          "type": "string"
+                        },
+                        "amEnd": {
+                          "type": "string"
+                        },
+                        "pmStart": {
+                          "type": "string"
+                        },
+                        "pmEnd": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "tuesday": {
+                      "type": "object",
+                      "properties": {
+                        "amStart": {
+                          "type": "string"
+                        },
+                        "amEnd": {
+                          "type": "string"
+                        },
+                        "pmStart": {
+                          "type": "string"
+                        },
+                        "pmEnd": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "wednesday": {
+                      "type": "object",
+                      "properties": {
+                        "amStart": {
+                          "type": "string"
+                        },
+                        "amEnd": {
+                          "type": "string"
+                        },
+                        "pmStart": {
+                          "type": "string"
+                        },
+                        "pmEnd": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "thursday": {
+                      "type": "object",
+                      "properties": {
+                        "amStart": {
+                          "type": "string"
+                        },
+                        "amEnd": {
+                          "type": "string"
+                        },
+                        "pmStart": {
+                          "type": "string"
+                        },
+                        "pmEnd": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "friday": {
+                      "type": "object",
+                      "properties": {
+                        "amStart": {
+                          "type": "string"
+                        },
+                        "amEnd": {
+                          "type": "string"
+                        },
+                        "pmStart": {
+                          "type": "string"
+                        },
+                        "pmEnd": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "saturday": {
+                      "type": "object",
+                      "properties": {
+                        "amStart": {
+                          "type": "string"
+                        },
+                        "amEnd": {
+                          "type": "string"
+                        },
+                        "pmStart": {
+                          "type": "string"
+                        },
+                        "pmEnd": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "sunday": {
+                      "type": "object",
+                      "properties": {
+                        "amStart": {
+                          "type": "string"
+                        },
+                        "amEnd": {
+                          "type": "string"
+                        },
+                        "pmStart": {
+                          "type": "string"
+                        },
+                        "pmEnd": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "shopID": 11,
+                "dateStart": "2020-10-18",
+                "dateEnd": "2020-10-22",
+                "days": {
+                  "monday": {
+                    "amStart": "08:00",
+                    "amEnd": "09:00",
+                    "pmStart": "15:00",
+                    "pmEnd": "15:30"
+                  },
+                  "tuesday": {
+                    "amStart": "08:00",
+                    "amEnd": "09:00",
+                    "pmStart": "15:00",
+                    "pmEnd": "15:30"
+                  },
+                  "wednesday": {
+                    "amStart": "08:00",
+                    "amEnd": "09:00",
+                    "pmStart": "15:00",
+                    "pmEnd": "15:30"
+                  },
+                  "thursday": {
+                    "amStart": "08:00",
+                    "amEnd": "09:00",
+                    "pmStart": "15:00",
+                    "pmEnd": "15:30"
+                  },
+                  "friday": {
+                    "amStart": "08:00",
+                    "amEnd": "09:00",
+                    "pmStart": "15:00",
+                    "pmEnd": "15:30"
+                  },
+                  "saturday": {
+                    "amStart": "09:00",
+                    "amEnd": "10:00",
+                    "pmStart": "",
+                    "pmEnd": ""
+                  },
+                  "sunday": {
+                    "amStart": "",
+                    "amEnd": "",
+                    "pmStart": "",
+                    "pmEnd": ""
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateAppointments"
+            }
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+      "flow": "implicit",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "MainSearch": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string",
+          "example": "City found"
+        },
+        "number_result": {
+          "type": "integer",
+          "example": 2
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "cp": {
+                "type": "string"
+              }
+            }
+          },
+          "example": [
+            {
+              "city": "Roissy-en-Brie",
+              "cp": "77680"
+            },
+            {
+              "city": "Roissy-en-France",
+              "cp": "95700"
+            }
+          ]
+        }
+      }
+    },
+    "SearchByLocation": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string",
+          "example": "Shop founded"
+        },
+        "number_result": {
+          "type": "integer",
+          "example": 12
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "shop_name": {
+                "type": "string"
+              },
+              "opening_time": {
+                "type": "string"
+              },
+              "avatar_shop": {
+                "type": "string"
+              },
+              "is_active": {
+                "type": "boolean"
+              },
+              "address_name": {
+                "type": "string"
+              },
+              "address_number": {
+                "type": "integer"
+              },
+              "city": {
+                "type": "string"
+              },
+              "postal_code": {
+                "type": "string"
+              },
+              "geo": {
+                "type": "string"
+              },
+              "st_x": {
+                "type": "number",
+                "format": "float"
+              },
+              "st_y": {
+                "type": "number",
+                "format": "float"
+              },
+              "distance": {
+                "type": "number",
+                "format": "float"
+              }
+            }
+          },
+          "example": [
+            {
+              "id": 19,
+              "shop_name": "Papier Feuille Coupe choux",
+              "opening_time": "Du Mardi au ... De 9H00 à 19H00",
+              "avatar_shop": "https://www.url",
+              "is_active": true,
+              "address_name": "Rue Roger Salengro",
+              "address_number": 23,
+              "city": "Noisy-le-Grand",
+              "postal_code": "93160",
+              "geo": "0101000020E6100000965984622B6C484093FE5E0A0F5A0440",
+              "st_x": 48.845074,
+              "st_y": 2.543974,
+              "distance": 2003.17365389
+            },
+            {
+              "id": 17,
+              "shop_name": "Geek Barbu",
+              "opening_time": "Du Lundi au ... De 10H00 à 20H00",
+              "avatar_shop": "https://www.url",
+              "is_active": true,
+              "address_name": "Rue Georges Enesco",
+              "address_number": 6,
+              "city": "Créteil",
+              "postal_code": "94000",
+              "geo": "0101000020E6100000D8B79388F0654840118B187618930340",
+              "st_x": 48.796403,
+              "st_y": 2.446824,
+              "distance": 11846.28630894
+            },
+            "..."
+          ]
+        }
+      }
+    },
+    "CreateAppointments": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string",
+          "example": "Available appointment(s) correctly inserted"
+        },
+        "number_insertion": {
+          "type": "integer",
+          "example": 6
+        },
+        "inserted_slot": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": [
+            "2020-10-19 08:00",
+            "2020-10-19 08:30",
+            "2020-10-19 15:00",
+            "2020-10-22 08:00",
+            "2020-10-22 08:30",
+            "2020-10-22 15:00"
+          ]
+        },
+        "number_already_in_DB": {
+          "type": "integer",
+          "example": 6
+        },
+        "already_in_DB": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": [
+            "2020-10-20 08:00",
+            "2020-10-20 08:00",
+            "2020-10-20 15:00",
+            "2020-10-21 08:00",
+            "2020-10-21 08:00",
+            "2020-10-21 15:00"
+          ]
+        }
+      }
+    },
+    "Shop": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string",
+          "example": "Shop found"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "integer"
+            },
+            "_shop_name": {
+              "type": "string"
+            },
+            "_opening_time": {
+              "type": "string"
+            },
+            "_address_name": {
+              "type": "string"
+            },
+            "_address_number": {
+              "type": "integer"
+            },
+            "_city": {
+              "type": "string"
+            },
+            "_postal_code": {
+              "type": "string"
+            },
+            "_avatar_shop": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
