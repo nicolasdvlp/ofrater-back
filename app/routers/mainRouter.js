@@ -23,13 +23,13 @@ router.post('/services', validateBody(getShopServicesSchema), mainController.get
  * Routes Login/signin/signout
  */
     // Route to register
-router.post('/signin', validateBody(registerSchema), mainController.register);
+router.post('/join', validateBody(registerSchema), mainController.register);
     // Route to login
 router.post('/login', validateBody(loginSchema), mainController.postLogin);
     // Route to logout
 router.post('/logout', mainController.logout);
     // Route to verifiemail and reseting password
-router.get('/checkEmail/:crypto', mainController.checkEmail);
+router.get('/checkmail/:validationKey', mainController.checkEmail);
 
     // custom middleware to check if user is logged in
 // router.use(userConnect);

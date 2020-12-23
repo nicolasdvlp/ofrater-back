@@ -41,7 +41,7 @@ Content-Type: application/json
 }
 
 ### Route to create a new user (user registration)
-POST http://localhost:3003/registration
+POST http://localhost:3000/join
 Content-Type: application/json
 
 {

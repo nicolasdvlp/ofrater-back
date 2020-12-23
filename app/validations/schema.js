@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const patternDate = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
-const patternPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
+const patternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/;
 const patternTime = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
 const registerSchema = Joi.object({

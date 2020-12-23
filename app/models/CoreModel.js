@@ -49,14 +49,18 @@ class CoreModel {
 
     async insert() {
 
-
         const _cleanFields = [];
         const _cleanPlaceholders = [];
         const values = [];
         let placeHolderInc = 1;
     
         Object.keys(this).forEach((key) => {
-            key = key.replace('_', '');
+
+            console.log(key, key.charAt(0) === '_')
+
+            key.charAt(0) === '_' ? key = key.substring(1) : null ;
+
+            console.log(key)
 
             if (key === "id") return false;
         
@@ -88,7 +92,7 @@ class CoreModel {
         let incPlaceHolders = 1;
         const values = [];
         Object.keys(this).forEach((key) => {
-            key = key.replace('_', '');
+            key.charAt(0) === '_' ? key = key.substring(1) : null ;
             if (key === "id") return false;
     
             _cleanPlaceholders.push(`"${key}" = $${incPlaceHolders}`);

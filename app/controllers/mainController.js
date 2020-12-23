@@ -3,7 +3,8 @@ const sendmail = require('../mailer/mailer');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const fetch = require('node-fetch');
-const { getlength } = require('../modules/mainModule')
+const { getlength } = require('../modules/mainModule');
+const { Console } = require('console');
 
 module.exports = {
 
@@ -245,68 +246,72 @@ module.exports = {
             });
 
         } catch(error) {
-
             console.trace(error);
             response.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
                 error
             });
-
         }
     },
 
-    // Method to collect the crypto from the link the user clicked on and compare it with the one in BDD
-    // if the comparison is ok, the user is verified
+    // Method to collect the crypto from the link the user clicked on and compare it with the one in DB
+    // if the comparison is ok, the user is verified and updated in DB
     async checkEmail(request, response) {
 
         try {
-
-            const userToValidate = await User.findByAccountValidationCrypto(request.params.crypto);
+            const userToValidate = await User.findByAccountValidationCrypto(request.params.validationKey);
 
             if (userToValidate) {
                 userToValidate.is_validated = true;
+                userToValidate.account_validation_crypto = "";
                 userToValidate.update();
-                return response.json({success: true, message: 'Account validated.'});
-            } else {
-                return response.status(500).json({success: false, message: 'The account could not be validated.'});
+                return response.json({
+                    success: true, 
+                    message: 'Account validated.'
+                });
             }
-        } catch (error) {
-
+        } catch(error) {
             console.trace(error);
-            response.status(500).json('The account could not have been validated.');
-            
+            response.status(500).json({
+                success: false,
+                message: 'The account could not be validated.',
+                error
+            });
         }
     },
 
     async postLogin(request, response) {
 
         const { mail, password } = request.body
-        let shop, _shop;
+        let owned_shop;
 
         try {
-            
             const userToConnect = await User.findByMail(mail);
 
-            if(!userToConnect) {return response.status(404).json({message: `No user found for email ${mail}.`, info: 'mail'})};
+            if(!userToConnect) {return response.status(404).json({success: false, message: `No user found for email ${mail}.`, info: 'mail'})};
 
             if(userToConnect.role_id === 2) {
-                shop = await Shop.ownedByUser(userToConnect.id);
+                owned_shop = await Shop.ownedByUser(userToConnect.id);
             };
-
-            !!shop ? _shop = shop : null ;
-
+            
             if(await bcrypt.compare(password, userToConnect.password)) {
                 request.session.user = userToConnect;
-                return response.json({success: true, message: 'User logged in', data: userToConnect, owned_shop: _shop});
-            }
-
+                return response.json({
+                    success: true, 
+                    message: 'User logged in', 
+                    data: {...userToConnect, owned_shop}
+                });
+            };
             response.status(401).json({success: false, message: 'Impossible to log in. Wrong password.'})
 
-        } catch (error) {
-
-            console.log(error);    
-
+        } catch(error) {
+            console.trace(error);
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
         }
     },
 
@@ -314,12 +319,15 @@ module.exports = {
 
         try {
             await req.session.destroy();
-
-        } catch (error) {
-            console.log(error);    
+            res.json('User logged out.');
+        } catch(error) {
+            console.trace(error);
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
         }
-
-        res.json('User logged out.');
     },
 
     async getShopServices(req, res) {
@@ -328,17 +336,16 @@ module.exports = {
         let services = [];
         
         try {
-
             services = await Service.getShopServices(shopId);
-
             res.json(services)
-
-
-        } catch (error) {
-
-            console.log(error);    
+        } catch(error) {
+            console.trace(error);
+            response.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error
+            });
         }
-
     }
 
 }
