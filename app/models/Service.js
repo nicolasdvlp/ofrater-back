@@ -3,9 +3,9 @@ const CoreModel = require('./CoreModel');
 
 class Service extends CoreModel {
 
-    _name;
-    _price;
-    _duration;
+    name;
+    price;
+    duration;
 
     constructor(obj) {
         super(obj);

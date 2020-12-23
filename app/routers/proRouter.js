@@ -14,7 +14,7 @@ router.put('/profile', proController.updateProfile);
     // create available appointments in database
 router.post('/createappointments', validateBody(postAvailableAppointmentSchema), proController.postAvailableAppointment);
     // get appointment in database between to dates or a single date
-router.post('/getappointments', validateBody(getAppointmentsSchema), proController.getAppointmentsPro);
+router.post('/calendar', validateBody(getAppointmentsSchema), proController.getAppointmentsPro);
     // confirm that a client attended an appointment
 router.put('/confirmattendance', validateBody(confirmAttendanceSchema), proController.confirmAttendance);
 

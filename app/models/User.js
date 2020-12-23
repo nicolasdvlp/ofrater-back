@@ -3,30 +3,30 @@ const CoreModel = require('./CoreModel');
 
 module.exports = class User extends CoreModel {
    
-    _first_name;
-    _last_name;
-    _phone_number;
-    _birth;
-    _mail;
-    _password;
-    _avatar;
-    _role_id;
-    _is_validated;
-    _account_validation_crypto;
+    first_name;
+    last_name;
+    phone_number;
+    birth;
+    mail;
+    password;
+    avatar;
+    role_id;
+    is_validated;
+    account_validation_crypto;
 
     constructor(obj) {
         
         super(obj);
-        this._first_name = obj.first_name;
-        this._last_name = obj.last_name;
-        this._phone_number = obj.phone_number;
-        this._birth = obj.birth;
-        this._mail = obj.mail;
-        this._password = obj.password;
-        this._avatar = obj.avatar;
-        this._role_id = obj.role_id;
-        this._is_validated = obj.is_validated;
-        this._account_validation_crypto = obj.account_validation_crypto;
+        this.first_name = obj.first_name;
+        this.last_name = obj.last_name;
+        this.phone_number = obj.phone_number;
+        this.birth = obj.birth;
+        this.mail = obj.mail;
+        this.password = obj.password;
+        this.avatar = obj.avatar;
+        this.role_id = obj.role_id;
+        this.is_validated = obj.is_validated;
+        this.account_validation_crypto = obj.account_validation_crypto;
 
     };
 
@@ -36,43 +36,43 @@ module.exports = class User extends CoreModel {
      */
 
     get first_name() {
-        return this._first_name;
+        return this.first_name;
     }
     
     get last_name() {
-        return this._last_name;
+        return this.last_name;
     }
     
     get phone_number() {
-        return this._phone_number;
+        return this.phone_number;
     }
     
     get birth() {
-        return this._birth;
+        return this.birth;
     }
     
     get mail() {
-        return this._mail;
+        return this.mail;
     }
     
     get password() {
-        return this._password;
+        return this.password;
     }
     
     get avatar() {
-        return this._avatar;
+        return this.avatar;
     }
     
     get role_id() {
-        return this._role_id;
+        return this.role_id;
     }
 
     get is_validated() {
-        return this._is_validated;
+        return this.is_validated;
     }
 
     get account_validation_crypto() {
-        return this._account_validation_crypto;
+        return this.account_validation_crypto;
     }
     
     /**
@@ -80,43 +80,43 @@ module.exports = class User extends CoreModel {
      */
 
     set first_name(value) {
-        this._first_name = value;
+        this.first_name = value;
     };
 
     set last_name(value) {
-        this._last_name = value;
+        this.last_name = value;
     };
 
     set phone_number(value) {
-        this._phone_number = value;
+        this.phone_number = value;
     };
 
     set birth(value) {
-        this._birth = value;
+        this.birth = value;
     };
 
     set mail(value) {
-        this._mail = value;
+        this.mail = value;
     };
 
     set password(value) {
-        this._password = value;
+        this.password = value;
     };
 
     set avatar(value) {
-        this._avatar = value;
+        this.avatar = value;
     };
 
     set role_id(value) {
-        this._role_id = value;
+        this.role_id = value;
     };
 
     set is_validated(value) {
-        this._is_validated = value;
+        this.is_validated = value;
     };
 
     set account_validation_crypto(value) {
-        this._account_validation_crypto = value;
+        this.account_validation_crypto = value;
     };
 
     static async findAllPro() {

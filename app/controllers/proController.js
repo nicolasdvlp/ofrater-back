@@ -25,7 +25,7 @@ module.exports = {
                 success: true,
                 message: `Shop founded`,
                 data:{
-                    pro
+                    ...pro
                 }
             });
     
@@ -38,7 +38,6 @@ module.exports = {
     async updateProfile (request, response) {
 
         let pro;
-
         try {
 
             pro = await Shop.findById(request.body.shopId);
@@ -207,7 +206,7 @@ module.exports = {
 
             res.json({
                 success: true,
-                message: 'Available appointment(s) correctly inserted',
+                message: `Available appointment(s) correctly inserted for shopId ${shopId}`,
                 number_insertion : startTimestampArray.length,
                 inserted_slot : startTimestampArray,
                 number_already_in_DB : alreadyInDatabaseArray.length,
@@ -228,7 +227,6 @@ module.exports = {
     async getAppointmentsPro (request, response) {
 
         let appointments = [];
-
         try {
 
             let { shopId, dateStart, dateEnd } = request.body

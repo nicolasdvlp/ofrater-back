@@ -3,25 +3,25 @@ const CoreModel = require('./CoreModel');
 
 class Role extends CoreModel {
 
-    _name
+    name
 
     constructor(obj) {
         super(obj);
-        this._name = obj.name;
+        this.name = obj.name;
     }
 
     // ******
     // GETTER
     // ******
     get name() {
-        return this._name;
+        return this.name;
     }
 
     // ******
     // SETTER
     // ******
     set name(value) {
-        this._name = value;
+        this.name = value;
     }
 
 

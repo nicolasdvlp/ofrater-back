@@ -3,13 +3,13 @@ const CoreModel = require('./CoreModel');
 
 class Review extends CoreModel {
 
-    _rate;
-    _description;
+    rate;
+    description;
 
     constructor(obj) {
         super(obj);
-        this._rate = obj.rate;
-        this._description = obj._description;
+        this.rate = obj.rate;
+        this.description = obj._description;
     }
 
     // ******
@@ -20,18 +20,18 @@ class Review extends CoreModel {
     }
 
     get _description() {
-        return this._description;
+        return this.description;
     }
 
     // ******
     // SETTER
     // ******
     set rate(value) {
-        this._rate = value;
+        this.rate = value;
     }
 
     set description(value) {
-        this._description = value;
+        this.description = value;
     }
 }
 
