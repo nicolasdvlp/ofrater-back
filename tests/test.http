@@ -27,7 +27,7 @@ POST http://localhost:3000/services
 Content-Type: application/json
 
 {
-    "shopID": "2"
+    "shopId": "2"
 }
 
 
@@ -117,7 +117,7 @@ POST http://localhost:3001/pro/availableappointment
 Content-Type: application/json
 
 {
-    "shopID": 11,
+    "shopId": 11,
     "dateStart": "2020-10-04",
     "dateEnd": "2020-10-25",
     "days": {
@@ -176,7 +176,7 @@ Content-Type: application/json
     "dateEnd": "2020-12-05",
     "starthour": "09:00",
     "endHour": "17:00",
-    "shopID": 2,
+    "shopId": 2,
     "slotStart": "2020-10-20 22:00:0+02",
     "slotEnd": "2020-10-20 22:29:59+02"
 }
@@ -195,7 +195,7 @@ POST http://localhost:3000/pro/availableappointment
 Content-Type: application/json
 
 {
-    "shopID": 4,
+    "shopId": 4,
     "dateStart": "2019-10-12",
     "dateEnd": "2019-10-14"
     "days": {
@@ -254,7 +254,7 @@ Content-Type: application/json
     "dateEnd": "2020-12-05",
     "starthour": "09:00",
     "endHour": "17:00",
-    "shopID": 2,
+    "shopId": 2,
     "slotStart": "2020-10-20 22:00:0+02",
     "slotEnd": "2020-10-20 22:29:59+02"
 }
@@ -264,7 +264,7 @@ POST http://localhost:3000/pro/getappointments
 Content-Type: application/json
 
 {
-    "shopID": 4,
+    "shopId": 4,
     "dateStart": "2019-10-12",
     "dateEnd": "2019-10-14"
 }
@@ -306,7 +306,7 @@ Content-Type: application/json
 {
     "dateStart": "2019-10-18",
     "dateEnd": "2019-10-20",
-    "shopID": 2
+    "shopId": 2
 }
 
 ###

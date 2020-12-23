@@ -116,11 +116,11 @@ module.exports = {
 
     async getProDetailsById(request, response) {
         
-        const proId = parseInt(request.body.id);
+        const proId = parseInt(request.body.shopId);
         let pro, category, service;
         
         if (!request.body.id) { return response.status(400).json({ success: false, message: 'missing_required_parameter', info: 'id' }); };
-        if (proId<=0|| isNaN(proId)) { return response.status(400).json({ success: false, message: 'ShopID must be a positive number', info: 'id' }); };
+        if (proId<=0|| isNaN(proId)) { return response.status(400).json({ success: false, message: 'ShopId must be a positive number', info: 'id' }); };
 
         try {
             pro = await Shop.findById(proId);
@@ -137,20 +137,20 @@ module.exports = {
     
     async getShopPage(request, response) {
 
-        const { dateStart, dateEnd, shopID } = request.body;
+        const { dateStart, dateEnd, shopId } = request.body;
 
         let _dateEnd, availableAppointments, shop;
 
         !!dateEnd ? _dateEnd = dateEnd : _dateEnd = dateStart ;
 
         try {
-            shop = await Shop.findById(shopID);
-            availableAppointments = await Appointment.getAppointmentsClient(dateStart, _dateEnd, shopID);
+            shop = await Shop.findById(shopId);
+            availableAppointments = await Appointment.getAppointmentsClient(dateStart, _dateEnd, shopId);
 
             if(!shop) {
                 return response.json({
                     success: false,
-                    message: `No shop found with id ${shopID}`,
+                    message: `No shop found with id ${shopId}`,
                     data:{}
                 });
             };
@@ -324,12 +324,12 @@ module.exports = {
 
     async getShopServices(req, res) {
 
-        const { shopID } = req.body;
+        const { shopId } = req.body;
         let services = [];
         
         try {
 
-            services = await Service.getShopServices(shopID);
+            services = await Service.getShopServices(shopId);
 
             res.json(services)
 

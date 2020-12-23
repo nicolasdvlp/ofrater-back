@@ -44,11 +44,11 @@ class Service extends CoreModel {
         this._duration = value
     }
 
-    static async getShopServices(shopID) {
+    static async getShopServices(shopId) {
 
             const query = {
                 text: `SELECT service.* FROM service JOIN shop_has_service ON shop_has_service.service_id = service.id  WHERE shop_has_service.shop_id = $1;`,
-                values: [shopID],
+                values: [shopId],
             };
     
             const result = await db.query(query); 

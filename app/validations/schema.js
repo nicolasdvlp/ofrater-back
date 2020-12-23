@@ -30,7 +30,7 @@ const loginSchema = Joi.object({
 });
 
 const postAvailableAppointmentSchema = Joi.object({
-    shopID: Joi.required(),
+    shopId: Joi.required(),
     dateStart: Joi.string().required().pattern(new RegExp(patternDate)),
     dateEnd: Joi.string().required().pattern(new RegExp(patternDate)),
     days: Joi.object({
@@ -80,13 +80,13 @@ const postAvailableAppointmentSchema = Joi.object({
 });
 
 const getAppointmentsSchema = Joi.object({
-    shopID: Joi.required(),
+    shopId: Joi.required(),
     dateStart: Joi.string().required().pattern(new RegExp(patternDate)),
     dateEnd: Joi.string().allow('').pattern(new RegExp(patternDate))
 });
 
 const updateProProfileSchema = Joi.object({
-    shopID: Joi.required()
+    shopId: Joi.required()
 });
 
 const modifyAnAppointmentSchema = Joi.object({
@@ -107,7 +107,7 @@ const cancelAppointmentSchema = Joi.object({
 const getShopPageAndAgendaSchema = Joi.object({
     dateStart: Joi.string().required().pattern(new RegExp(patternDate)),
     dateEnd: Joi.string().allow('').pattern(new RegExp(patternDate)),
-    shopID: Joi.required()
+    shopId: Joi.required()
 });
 
 const getUserProfileSchema = Joi.object({
@@ -115,7 +115,7 @@ const getUserProfileSchema = Joi.object({
 });
 
 const getShopServicesSchema = Joi.object({
-    shopID: Joi.required(),
+    shopId: Joi.required(),
 });
 
 const searchprobylocationSchema = Joi.object({

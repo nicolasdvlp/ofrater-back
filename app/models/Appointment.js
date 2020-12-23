@@ -149,11 +149,11 @@ class Appointment extends CoreModel {
 
     }
 
-    static async alreadyHaveAppointmentInDatabase(dateAndTime, shopID) {
+    static async alreadyHaveAppointmentInDatabase(dateAndTime, shopId) {
 
         const query = {
             text: `SELECT * FROM appointment WHERE slot_start = $1 AND shop_id = $2 ;`,
-            values: [dateAndTime, shopID],
+            values: [dateAndTime, shopId],
         };
 
         const result = await db.query(query); 

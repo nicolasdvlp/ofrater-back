@@ -3,19 +3,19 @@ const moment = require('moment');
 moment().format(); 
 
 // function to add one appointment
-const generateNewAppointment = async function (shopID, slotStart, slotEnd) {
+const generateNewAppointment = async function (shopId, slotStart, slotEnd) {
 
     let newAppointment = new Appointment({
         slot_start: slotStart, 
         slot_end: slotEnd, 
-        shop_id: shopID,
+        shop_id: shopId,
         is_attended: false
     })
     await newAppointment.insert()
 };
 
 // function a insert appointment un a day with starting hour and ending hour
-const generateNewAppointmentForADay = async function (date, startHour, endHour, shopID, callback) {
+const generateNewAppointmentForADay = async function (date, startHour, endHour, shopId, callback) {
 
     let alreadyInDatabaseArray = [];
 
@@ -33,7 +33,7 @@ const generateNewAppointmentForADay = async function (date, startHour, endHour, 
 
         let currentTime = startTime.format("YYYY-MM-DD HH:mm").toString();
 
-        const isInDatabase = await Appointment.alreadyHaveAppointmentInDatabase(currentTime, shopID)
+        const isInDatabase = await Appointment.alreadyHaveAppointmentInDatabase(currentTime, shopId)
         
         if(!!isInDatabase) {
             alreadyInDatabaseArray.push(currentTime);
@@ -54,7 +54,7 @@ const generateNewAppointmentForADay = async function (date, startHour, endHour, 
 
     // loop to insert appointments in given date
     for (let index = 0; index < startTimestampArray.length; index++) {
-        await generateNewAppointment(shopID, startTimestampArray[index], endTimestampArray[index]); 
+        await generateNewAppointment(shopId, startTimestampArray[index], endTimestampArray[index]); 
     };
 
     await callback(alreadyInDatabaseArray, startTimestampArray)
