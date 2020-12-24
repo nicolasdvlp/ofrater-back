@@ -27,72 +27,40 @@ class Shop extends CoreModel {
     // *******
     // GETTERS
     // *******
-    get shop_name() {
-        return this.shop_name;
-    }
+    get shop_name() { return this.shop_name; }
 
-    get opening_time() {
-        return this.opening_time;
-    }
+    get opening_time() { return this.opening_time; }
 
-    get address_name() {
-        return this.address_name;
-    }
+    get address_name() { return this.address_name; }
 
-    get address_number() {
-        return this.address_number;
-    }
+    get address_number() { return this.address_number; }
 
-    get city() {
-        return this.city;
-    }
+    get city() { return this.city; }
 
-    get postal_code() {
-        return this.postal_code;
-    }
+    get postal_code() { return this.postal_code; }
 
-    get avatar_shop() {
-        return this.avatar_shop;
-    }
+    get avatar_shop() { return this.avatar_shop; }
 
-    get geo() {
-        return this.geo;
-    }
+    get geo() { return this.geo; }
 
     // *******
     // SETTERS
     // *******
-    set shop_name(value) {
-        this.shop_name = value;
-    }
+    set shop_name(value) { this.shop_name = value; }
 
-    set opening_time(value) {
-        this.opening_time = value;
-    }
+    set opening_time(value) { this.opening_time = value; }
 
-    set address_name(value) {
-        this.address_name = value;
-    }
+    set address_name(value) { this.address_name = value; }
 
-    set address_number(value) {
-        this.address_number = value;
-    }
+    set address_number(value) { this.address_number = value; }
 
-    set city(value) {
-        this.city = value;
-    }
+    set city(value) { this.city = value; }
 
-    set postal_code(value) {
-        this.postal_code = value;
-    }
+    set postal_code(value) { this.postal_code = value; }
 
-    set avatar_shop(value) {
-        this.avatar_shop = value;
-    }
+    set avatar_shop(value) { this.avatar_shop = value; }
 
-    set geo(value) {
-        this.geo = value;
-    }
+    set geo(value) { this.geo = value; }
 
     // Méthode pour la page d'accueil qui retourne uniquement les CP et les villes pour la recherche "prédictive"
     static async findCityOrZip(cityOrZip) {
