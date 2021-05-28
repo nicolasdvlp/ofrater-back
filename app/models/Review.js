@@ -1,38 +1,38 @@
-const db = require('../database');
+const db = require('../../config/database');
 const CoreModel = require('./CoreModel');
 
 class Review extends CoreModel {
 
-    rate;
-    description;
+  rate;
+  description;
 
-    constructor(obj) {
-        super(obj);
-        this.rate = obj.rate;
-        this.description = obj._description;
-    }
+  constructor(obj) {
+    super(obj);
+    this.rate = obj.rate;
+    this.description = obj._description;
+  }
 
-    // ******
-    // GETTER
-    // ******
-    get rate() {
-        return this.rate;
-    }
+  // ******
+  // GETTER
+  // ******
+  get rate() {
+    return this.rate;
+  }
 
-    get _description() {
-        return this.description;
-    }
+  get _description() {
+    return this.description;
+  }
 
-    // ******
-    // SETTER
-    // ******
-    set rate(value) {
-        this.rate = value;
-    }
+  // ******
+  // SETTER
+  // ******
+  set rate(value) {
+    this.rate = value;
+  }
 
-    set description(value) {
-        this.description = value;
-    }
+  set description(value) {
+    this.description = value;
+  }
 }
 
 module.exports = Review;

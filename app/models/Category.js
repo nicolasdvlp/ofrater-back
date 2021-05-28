@@ -1,28 +1,28 @@
-const db = require('../database');
+const db = require('../../config/database');
 const CoreModel = require('./CoreModel');
 
 class Category extends CoreModel {
 
-    name;
+  name;
 
-    constructor(obj) {
-        super(obj);
-        this.name = obj.name;
-    }
+  constructor(obj) {
+    super(obj);
+    this.name = obj.name;
+  }
 
-    // ******
-    // GETTER
-    // ******
-    get name() {
-        return this.name;
-    }
+  // ******
+  // GETTER
+  // ******
+  get name() {
+    return this.name;
+  }
 
-    // ******
-    // SETTER
-    // ******
-    set name(value) {
-        this.name = value;
-    }
+  // ******
+  // SETTER
+  // ******
+  set name(value) {
+    this.name = value;
+  }
 }
 
 module.exports = Category;

@@ -1,8 +1,7 @@
-const db = require('../database');
-
+const db = require('../../config/database');
 class CoreModel {
 
-  id
+  id;
 
   constructor(obj) {
     this.id = obj.id;
