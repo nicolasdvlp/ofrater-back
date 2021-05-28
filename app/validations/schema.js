@@ -32,7 +32,7 @@ const loginSchema = Joi.object({
 const postAvailableAppointmentSchema = Joi.object({
   id: Joi.number().required(),
   dateStart: Joi.string().required().pattern(new RegExp(patternDate)),
-  dateEnd: Joi.string().required().pattern(new RegExp(patternDate)),
+  dateEnd: Joi.string().pattern(new RegExp(patternDate)),
   days: Joi.object({
     monday: Joi.object({
       amStart: Joi.string().allow('').required().pattern(new RegExp(patternTime)),

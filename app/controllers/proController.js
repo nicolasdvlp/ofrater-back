@@ -12,10 +12,7 @@ module.exports = {
 
       pro = await Shop.findById(id);
 
-      response.json({
-        message: `Shop founded : ${!!pro}`,
-        data: { ...pro }
-      });
+      response.json({ data: { ...pro } });
 
     } catch (error) {
       console.trace(error);
@@ -39,10 +36,7 @@ module.exports = {
         pro.update();
       };
 
-      response.json({
-        message: `Shop updated`,
-        data: { pro }
-      });
+      response.json({ data: { pro } });
 
     } catch (error) {
 
@@ -52,12 +46,23 @@ module.exports = {
     }
   },
 
+  /**
+   * 
+   * @version 30/05/2021
+   * @author Nicolas
+   * @param  {object} req
+   * @param  {string} req.body
+   * @param  {number} req.body.id
+   * @param  {string} req.body.dateStart
+   * @param  {string=} req.body.dateEnd
+   * @param  {monday: string, tuesday: string, wednesday: string, thursday: string, friday: string, saturday: string, sunday: string} req.body.days
+   */
   async postAvailableAppointment(req, res) {
     try {
       let startTimestampArray = [],
         alreadyExistInDbArray = [],
         currentDay;
-      let { id, dateStart, dateEnd, days } = req.body;
+      const { id, dateStart, dateEnd = dateStart, days } = req.body;
 
       if (moment(dateStart, "YYYY-MM-DD").isAfter(dateEnd))
         return res.status(400).json({ success: false, message: 'dateEnd must be after dateStart', info: 'dateStart/dateEnd' });
@@ -73,7 +78,6 @@ module.exports = {
 
       // loop to add appointments for each day
       for (let index = 0; moment(currentDay, "YYYY-MM-DD").isSameOrBefore(moment(dateEnd, "YYYY-MM-DD")); index++) {
-
         let _startTimestampArray = [],
           _alreadyExistInDbArray = [],
           currentWeekDay;
@@ -97,7 +101,6 @@ module.exports = {
       }
 
       res.json({
-        message: `Available appointment(s) correctly inserted for id ${id}`,
         number_insertion: startTimestampArray.length,
         inserted_slot: startTimestampArray,
         number_already_in_DB: alreadyExistInDbArray.length,
@@ -105,15 +108,9 @@ module.exports = {
       });
 
     } catch (error) {
-
       console.trace(error);
-      res.status(500).json({
-        success: false,
-        message: 'Internal Server Error',
-        error
-      });
+      res.status(500).json({ error });
     }
-
   },
 
   async getAppointmentsPro(request, response) {
@@ -136,14 +133,8 @@ module.exports = {
       });
 
     } catch (error) {
-
       console.trace(error);
-      return response.status(500).json({
-        success: false,
-        message: 'Internal Server Error',
-        error
-      });
-
+      response.status(500).json({ error });
     }
   },
 
@@ -170,10 +161,8 @@ module.exports = {
       });
 
     } catch (error) {
-
       console.trace(error);
-      response.status(500).json({ error: { message: 'Attendance confirmation could not be registered.' } });
-
+      response.status(500).json({ error });
     }
   }
 }
