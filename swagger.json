@@ -876,7 +876,7 @@
         ],
         "summary": "Generate appointments in DB",
         "description": "",
-        "operationId": "createappointments",
+        "operationId": "createslots",
         "produces": [
           "application/json"
         ],

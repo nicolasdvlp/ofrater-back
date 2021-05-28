@@ -56,137 +56,44 @@ module.exports = {
 
   async postAvailableAppointment(req, res) {
     try {
-      let startTimestampArray = [];
-      let alreadyExistInDbArray = [];
-      const { id, dateStart, dateEnd, days } = req.body;
+      let startTimestampArray = [],
+        alreadyExistInDbArray = [];
+      let { id, dateStart, dateEnd, days } = req.body;
 
       if (moment(dateStart, "YYYY-MM-DD").isAfter(dateEnd))
-        return res.status(400).json({ success: false, message: 'dateStart must be after dateEnd', info: 'dateStart/dateEnd' });
+        return res.status(400).json({ success: false, message: 'dateEnd must be after dateStart', info: 'dateStart/dateEnd' });
 
       for (const key of Object.keys(days)) {
-        console.log(days[key].amStart, days[key].amEnd,
-          moment(days[key].amStart, "HH:mm").isAfter(moment(days[key].amEnd, "HH:mm"))
-        )
+        if (moment(days[key].amStart, "HH:mm").isAfter(moment(days[key].amEnd, "HH:mm"))
+          || moment(days[key].pmStart, "HH:mm").isAfter(moment(days[key].pmEnd, "HH:mm"))
+          || moment(days[key].amEnd, "HH:mm").isAfter(moment(days[key].pmStart, "HH:mm")))
+          return res.status(400).json({ success: false, message: `${key}.xxEnd must be after ${key}.xxStart OR ${key}.pmStart must be after ${key}.amEnd`, info: 'dateStart/dateEnd' });
       }
 
-      let dateToCible = moment(dateStart, "YYYY-MM-DD")
-      // .format("YYYY-MM-DD").toString();
+      dateStart = moment(dateStart, "YYYY-MM-DD")
 
-      // loop to add appointments in a day
-      for (let index = 0; dateToCible !== dateEnd; index++) {
+      // loop to add appointments for each day
+      for (let index = 0; dateStart !== dateEnd; index++) {
 
-        dateToCible = moment(dateStart, "YYYY-MM-DD").add(index, "day").format("YYYY-MM-DD").toString();
-        const jourDeDateCible = moment(dateToCible, "YYYY-MM-DD").format("dddd").toString().toLowerCase();
-        // Switch to verify the dayy of the week and if it's a worked day
-        switch (jourDeDateCible) {
-          case "monday":
-            if (!!days.monday.amStart && !!days.monday.amEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.monday.amStart, days.monday.amEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            if (!!days.monday.pmStart && !!days.monday.pmEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.monday.pmStart, days.monday.pmEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            break;
+        let _startTimestampArray = [],
+          _alreadyExistInDbArray = [],
+          currentWeekDay;
 
-          case "tuesday":
-            if (!!days.tuesday.amStart && !!days.tuesday.amEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.tuesday.amStart, days.tuesday.amEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            if (!!days.tuesday.pmStart && !!days.tuesday.pmEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.tuesday.pmStart, days.tuesday.pmEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            break;
+        dateStart = moment(dateStart, "YYYY-MM-DD").add(index, "day").format("YYYY-MM-DD");
+        currentWeekDay = moment(dateStart, "YYYY-MM-DD").format("dddd").toString().toLowerCase();
 
-          case "wednesday":
-            if (!!days.wednesday.amStart && !!days.wednesday.amEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.wednesday.amStart, days.wednesday.amEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
+        if (Object.keys(days).includes(currentWeekDay))
+          for (const tm of ["am", "pm"])
+            if (!!days[currentWeekDay][`${tm}Start`] && !!days[currentWeekDay][`${tm}End`]) {
+              [_alreadyExistInDbArray, _startTimestampArray] = await generateNewAppointmentForADay(
+                dateStart,
+                days[currentWeekDay][`${tm}Start`],
+                days[currentWeekDay][`${tm}End`],
+                id
+              )
+              startTimestampArray.push(..._startTimestampArray);
+              alreadyExistInDbArray.push(..._alreadyExistInDbArray);
             };
-            if (!!days.wednesday.pmStart && !!days.wednesday.pmEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.wednesday.pmStart, days.wednesday.pmEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            break;
-
-          case "thursday":
-            if (!!days.thursday.amStart && !!days.thursday.amEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.thursday.amStart, days.thursday.amEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            if (!!days.thursday.pmStart && !!days.thursday.pmEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.thursday.pmStart, days.thursday.pmEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            break;
-
-          case "friday":
-            if (!!days.friday.amStart && !!days.friday.amEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.friday.amStart, days.friday.amEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            if (!!days.friday.pmStart && !!days.friday.pmEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.friday.pmStart, days.friday.pmEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            break;
-
-          case "saturday":
-            if (!!days.saturday.amStart && !!days.saturday.amEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.saturday.amStart, days.saturday.amEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            if (!!days.saturday.pmStart && !!days.saturday.pmEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.saturday.pmStart, days.saturday.pmEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            break;
-
-          case "sunday":
-            if (!!days.sunday.amStart && !!days.sunday.amEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.sunday.amStart, days.sunday.amEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            if (!!days.sunday.pmStart && !!days.sunday.pmEnd) {
-              await generateNewAppointmentForADay(dateToCible, days.sunday.pmStart, days.sunday.pmEnd, id, (resInDB, resInsert) => {
-                startTimestampArray = [...startTimestampArray, ...resInsert];
-                alreadyExistInDbArray = [...alreadyExistInDbArray, ...resInDB];
-              })
-            };
-            break;
-
-          default:
-            break;
-        }
       }
 
       res.json({
@@ -207,7 +114,6 @@ module.exports = {
         error
       });
     }
-
   },
 
   async getAppointmentsPro(request, response) {

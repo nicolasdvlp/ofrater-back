@@ -1,63 +1,63 @@
 const { Appointment } = require('../models/');
-const moment = require('moment'); 
-moment().format(); 
+const moment = require('moment');
+moment().format();
 
 // function to add one appointment
 const generateNewAppointment = async function (shopId, slotStart, slotEnd) {
 
-    let newAppointment = new Appointment({
-        slot_start: slotStart, 
-        slot_end: slotEnd, 
-        shop_id: shopId,
-        is_attended: false
-    })
-    await newAppointment.insert()
+  let newAppointment = new Appointment({
+    slot_start: slotStart,
+    slot_end: slotEnd,
+    shop_id: shopId,
+    is_attended: false
+  })
+  await newAppointment.insert()
 };
 
 // function a insert appointment un a day with starting hour and ending hour
-const generateNewAppointmentForADay = async function (date, startHour, endHour, shopId, callback) {
+const generateNewAppointmentForADay = async function (date, startHour, endHour, id) {
 
-    let alreadyInDatabaseArray = [];
+  let alreadyInDatabaseArray = [];
 
-    let startTimestampArray = [];
-    let endTimestampArray = [];
+  let startTimestampArray = [];
+  let endTimestampArray = [];
 
-    const startTime = moment(date + ' ' + startHour, "YYYY-MM-DD HH:mm");
-    const endTime = moment(date + ' ' + endHour, "YYYY-MM-DD HH:mm");
+  const startTime = moment(date + ' ' + startHour, "YYYY-MM-DD HH:mm");
+  const endTime = moment(date + ' ' + endHour, "YYYY-MM-DD HH:mm");
 
-    // calculate how many slot exist to repeat 'insert'
-    const indexDay = await (endTime - startTime) /30 / 60 /1000;
+  // calculate how many slot exist to repeat 'insert'
+  const indexDay = await (endTime - startTime) / 30 / 60 / 1000;
 
-    // loop to add start times in startTimestampArray
-    for (let index = 0; index < indexDay; index++) {
+  // loop to add start times in startTimestampArray
+  for (let index = 0; index < indexDay; index++) {
 
-        let currentTime = startTime.format("YYYY-MM-DD HH:mm").toString();
+    let currentTime = startTime.format("YYYY-MM-DD HH:mm").toString();
 
-        const isInDatabase = await Appointment.alreadyHaveAppointmentInDatabase(currentTime, shopId)
-        
-        if(!!isInDatabase) {
-            alreadyInDatabaseArray.push(currentTime);
-        } else {
-            startTimestampArray.push(currentTime);
-            currentTime = startTime.add(30, 'm').format("YYYY-MM-DD HH:mm").toString();
-        }
-    };
+    const isInDatabase = await Appointment.alreadyHaveAppointmentInDatabase(currentTime, id)
 
-    // endTimestampArray array
-    endTimestampArray = await startTimestampArray.map(date => 
-        moment(date, "YYYY-MM-DD HH:mm")
-        .add(30, "m")
-        .subtract(1, 'm')
-        .format("YYYY-MM-DD HH:mm")
-        .toString()
-    )
+    if (!!isInDatabase) {
+      alreadyInDatabaseArray.push(currentTime);
+    } else {
+      startTimestampArray.push(currentTime);
+      currentTime = startTime.add(30, 'm').format("YYYY-MM-DD HH:mm").toString();
+    }
+  };
 
-    // loop to insert appointments in given date
-    for (let index = 0; index < startTimestampArray.length; index++) {
-        await generateNewAppointment(shopId, startTimestampArray[index], endTimestampArray[index]); 
-    };
+  // endTimestampArray array
+  endTimestampArray = await startTimestampArray.map(date =>
+    moment(date, "YYYY-MM-DD HH:mm")
+      .add(30, "m")
+      .subtract(1, 'm')
+      .format("YYYY-MM-DD HH:mm")
+      .toString()
+  )
 
-    await callback(alreadyInDatabaseArray, startTimestampArray)
+  // loop to insert appointments in given date
+  for (let index = 0; index < startTimestampArray.length; index++) {
+    await generateNewAppointment(id, startTimestampArray[index], endTimestampArray[index]);
+  };
+
+  return [alreadyInDatabaseArray, startTimestampArray]
 };
 
 

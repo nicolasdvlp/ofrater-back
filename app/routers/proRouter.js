@@ -23,7 +23,7 @@ router.put(
 
 // create available appointments in database
 router.post(
-  '/createappointments',
+  '/createslots',
   validateBody(postAvailableAppointmentSchema),
   proController.postAvailableAppointment
 );
