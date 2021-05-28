@@ -1,5 +1,5 @@
-if (process.env.NODE_ENV !== 'production') {require('dotenv').config();}
-const PORT = process.env.PORT || 3000;
+if (process.env.NODE_ENV !== 'production') { require('dotenv').config(); }
+const config = require('./config');
 const express = require('express');
 const session = require('express-session');
 const fs = require('fs');
@@ -7,15 +7,15 @@ const path = require('path');
 const { requireHTTPS } = require('./app/middlewares')
 const routers = require('./app/routers');
 const cors = require('cors');
-    // const https = require('https');
+// const https = require('https');
 
 const app = express();
 
-    // SSH files
-    // const key = fs.readFileSync(path.join(__dirname, 'certificate', 'private.key'));
-    // const cert = fs.readFileSync(path.join(__dirname, 'certificate', 'ofrater_me.crt'));
-    // const ca = fs.readFileSync(path.join(__dirname, 'certificate', 'ofrater_me.ca-bundle'));
-    // const options = { key, cert, ca };
+// SSH files
+// const key = fs.readFileSync(path.join(__dirname, 'certificate', 'private.key'));
+// const cert = fs.readFileSync(path.join(__dirname, 'certificate', 'ofrater_me.crt'));
+// const ca = fs.readFileSync(path.join(__dirname, 'certificate', 'ofrater_me.ca-bundle'));
+// const options = { key, cert, ca };
 
 // ### Middlewares ###
 
@@ -30,10 +30,10 @@ app.use(session({
   secret: 'Une super phrase de chiffrement de ouf Iliade 4 Life',
   resave: false,
   saveUninitialized: true,
-  cookie: { 
+  cookie: {
     secure: false, //! true if https
     maxAge: (1000 * 60 * 60 * 10) // 10 hours
-   } 
+  }
 }))
 
 // cors
@@ -45,19 +45,19 @@ const swaggerDocument = require('./swagger.json');
 app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
-    // force https
-    // app.use(requireHTTPS);
+// force https
+// app.use(requireHTTPS);
 
 // ### routers ###
 app.use('/api/v1', routers);
 
-    // ### Serveur Listener ###
+// ### Serveur Listener ###
 
-    // https
-    // .createServer(options, app).listen(PORT, () => {
-      // console.log(`App is running ! Go to https://localhost:${PORT}`);
-    // });
+// https
+// .createServer(options, app).listen(PORT, () => {
+// console.log(`App is running ! Go to https://localhost:${PORT}`);
+// });
 
-app.listen(PORT, () => {
-    console.log(`Listening on ${PORT}`);
+app.listen(config.port, () => {
+  console.log(`Listening on ${config.port}`);
 });

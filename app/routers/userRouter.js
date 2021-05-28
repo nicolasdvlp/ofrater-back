@@ -8,16 +8,38 @@ const router = express.Router();
 /**
  * Routes /user
  */
-    // Route to get user profile 
-router.post('/profile', validateBody(getUserProfileSchema), userController.getUserProfile);
-    // Route to update user profile 
-router.put('/profile', userController.updateUserProfile);
-    // to book an appointment
-router.put('/book', validateBody(bookAnAppointementSchema), userController.bookAnAppointement);
-    // to modify an appointment and clear the old appointment
-router.put('/bookmodify', validateBody(modifyAnAppointmentSchema), userController.modifyAnAppointment);
-    // to cancel an appointment
-router.put('/bookcancel', userController.cancelAppointment);
+// Route to get user profile 
+router.post(
+  '/profile',
+  validateBody(getUserProfileSchema),
+  userController.getUserProfile
+);
+
+// Route to update user profile 
+router.put(
+  '/profile',
+  userController.updateUserProfile
+);
+
+// to book an appointment
+router.put(
+  '/book',
+  validateBody(bookAnAppointementSchema),
+  userController.bookAnAppointement
+);
+
+// to modify an appointment and clear the old appointment
+router.put(
+  '/bookmodify',
+  validateBody(modifyAnAppointmentSchema),
+  userController.modifyAnAppointment
+);
+
+// to cancel an appointment
+router.put(
+  '/bookcancel',
+  userController.cancelAppointment
+);
 
 module.exports = router;
 

@@ -1,11 +1,3 @@
-### Search shop/pro by city name or zip code
-POST http://localhost:3000/mainsearch HTTP/1.1
-content-type: application/json
-
-{
-    "input": "78646"
-}
-
 ### Route to find one professional
 POST  http://localhost:3000/searchonepro
 Content-Type: application/json
@@ -14,25 +6,7 @@ Content-Type: application/json
     "id": "2"
 }
 
-### Route to find professionnals by location
-POST http://localhost:3000/searchprobylocation
-Content-Type: application/json
-
-{
-    "zipOrCity": "77600"
-}
-
-### Route to find professionnals by location
-POST http://localhost:3000/services
-Content-Type: application/json
-
-{
-    "shopId": "2"
-}
-
-
 ### get Profile client
-
 POST http://localhost:3001/client/profile
 Content-Type: application/json
 
@@ -67,8 +41,6 @@ Content-Type: application/json
     "birth": "12/01/1985",
     "role_id": 1
 }
-
-
 
 ### Route to create a new user and shop (user registration)
 POST http://localhost:3001/registration
@@ -297,16 +269,6 @@ Content-Type: application/json
 
 {
     "id": 1
-}
-
-### Consult a shop info with its available appointments for a client
-POST http://localhost:3000/client/shop
-Content-Type: application/json
-
-{
-    "dateStart": "2019-10-18",
-    "dateEnd": "2019-10-20",
-    "shopId": 2
 }
 
 ###

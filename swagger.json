@@ -38,7 +38,7 @@
     "http"
   ],
   "paths": {
-    "/main/mainsearch": {
+    "/main/maininputsearch": {
       "post": {
         "tags": [
           "main"
@@ -869,7 +869,7 @@
         }
       }
     },
-    "/pro/createappointments": {
+    "/pro/createslots": {
       "post": {
         "tags": [
           "pro"

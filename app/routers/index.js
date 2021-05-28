@@ -6,12 +6,14 @@ const userRouter = require('./userRouter');
 const proRouter = require('./proRouter');
 
 // route api test
-router.get('/api/hello', (req, res) => { res.json("Hello Wordl!");})
+router.get('/hello', (req, res) => { res.json("Hello Wordl!"); })
 
 //-- route api
 router.use('/main', mainRouter);
+
 // connected user route
 router.use('/user', userRouter);
+
 // connected profesionnal route
 router.use('/pro', proRouter);
 

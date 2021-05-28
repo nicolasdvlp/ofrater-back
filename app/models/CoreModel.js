@@ -2,148 +2,141 @@ const db = require('../database');
 
 class CoreModel {
 
-    id
+  id
 
-    constructor(obj) {
-        this.id = obj.id;
+  constructor(obj) {
+    this.id = obj.id;
+  }
+
+  // ******
+  // GETTER
+  // ******
+  get id() {
+    return this.id;
+  }
+
+  // ******
+  // SETTER
+  // ******
+  set id(value) {
+    this.id = value;
+  }
+
+  static async findAll() {
+
+    const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}"`);
+
+    const list = [];
+    for (const data of result.rows) {
+      list.push(new this(data));
     }
 
-    // ******
-    // GETTER
-    // ******
-    get id() {
-        return this.id;
-    }
+    return list;
+  }
 
-    // ******
-    // SETTER
-    // ******
-    set id(value) {
-        this.id = value;
-    }
+  static async findById(idToFind) {
+    const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE id = $1;`, [idToFind]);
 
-    static async findAll() {
+    return new this(result.rows[0]);
+  }
 
-        const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}"`);
+  async insert() {
 
-        const list = [];
-        for (const data of result.rows) {
-            list.push(new this(data));
-        }
+    const _cleanFields = [];
+    const _cleanPlaceholders = [];
+    const values = [];
+    let placeHolderInc = 1;
 
-        return list;
+    Object.keys(this).forEach((key) => {
 
-    }
+      console.log(key, key.charAt(0) === '_')
 
-    static async findById(idToFind) {
+      key.charAt(0) === '_' ? key = key.substring(1) : null;
 
-        const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE id = $1;`, [idToFind]);
+      console.log(key)
 
-        if (result.rowCount===0) {
-            throw new Error(`No match found with id "${idToFind}" for table "${this.name.toLowerCase()}".`);
-        }
+      if (key === "id") return false;
 
-        return new this(result.rows[0]);
+      _cleanFields.push(`"${key}"`);
+      _cleanPlaceholders.push(`$${placeHolderInc}`);
+      values.push(this[key]);
+      placeHolderInc++;
 
-    }
+    });
 
-    async insert() {
+    const fields = _cleanFields.join(', ');
+    const placeholders = _cleanPlaceholders.join(', ');
 
-        const _cleanFields = [];
-        const _cleanPlaceholders = [];
-        const values = [];
-        let placeHolderInc = 1;
-    
-        Object.keys(this).forEach((key) => {
+    const query = {
 
-            console.log(key, key.charAt(0) === '_')
+      text: `INSERT INTO "${this.constructor.name.toLowerCase()}" (${fields}) VALUES (${placeholders}) RETURNING "id"`,
+      values: values,
+    };
 
-            key.charAt(0) === '_' ? key = key.substring(1) : null ;
+    const result = await db.query(query);
 
-            console.log(key)
+    this.id = result.rows[0].id;
 
-            if (key === "id") return false;
-        
-            _cleanFields.push(`"${key}"`);
-            _cleanPlaceholders.push(`$${placeHolderInc}`);
-            values.push(this[key]);
-            placeHolderInc++;
-                
-        });
+  }
 
-        const fields = _cleanFields.join(', ');
-        const placeholders = _cleanPlaceholders.join(', ');
+  async update() {
 
-        const query = {
+    const _cleanPlaceholders = [];
+    let incPlaceHolders = 1;
+    const values = [];
+    Object.keys(this).forEach((key) => {
+      key.charAt(0) === '_' ? key = key.substring(1) : null;
+      if (key === "id") return false;
 
-            text: `INSERT INTO "${this.constructor.name.toLowerCase()}" (${fields}) VALUES (${placeholders}) RETURNING "id"`,
-                values: values,
-            };
+      _cleanPlaceholders.push(`"${key}" = $${incPlaceHolders}`);
+      values.push(this[key]);
+      incPlaceHolders++;
+    });
 
-        const result = await db.query(query); 
+    values.push(this.id);
+    const placeholders = _cleanPlaceholders.join(', ');
 
-        this.id = result.rows[0].id;
-
-    }
-
-    async update() {
-    
-        const _cleanPlaceholders = [];
-        let incPlaceHolders = 1;
-        const values = [];
-        Object.keys(this).forEach((key) => {
-            key.charAt(0) === '_' ? key = key.substring(1) : null ;
-            if (key === "id") return false;
-    
-            _cleanPlaceholders.push(`"${key}" = $${incPlaceHolders}`);
-            values.push(this[key]);
-            incPlaceHolders++;
-        });
-
-        values.push(this.id);
-        const placeholders = _cleanPlaceholders.join(', ');
-    
-        const query = {
-          text: `
+    const query = {
+      text: `
             UPDATE "${this.constructor.name.toLowerCase()}" SET 
             ${placeholders}
             WHERE "id" = $${incPlaceHolders}
           `,
-          values: values,
-        };
-    
-        const result = await db.query(query);
-        
-    }
-    
-    async delete() {
-        // constructor représente la classe elle même auquel on accède depuis l'instance this --> this.constructor
-        const query = {
-            text: `DELETE FROM "${this.constructor.name.toLowerCase()}" WHERE id=$1`,
-            values: [this.id],
-        };
-        const result = await db.query(query);
+      values: values,
+    };
 
-    }
-    
-    // /**
-    //  * Insert or Update function to store in DB
-    //  * @param {function} 
-    //  */
-    // async save(){
-    
-    //     console.log('le this avant traitemen', this);
+    const result = await db.query(query);
 
-    //     if(this.id){
-    //         this.update();
-    //         console.log('le this apres le update', this);
-    //       }
-    //       else {
-    //         this.insert();
-    //         console.log('le this apres le insert', this);
+  }
 
-    //       }
-    // }
+  async delete() {
+    // constructor représente la classe elle même auquel on accède depuis l'instance this --> this.constructor
+    const query = {
+      text: `DELETE FROM "${this.constructor.name.toLowerCase()}" WHERE id=$1`,
+      values: [this.id],
+    };
+    const result = await db.query(query);
+
+  }
+
+  // /**
+  //  * Insert or Update function to store in DB
+  //  * @param {function} 
+  //  */
+  // async save(){
+
+  //     console.log('le this avant traitemen', this);
+
+  //     if(this.id){
+  //         this.update();
+  //         console.log('le this apres le update', this);
+  //       }
+  //       else {
+  //         this.insert();
+  //         console.log('le this apres le insert', this);
+
+  //       }
+  // }
 
 }
 
