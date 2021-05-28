@@ -49,11 +49,7 @@ class CoreModel {
 
     Object.keys(this).forEach((key) => {
 
-      console.log(key, key.charAt(0) === '_')
-
       key.charAt(0) === '_' ? key = key.substring(1) : null;
-
-      console.log(key)
 
       if (key === "id") return false;
 

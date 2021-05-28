@@ -57,7 +57,8 @@ module.exports = {
   async postAvailableAppointment(req, res) {
     try {
       let startTimestampArray = [],
-        alreadyExistInDbArray = [];
+        alreadyExistInDbArray = [],
+        currentDay;
       let { id, dateStart, dateEnd, days } = req.body;
 
       if (moment(dateStart, "YYYY-MM-DD").isAfter(dateEnd))
@@ -70,23 +71,22 @@ module.exports = {
           return res.status(400).json({ success: false, message: `${key}.xxEnd must be after ${key}.xxStart OR ${key}.pmStart must be after ${key}.amEnd`, info: 'dateStart/dateEnd' });
       }
 
-      dateStart = moment(dateStart, "YYYY-MM-DD")
+      currentDay = moment(dateStart, "YYYY-MM-DD").format("YYYY-MM-DD")
 
       // loop to add appointments for each day
-      for (let index = 0; dateStart !== dateEnd; index++) {
+      for (let index = 0; moment(currentDay, "YYYY-MM-DD").isSameOrBefore(moment(dateEnd, "YYYY-MM-DD")); index++) {
 
         let _startTimestampArray = [],
           _alreadyExistInDbArray = [],
           currentWeekDay;
 
-        dateStart = moment(dateStart, "YYYY-MM-DD").add(index, "day").format("YYYY-MM-DD");
-        currentWeekDay = moment(dateStart, "YYYY-MM-DD").format("dddd").toString().toLowerCase();
+        currentWeekDay = moment(currentDay, "YYYY-MM-DD").format("dddd").toString().toLowerCase();
 
         if (Object.keys(days).includes(currentWeekDay))
           for (const tm of ["am", "pm"])
             if (!!days[currentWeekDay][`${tm}Start`] && !!days[currentWeekDay][`${tm}End`]) {
               [_alreadyExistInDbArray, _startTimestampArray] = await generateNewAppointmentForADay(
-                dateStart,
+                currentDay,
                 days[currentWeekDay][`${tm}Start`],
                 days[currentWeekDay][`${tm}End`],
                 id
@@ -94,6 +94,8 @@ module.exports = {
               startTimestampArray.push(..._startTimestampArray);
               alreadyExistInDbArray.push(..._alreadyExistInDbArray);
             };
+
+        currentDay = moment(currentDay, "YYYY-MM-DD").add(1, "day").format("YYYY-MM-DD");
       }
 
       res.json({
@@ -114,6 +116,7 @@ module.exports = {
         error
       });
     }
+
   },
 
   async getAppointmentsPro(request, response) {
