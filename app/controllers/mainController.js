@@ -36,7 +36,6 @@ module.exports = {
       }
 
       response.json({
-        success: true,
         message: 'City found',
         number_result: city.length,
         data: city
@@ -46,9 +45,10 @@ module.exports = {
 
       console.trace(error);
       response.status(500).json({
-        success: false,
-        message: 'Internal Server Error',
-        error
+        error: {
+          message: 'Internal Server Error',
+          error
+        }
       });
 
     }
@@ -101,7 +101,6 @@ module.exports = {
         findedPros = await Shop.findNearest(longitude, latitude);
 
         return response.json({
-          success: true,
           message: 'Shop founded',
           number_result: findedPros.length,
           data: findedPros
@@ -110,7 +109,6 @@ module.exports = {
       }
 
       response.json({
-        success: true,
         message: 'Shop founded',
         number_result: findedPros.length,
         data: findedPros
@@ -160,7 +158,6 @@ module.exports = {
         availableAppointments = await Appointment.getAppointmentsClient(dateStart, dateEnd, shopId);
 
       response.json({
-        success: true,
         message: 'Shop found',
         data: { shop, availableAppointments }
       });
@@ -245,7 +242,6 @@ module.exports = {
       sendmail(newUser.mail, bufferString);
 
       response.json({
-        success: true,
         message: 'User (and Shop) correctly created',
         data
       });
@@ -272,7 +268,6 @@ module.exports = {
         userToValidate.account_validation_crypto = "";
         userToValidate.update();
         return response.json({
-          success: true,
           message: 'Account validated.'
         });
       }
@@ -306,7 +301,6 @@ module.exports = {
       if (await bcrypt.compare(password, userToConnect.password)) {
         request.session.user = userToConnect;
         return response.json({
-          success: true,
           message: 'User logged in',
           data: { ...userToConnect, owned_shop }
         });
@@ -353,7 +347,6 @@ module.exports = {
       services = await Service.getShopServices(id);
 
       response.json({
-        success: true,
         data: services
       });
 

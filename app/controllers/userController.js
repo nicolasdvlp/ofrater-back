@@ -49,7 +49,6 @@ module.exports = {
       client.update();
 
       response.json({
-        success: true,
         message: 'Profile Updated.',
         data: client
       });
@@ -99,7 +98,6 @@ module.exports = {
       oldRdv.update();
 
       response.json({
-        success: true,
         message: 'Appointment modified.',
         data: {
           new_appointment: newRdv,
@@ -145,7 +143,6 @@ module.exports = {
       appointment.update();
 
       response.json({
-        success: true,
         message: 'Appointment correctly booked',
         data: appointment
       });
@@ -182,7 +179,6 @@ module.exports = {
       appointment.update();
 
       response.json({
-        success: true,
         message: 'Appointment correctly cancelled',
         data: appointment
       });

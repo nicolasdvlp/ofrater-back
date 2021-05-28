@@ -13,7 +13,6 @@ module.exports = {
       pro = await Shop.findById(id);
 
       response.json({
-        success: true,
         message: `Shop founded : ${!!pro}`,
         data: { ...pro }
       });
@@ -41,7 +40,6 @@ module.exports = {
       };
 
       response.json({
-        success: true,
         message: `Shop updated`,
         data: { pro }
       });
@@ -99,7 +97,6 @@ module.exports = {
       }
 
       res.json({
-        success: true,
         message: `Available appointment(s) correctly inserted for id ${id}`,
         number_insertion: startTimestampArray.length,
         inserted_slot: startTimestampArray,
@@ -133,7 +130,6 @@ module.exports = {
       appointments = await Appointment.getAppointmentShop(dateStart, dateEnd, _shopId);
 
       response.json({
-        success: true,
         message: 'Appointments correctly requested',
         number_appointment: appointments.length,
         data: appointments
@@ -161,19 +157,22 @@ module.exports = {
       appointment = await Appointment.findById(appointmentId);
 
       if (!appointment.user_id)
-        return response.status(400).json({ success: false, message: 'Appointment not found.' });
+        return response.status(400).json({ error: { message: 'Appointment not found.' } });
 
       if (appointment.user_id === null)
-        return response.status(400).json({ success: false, message: 'Attendance registration impossible. This appointment is not booked by any client.' });
+        return response.status(400).json({ error: { message: 'Attendance registration impossible. This appointment is not booked by any client.' } });
 
       appointment.is_attended = true;
       appointment.update();
-      response.json({ success: true, message: 'Attendance confirmation successfully registered.', data: appointment });
+      response.json({
+        message: 'Attendance confirmation successfully registered.',
+        data: appointment
+      });
 
     } catch (error) {
 
       console.trace(error);
-      response.status(500).json({ success: false, message: 'Attendance confirmation could not be registered.' });
+      response.status(500).json({ error: { message: 'Attendance confirmation could not be registered.' } });
 
     }
   }
