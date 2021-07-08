@@ -1,38 +1,20 @@
-const db = require('../../config/database');
-const CoreModel = require('./CoreModel');
+const sequelize = require('../../config/database');
+const { DataTypes, Model } = require('sequelize');
 
-class Review extends CoreModel {
+class Review extends Model { }
 
-  rate;
-  description;
-
-  constructor(obj) {
-    super(obj);
-    this.rate = obj.rate;
-    this.description = obj._description;
+Review.init({
+  rate: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: true,
   }
-
-  // ******
-  // GETTER
-  // ******
-  get rate() {
-    return this.rate;
-  }
-
-  get _description() {
-    return this.description;
-  }
-
-  // ******
-  // SETTER
-  // ******
-  set rate(value) {
-    this.rate = value;
-  }
-
-  set description(value) {
-    this.description = value;
-  }
-}
+}, {
+  sequelize,
+  tableName: 'review'
+})
 
 module.exports = Review;

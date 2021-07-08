@@ -1,56 +1,20 @@
-const { Role, User, Shop, Service, Appointment } = require('../models/');
-const sendmail = require('../mailer/mailer');
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
-const fetch = require('node-fetch');
-const { getlength } = require('../modules/mainModule');
-const { Console } = require('console');
-const config = require('./../../config')
+"use strict";
+
+const { Role, User, Shop, Service, Appointment, Category } = require('../models/'),
+  { getCitysAndZips, getGPSCoordinates } = require('./../modules/locationModule'),
+  config = require('./../../config'),
+  bcrypt = require('bcrypt'),
+  crypto = require('crypto'),
+  sendmail = require('../mailer/mailer');
 
 module.exports = {
-  // Route "/mainsearch"
+  // Route "/maininputsearch"
   async findCityOrZip(request, response) {
     try {
-
-      let { input } = request.body
-      let city = [];
-
-      if (!isNaN(parseInt(input)) && getlength(input) === 5) { //if it's a number
-
-        await fetch(`${config.gouvGeoAPI.zipCode}${parseInt(input)}`)
-          .then(res => res.json())
-          .then((json) => {
-            if (json)
-              json.forEach(ville => { city.push({ city: ville.nom, cp: ville.codesPostaux[0] }) });
-          })
-
-      } else {
-
-        await fetch(`${config.gouvGeoAPI.cityName}${input}`)
-          .then(res => res.json())
-          .then((json) => {
-            if (json)
-              json.forEach(ville => { city.push({ city: ville.nom, cp: ville.codesPostaux[0] }) });
-          });
-
-      }
-
-      response.json({
-        message: 'City found',
-        number_result: city.length,
-        data: city
-      });
-
+      await getCitysAndZips(request.body.input, (res) => { response.json(res) })
     } catch (error) {
-
       console.trace(error);
-      response.status(500).json({
-        error: {
-          message: 'Internal Server Error',
-          error
-        }
-      });
-
+      response.status(500).json({ error });
     }
   },
 
@@ -59,101 +23,58 @@ module.exports = {
     try {
 
       let { input } = request.body
-      let longitude, latitude;
-      let findedPros = [];
-      let city = [];
+      let latitude, longitude, pros = [];
 
-      if (!isNaN(parseInt(input)) && getlength(parseInt(input)) === 5) { //if it's a number
+      [latitude, longitude] = await getGPSCoordinates(input, async (input) => {
+        const citys = await getCitysAndZips(input)
+        return citys[0].zipCode
+      })
 
-        await fetch(`${config.gouvGeoAPI.zipCode}${parseInt(input)}`)
-          .then(res => res.json())
-          .then((json) => {
-            if (!!json) {
-              json.forEach(ville => { city.push({ city: ville.nom, cp: ville.codesPostaux[0] }) });
-            }
-          })
+      if (!latitude || !longitude)
+        return response.status(400).json({ success: false, message: 'geocode from city not found', info: 'zipOrCity' });
 
-      } else {
+      // FIXME:
+      // pros = await Shop.findAll({ where: { geo: [] } }longitude, latitude);
 
-        await fetch(`${config.gouvGeoAPI.cityName}${input}`)
-          .then(res => res.json())
-          .then((json) => {
-            if (!!json) {
-              json.forEach(ville => { city.push({ city: ville.nom, cp: ville.codesPostaux[0] }) });
-            }
-          });
-
-      }
-
-      if (city[0].cp) {
-
-        await fetch(`https://api-adresse.data.gouv.fr/search/?q=${city[0].cp}`)
-          .then(res => res.json())
-          .then((json) => {
-            if (!!json && !!json.features) {
-              [latitude, longitude] = json.features[0].geometry.coordinates
-            }
-          });
-
-        if (!latitude || !longitude)
-          return response.status(400).json({ success: false, message: 'geocode from city not found', info: 'zipOrCity' });
-
-        findedPros = await Shop.findNearest(longitude, latitude);
-
-        return response.json({
-          message: 'Shop founded',
-          number_result: findedPros.length,
-          data: findedPros
-        });
-
-      }
-
-      response.json({
-        message: 'Shop founded',
-        number_result: findedPros.length,
-        data: findedPros
-      });
+      return response.json(pros);
 
     } catch (error) {
-
       console.trace(error);
-      response.status(500).json({
-        success: false,
-        message: 'Internal Server Error',
-        error
-      });
-
+      response.status(500).json(error);
     }
   },
 
   async getProDetailsById(request, response) {
 
-    const { id } = request.body;
+    const { id: shopId } = request.body;
     let pro, category, service;
 
     try {
 
-      pro = await Shop.findById(id);
-      category = await Role.findShopCategories(id);
-      service = await Service.getShopServices(id);
+      pro = await Shop.findByPk(shopId, { include: "services" });
+
+      if (pro)
+        [category, service] = Promise.all([
+          // FIXME: Role ? Categorie ?
+          Role.findShopCategories(shopId),
+          Service.getShopServices(shopId),
+        ])
 
       response.json({ ...pro, category, service });
 
     } catch (error) {
-
       console.trace(error);
-      response.status(404).json(`No professional found for id ${id}.`)
-
+      response.status(500).json(error);
     }
   },
 
   async getShopPage(request, response) {
     try {
 
-      const { dateStart, dateEnd = dateStart, shopId } = request.body;
+      const { dateStart, dateEnd = dateStart, id: shopId } = request.body;
       let availableAppointments, shop;
 
-      shop = await Shop.findById(shopId);
+      shop = await Shop.findByPk(shopId);
       if (shop)
         availableAppointments = await Appointment.getAppointmentsClient(dateStart, dateEnd, shopId);
 
@@ -163,29 +84,20 @@ module.exports = {
       });
 
     } catch (error) {
-
       console.trace(error);
-      response.status(500).json({
-        success: false,
-        message: 'Internal Server Error',
-        error
-      });
-
+      response.status(500).json(error);
     }
   },
 
   async register(request, response) {
     try {
 
-
       let { first_name, last_name, phone_number, birth, mail, password, role_id } = request.body;
       let shop_name, opening_time, address_name, address_number, city, postal_code, latitude, longitude;
-      let newUser, newShop;
-      let data = {};
+      let user, newShop, alreadyExist, account_validation_crypto;
       const hash = bcrypt.hashSync(password, config.bcrypt.saltRounds);
 
-      if (request.body.shop) {
-
+      if (!!request.body.shop) {
         shop_name = request.body.shop.shop_name;
         opening_time = request.body.shop.opening_time;
         address_name = request.body.shop.address_name;
@@ -194,28 +106,21 @@ module.exports = {
         postal_code = request.body.shop.postal_code;
         latitude = request.body.shop.latitude;
         longitude = request.body.shop.longitude;
-
       }
 
-      let isInDatabase = await User.findByMail(mail);
-      if (isInDatabase)
+      alreadyExist = await User.findByMail(mail);
+      if (alreadyExist)
         return response.status(400).json({ success: false, message: `User already in database with this email : ${mail}`, info: 'mail' });
 
-      newUser = new User({ first_name, last_name, phone_number, birth, mail, password: hash, role_id, is_validated: false });
-      await newUser.insert();
+      // Generate a unique string that will be sent to the new user for user activation email
+      account_validation_crypto = crypto.randomBytes(50).toString('hex');
 
-      if (newUser.role_id === 2) {
+      user = new User({ first_name, last_name, phone_number, birth, mail, password: hash, role_id, is_validated: false, account_validation_crypto });
 
-        const adressToGeo = [
-          address_number,
-          address_name.split(' ').join('+'),
-          postal_code,
-          city.split('-').join('+').split(' ').join('+')
-        ].join('+').toLowerCase();
+      if (user.role_id === 2) {
 
-        await fetch(`https://api-adresse.data.gouv.fr/search/?q=${adressToGeo}`)
-          .then(res => res.json())
-          .then((json) => { if (!!json.features.length) { return [longitude, latitude] = json.features[0].geometry.coordinates } });
+        const adressToGeo = encodeURI([address_number, address_name, postal_code, city].join(' '));
+        [latitude, longitude] = await getGPSCoordinates(adressToGeo)
 
         newShop = new Shop({
           shop_name, opening_time,
@@ -223,36 +128,27 @@ module.exports = {
           city, postal_code,
           geo: `point(${latitude} ${longitude})`
         });
-        await newShop.insert();
-        await newUser.ownShop(newShop);
       }
 
-      data.user = newUser;
-      !!newShop ? data.shop = newShop : null;
+      Promise.all([
+        user.insert(),
+        newShop.insert(),
+        user.ownShop(newShop),
+      ])
 
-      // Creation of a unique string that will be sent to the new user for user activation email
-      const buffer = crypto.randomBytes(50);
-      const bufferString = buffer.toString('hex');
-
-      // Storage of this unique string in db
-      newUser.account_validation_crypto = bufferString;
-      newUser.update();
-
-      // Send email containing the previous string to the new user for account verification
-      sendmail(newUser.mail, bufferString);
+      sendmail(user.mail, account_validation_crypto);
 
       response.json({
         message: 'User (and Shop) correctly created',
-        data
+        data: {
+          user,
+          ... (!!newShop && { shop: newshop })
+        }
       });
 
     } catch (error) {
       console.trace(error);
-      response.status(500).json({
-        success: false,
-        message: 'Internal Server Error',
-        error
-      });
+      response.status(500).json(error);
     }
   },
 
@@ -266,21 +162,15 @@ module.exports = {
       if (userToValidate) {
         userToValidate.is_validated = true;
         userToValidate.account_validation_crypto = "";
-        userToValidate.update();
+        await userToValidate.update();
         return response.json({
           message: 'Account validated.'
         });
       }
 
     } catch (error) {
-
       console.trace(error);
-      response.status(500).json({
-        success: false,
-        message: 'The account could not be validated.',
-        error
-      });
-
+      response.status(500).json(error);
     }
   },
 
@@ -309,14 +199,8 @@ module.exports = {
       response.status(401).json({ success: false, message: 'Impossible to log in. Wrong password.' })
 
     } catch (error) {
-
       console.trace(error);
-      response.status(500).json({
-        success: false,
-        message: 'Internal Server Error',
-        error
-      });
-
+      response.status(500).json(error);
     }
   },
 
@@ -327,38 +211,18 @@ module.exports = {
       res.json('User logged out.');
 
     } catch (error) {
-
       console.trace(error);
-      response.status(500).json({
-        success: false,
-        message: 'Internal Server Error',
-        error
-      });
-
+      response.status(500).json(error);
     }
   },
 
   async getShopServices(request, response) {
     try {
-
-      const { id } = request.body;
-      let services;
-
-      services = await Service.getShopServices(id);
-
-      response.json({
-        data: services
-      });
-
+      const { id: serviceId } = request.body;
+      response.json(await Service.getShopServices(serviceId));
     } catch (error) {
-
       console.trace(error);
-      response.status(500).json({
-        success: false,
-        message: 'Internal Server Error',
-        error
-      });
-
+      response.status(500).json(error);
     }
   }
 }

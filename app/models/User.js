@@ -1,158 +1,93 @@
-const db = require('../../config/database');
-const CoreModel = require('./CoreModel');
+const sequelize = require('../../config/database');
+const { DataTypes, Model } = require('sequelize');
 
-module.exports = class User extends CoreModel {
+class User extends Model { }
 
-  first_name;
-  last_name;
-  phone_number;
-  birth;
-  mail;
-  password;
-  avatar;
-  role_id;
-  is_validated;
-  account_validation_crypto;
+User.init({
 
-  constructor(obj) {
-
-    super(obj);
-    this.first_name = obj.first_name;
-    this.last_name = obj.last_name;
-    this.phone_number = obj.phone_number;
-    this.birth = obj.birth;
-    this.mail = obj.mail;
-    this.password = obj.password;
-    this.avatar = obj.avatar;
-    this.role_id = obj.role_id;
-    this.is_validated = obj.is_validated;
-    this.account_validation_crypto = obj.account_validation_crypto;
-
-  };
-
-
-  /**
-   * GETTER
-   */
-
-  get first_name() {
-    return this.first_name;
+  first_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  last_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  phone_number: {
+    type: DataTypes.STRING, //TODO
+    allowNull: false,
+  },
+  birth: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  mail: {
+    type: DataTypes.STRING, //TODO
+    allowNull: false,
+    unique: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  avatar: {
+    type: DataTypes.TEXT, //TODO
+    allowNull: true,
+  },
+  // role_id: {
+  //   type: DataTypes.,
+  //   allowNull: false,
+  //   defaultValue: 'yo'
+  // },
+  is_validated: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
+  account_validation_crypto: {
+    type: DataTypes.STRING,
+    allowNull: true,
   }
+}, {
+  sequelize,
+  tableName: 'user'
+})
 
-  get last_name() {
-    return this.last_name;
-  }
+module.exports = User
 
-  get phone_number() {
-    return this.phone_number;
-  }
+  // static async findAllPro() {
+  //   const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE role_id = $1;`, [1]);
 
-  get birth() {
-    return this.birth;
-  }
+  //   const proList = [];
+  //   for (const professional of result.rows) {
+  //     proList.push(new this(professional));
+  //   }
 
-  get mail() {
-    return this.mail;
-  }
+  //   return proList;
+  // };
 
-  get password() {
-    return this.password;
-  }
+  // static async findByMail(mail) {
 
-  get avatar() {
-    return this.avatar;
-  }
+  //   const result = await db.query(`select * from "${this.name.toLowerCase()}" where mail=$1;`, [mail]);
 
-  get role_id() {
-    return this.role_id;
-  }
+  //   return result.rows[0];
+  // };
 
-  get is_validated() {
-    return this.is_validated;
-  }
+  // static async findByAccountValidationCrypto(account_validation_crypto) {
 
-  get account_validation_crypto() {
-    return this.account_validation_crypto;
-  }
+  //   const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" where account_validation_crypto = $1;`, [account_validation_crypto]);
+  //   return new this(result.rows[0]);
+  // }
 
-  /**
-   * SETTER
-   */
+  // async ownShop(shopInstance) {
 
-  set first_name(value) {
-    this.first_name = value;
-  };
+  //   const query = {
+  //     text: `INSERT INTO "user_owns_shop" (user_id, shop_id) VALUES ($1, $2) RETURNING "id"`,
+  //     values: [this.id, shopInstance.id],
+  //   };
 
-  set last_name(value) {
-    this.last_name = value;
-  };
+  //   const result = await db.query(query);
 
-  set phone_number(value) {
-    this.phone_number = value;
-  };
+  //   return result.rowCount;
 
-  set birth(value) {
-    this.birth = value;
-  };
-
-  set mail(value) {
-    this.mail = value;
-  };
-
-  set password(value) {
-    this.password = value;
-  };
-
-  set avatar(value) {
-    this.avatar = value;
-  };
-
-  set role_id(value) {
-    this.role_id = value;
-  };
-
-  set is_validated(value) {
-    this.is_validated = value;
-  };
-
-  set account_validation_crypto(value) {
-    this.account_validation_crypto = value;
-  };
-
-  static async findAllPro() {
-    const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE role_id = $1;`, [1]);
-
-    const proList = [];
-    for (const professional of result.rows) {
-      proList.push(new this(professional));
-    }
-
-    return proList;
-  };
-
-  static async findByMail(mail) {
-
-    const result = await db.query(`select * from "${this.name.toLowerCase()}" where mail=$1;`, [mail]);
-
-    return result.rows[0];
-  };
-
-  static async findByAccountValidationCrypto(account_validation_crypto) {
-
-    const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" where account_validation_crypto = $1;`, [account_validation_crypto]);
-    return new this(result.rows[0]);
-  }
-
-  async ownShop(shopInstance) {
-
-    const query = {
-      text: `INSERT INTO "user_owns_shop" (user_id, shop_id) VALUES ($1, $2) RETURNING "id"`,
-      values: [this.id, shopInstance.id],
-    };
-
-    const result = await db.query(query);
-
-    return result.rowCount;
-
-  };
-}
+  // };

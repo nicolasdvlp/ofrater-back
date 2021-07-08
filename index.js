@@ -1,3 +1,5 @@
+'use strict';
+
 if (process.env.NODE_ENV !== 'production') { require('dotenv').config(); }
 const config = require('./config');
 const express = require('express');
@@ -7,7 +9,10 @@ const path = require('path');
 const { requireHTTPS } = require('./app/middlewares')
 const routers = require('./app/routers');
 const cors = require('cors');
+require(`${process.cwd()}/prototyping`);
+
 // const https = require('https');
+
 
 const app = express();
 

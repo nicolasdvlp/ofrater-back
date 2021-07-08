@@ -1,5 +1,7 @@
+"use strict";
+
 const { Appointment, Shop } = require('../models/');
-const { generateNewAppointmentForADay } = require('../modules/appointmentModule');
+const { generateNewAppointmentForALength } = require('../modules/appointmentModule');
 const moment = require('moment');
 moment().format();
 
@@ -7,26 +9,22 @@ module.exports = {
 
   async getProfile(request, response) {
     try {
-      let { id } = request.body;
-      let pro;
-
-      pro = await Shop.findById(id);
+      const { id: shopId } = request.body.id;
+      let pro = await Shop.findById(shopId);
 
       response.json({ data: { ...pro } });
 
     } catch (error) {
       console.trace(error);
-      response.status(404).json(`No shop found for id ${id}.`);
+      response.status(404).json({ error });
     }
 
   },
 
   async updateProfile(request, response) {
     try {
-      let { id } = request.body;
-      let pro;
-
-      pro = await Shop.findById(id);
+      const { id: shopId } = request.body.id;
+      let pro = await Shop.findById(shopId);
 
       if (pro) {
         for (const key of Object.keys(request.body)) {
@@ -39,15 +37,12 @@ module.exports = {
       response.json({ data: { pro } });
 
     } catch (error) {
-
       console.trace(error);
-      response.status(404).json(`Could not find shop with id ${request.body.id};`)
-
+      response.status(404).json(`Could not find shop with id ${shopId};`)
     }
   },
 
   /**
-   * 
    * @version 30/05/2021
    * @author Nicolas
    * @param  {object} req
@@ -55,56 +50,29 @@ module.exports = {
    * @param  {number} req.body.id
    * @param  {string} req.body.dateStart
    * @param  {string=} req.body.dateEnd
-   * @param  {monday: string, tuesday: string, wednesday: string, thursday: string, friday: string, saturday: string, sunday: string} req.body.days
+   * @param {{monday: string, tuesday: string, wednesday: string, thursday: string, friday: string, saturday: string, sunday: string}} req.body.days
    */
   async postAvailableAppointment(req, res) {
     try {
-      let startTimestampArray = [],
-        alreadyExistInDbArray = [],
-        currentDay;
-      const { id, dateStart, dateEnd = dateStart, days } = req.body;
-
-      if (moment(dateStart, "YYYY-MM-DD").isAfter(dateEnd))
-        return res.status(400).json({ success: false, message: 'dateEnd must be after dateStart', info: 'dateStart/dateEnd' });
+      let newAppointmeentsArray = [],
+        appointmentsAlreadyInDbArray = [];
+      const { id: shopId, dateStart, dateEnd = dateStart, days } = req.body;
 
       for (const key of Object.keys(days)) {
+        // FIXME: Schema
         if (moment(days[key].amStart, "HH:mm").isAfter(moment(days[key].amEnd, "HH:mm"))
           || moment(days[key].pmStart, "HH:mm").isAfter(moment(days[key].pmEnd, "HH:mm"))
           || moment(days[key].amEnd, "HH:mm").isAfter(moment(days[key].pmStart, "HH:mm")))
           return res.status(400).json({ success: false, message: `${key}.xxEnd must be after ${key}.xxStart OR ${key}.pmStart must be after ${key}.amEnd`, info: 'dateStart/dateEnd' });
       }
 
-      currentDay = moment(dateStart, "YYYY-MM-DD").format("YYYY-MM-DD")
-
-      // loop to add appointments for each day
-      for (let index = 0; moment(currentDay, "YYYY-MM-DD").isSameOrBefore(moment(dateEnd, "YYYY-MM-DD")); index++) {
-        let _startTimestampArray = [],
-          _alreadyExistInDbArray = [],
-          currentWeekDay;
-
-        currentWeekDay = moment(currentDay, "YYYY-MM-DD").format("dddd").toString().toLowerCase();
-
-        if (Object.keys(days).includes(currentWeekDay))
-          for (const tm of ["am", "pm"])
-            if (!!days[currentWeekDay][`${tm}Start`] && !!days[currentWeekDay][`${tm}End`]) {
-              [_alreadyExistInDbArray, _startTimestampArray] = await generateNewAppointmentForADay(
-                currentDay,
-                days[currentWeekDay][`${tm}Start`],
-                days[currentWeekDay][`${tm}End`],
-                id
-              )
-              startTimestampArray.push(..._startTimestampArray);
-              alreadyExistInDbArray.push(..._alreadyExistInDbArray);
-            };
-
-        currentDay = moment(currentDay, "YYYY-MM-DD").add(1, "day").format("YYYY-MM-DD");
-      }
+      [newAppointmeentsArray, appointmentsAlreadyInDbArray] = await generateNewAppointmentForALength(dateStart, dateEnd, days, shopId)
 
       res.json({
-        number_insertion: startTimestampArray.length,
-        inserted_slot: startTimestampArray,
-        number_already_in_DB: alreadyExistInDbArray.length,
-        already_in_DB: alreadyExistInDbArray
+        number_insertion: newAppointmeentsArray.length,
+        inserted_slot: newAppointmeentsArray,
+        number_already_in_DB: appointmentsAlreadyInDbArray.length,
+        already_in_DB: appointmentsAlreadyInDbArray
       });
 
     } catch (error) {
@@ -116,15 +84,10 @@ module.exports = {
   async getAppointmentsPro(request, response) {
     try {
 
+      let { id: shopId, dateStart, dateEnd = dateStart } = request.body
       let appointments = [];
-      let { shopId, dateStart, dateEnd } = request.body
-      const _shopId = parseInt(shopId);
-      if (_shopId <= 0 || isNaN(_shopId))
-        return response.status(400).json({ success: false, message: 'shopId must be a positive number', info: 'shopId' });
 
-      if (!dateEnd) dateEnd = dateStart;
-
-      appointments = await Appointment.getAppointmentShop(dateStart, dateEnd, _shopId);
+      appointments = await Appointment.getAppointmentShop(dateStart, dateEnd, shopId);
 
       response.json({
         message: 'Appointments correctly requested',
@@ -142,10 +105,9 @@ module.exports = {
   async confirmAttendance(request, response) {
     try {
 
-      const appointmentId = request.body;
-      let appointment;
+      const { id: appointmentId } = request.body;
 
-      appointment = await Appointment.findById(appointmentId);
+      let appointment = await Appointment.findById(appointmentId);
 
       if (!appointment.user_id)
         return response.status(400).json({ error: { message: 'Appointment not found.' } });
@@ -154,7 +116,8 @@ module.exports = {
         return response.status(400).json({ error: { message: 'Attendance registration impossible. This appointment is not booked by any client.' } });
 
       appointment.is_attended = true;
-      appointment.update();
+      await appointment.update();
+
       response.json({
         message: 'Attendance confirmation successfully registered.',
         data: appointment

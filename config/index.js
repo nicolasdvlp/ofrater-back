@@ -7,7 +7,7 @@ module.exports = {
   // databaseURL: process.env.DATABASE_URI,
   postgresql: {
     user: process.env.PGUSER,
-    passwird: process.env.PGPASSWORD,
+    password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE,
     host: process.env.PGHOST || localhost
   },
@@ -15,11 +15,13 @@ module.exports = {
     user: process.env.GMAILEMAIL,
     password: process.env.GMAILPWD
   },
+  slotTime: 30,
   bcrypt: {
     saltRounds: 10
   },
   gouvGeoAPI: {
     zipCode: "https://geo.api.gouv.fr/communes?codePostal=",
-    cityName: "https://geo.api.gouv.fr/communes?nom="
+    cityName: "https://geo.api.gouv.fr/communes?nom=",
+    geoPosition: "https://api-adresse.data.gouv.fr/search/?q=",
   }
 }
