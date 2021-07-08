@@ -53,12 +53,12 @@ module.exports = {
 
       pro = await Shop.findByPk(shopId, { include: "services" });
 
-      if (pro)
-        [category, service] = Promise.all([
-          // FIXME: Role ? Categorie ?
-          Role.findShopCategories(shopId),
-          Service.getShopServices(shopId),
-        ])
+      // if (pro)
+      //   [category, service] = Promise.all([
+      //     // FIXME: Role ? Categorie ?
+      //     Role.findShopCategories(shopId),
+      //     Service.getShopServices(shopId),
+      //   ])
 
       response.json({ ...pro, category, service });
 
