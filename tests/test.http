@@ -56,14 +56,12 @@ Content-Type: application/json
     "password": "azertyA3",
     "password_confirm": "azertyA3",
     "role_id": 2,
-    "shop": {
-        "shop_name" : "Zizdou Président",
-        "opening_time" : "du lundi au dimanche 7/7! de 9h à 19h",
-        "address_name" : "5 avenue des petites ecuries",
-        "address_number" : 16,
-        "city" : "lognes",
-        "postal_code" : "77185"
-    }
+    "shop_name" : "Zizdou Président",
+    "opening_time" : "du lundi au dimanche 7/7! de 9h à 19h",
+    "address_name" : "5 avenue des petites ecuries",
+    "address_number" : 16,
+    "city" : "lognes",
+    "postal_code" : "77185"
 }
 
 #######

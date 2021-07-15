@@ -32,7 +32,7 @@ Appointment.init({
 }, {
   sequelize,
   tableName: 'appointment'
-})
+});
 
 module.exports = Appointment;
 

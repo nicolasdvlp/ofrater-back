@@ -1,13 +1,32 @@
 {
-    "env": {
-      "browser": true
-    },
-    "extends": "eslint:recommended",
-    "rules": {
-      "indent": ["error", 4],
-      "quotes": ["error", "single"],
-      "semi": ["error", "always"],
-      "no-console": "off",
-      "eqeqeq": "warn"
-    }
+  "globals": {
+    "console": true,
+    "$": true,
+    "describe": true,
+    "it": true,
+    "before": true,
+    "after": true,
+    "moment": true
+  },
+  "env": {
+    "node": true,
+    "commonjs": true,
+    "mocha": true,
+    "es6": true,
+    "es2017": true,
+    "es2020": true,
+    "es2021": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "indent": ["warn", 2, { "SwitchCase": 1 }],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+    "no-useless-escape": "warn",
+    "semi": ["error", "always"],
+    "no-console": "off",
+    "eqeqeq": "warn"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018
+  }
 }

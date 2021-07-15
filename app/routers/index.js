@@ -6,7 +6,7 @@ const userRouter = require('./userRouter');
 const proRouter = require('./proRouter');
 
 // route api test
-router.get('/hello', (req, res) => { res.json("Hello Wordl!"); })
+router.get('/hello', (req, res) => { res.json('Hello Wordl!'); });
 
 //-- route api
 router.use('/main', mainRouter);

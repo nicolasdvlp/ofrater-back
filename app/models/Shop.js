@@ -40,7 +40,7 @@ Shop.init({
 }, {
   sequelize,
   tableName: 'shop'
-})
+});
 
 module.exports = Shop;
 

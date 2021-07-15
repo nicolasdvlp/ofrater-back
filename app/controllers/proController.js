@@ -1,19 +1,19 @@
-"use strict";
+'use strict';
 
 const { Appointment, Shop } = require('../models/');
-const { generateNewAppointmentForALength } = require('../modules/appointmentModule');
+const { generateNewAppointmentForTimeLapse } = require('../modules/appointmentModule');
 const moment = require('moment');
 moment().format();
 
 module.exports = {
 
   async getProfile(request, response) {
+    const { id: shopId } = request.body.id;
+
     try {
-      const { id: shopId } = request.body.id;
       let pro = await Shop.findById(shopId);
 
-      response.json({ data: { ...pro } });
-
+      response.json(pro);
     } catch (error) {
       console.trace(error);
       response.status(404).json({ error });
@@ -22,23 +22,23 @@ module.exports = {
   },
 
   async updateProfile(request, response) {
+    const { id: shopId } = request.body.id;
+
     try {
-      const { id: shopId } = request.body.id;
       let pro = await Shop.findById(shopId);
 
       if (pro) {
         for (const key of Object.keys(request.body)) {
-          if (key !== "id")
+          if (key !== 'id')
             pro[key] = request.body[key];
         }
         pro.update();
-      };
+      }
 
       response.json({ data: { pro } });
-
     } catch (error) {
       console.trace(error);
-      response.status(404).json(`Could not find shop with id ${shopId};`)
+      response.status(404).json(`Could not find shop with id ${shopId};`);
     }
   },
 
@@ -53,40 +53,35 @@ module.exports = {
    * @param {{monday: string, tuesday: string, wednesday: string, thursday: string, friday: string, saturday: string, sunday: string}} req.body.days
    */
   async postAvailableAppointment(req, res) {
+    let newAppointmeentsArray = [], appointmentsAlreadyInDbArray = [];
+    const { id: shopId, dateStart, dateEnd = dateStart, days } = req.body;
+
     try {
-      let newAppointmeentsArray = [],
-        appointmentsAlreadyInDbArray = [];
-      const { id: shopId, dateStart, dateEnd = dateStart, days } = req.body;
-
-      for (const key of Object.keys(days)) {
-        // FIXME: Schema
-        if (moment(days[key].amStart, "HH:mm").isAfter(moment(days[key].amEnd, "HH:mm"))
-          || moment(days[key].pmStart, "HH:mm").isAfter(moment(days[key].pmEnd, "HH:mm"))
-          || moment(days[key].amEnd, "HH:mm").isAfter(moment(days[key].pmStart, "HH:mm")))
-          return res.status(400).json({ success: false, message: `${key}.xxEnd must be after ${key}.xxStart OR ${key}.pmStart must be after ${key}.amEnd`, info: 'dateStart/dateEnd' });
-      }
-
-      [newAppointmeentsArray, appointmentsAlreadyInDbArray] = await generateNewAppointmentForALength(dateStart, dateEnd, days, shopId)
+      [
+        newAppointmeentsArray,
+        appointmentsAlreadyInDbArray
+      ] = await generateNewAppointmentForTimeLapse(
+        dateStart,
+        dateEnd,
+        days,
+        shopId
+      );
 
       res.json({
-        number_insertion: newAppointmeentsArray.length,
-        inserted_slot: newAppointmeentsArray,
-        number_already_in_DB: appointmentsAlreadyInDbArray.length,
-        already_in_DB: appointmentsAlreadyInDbArray
+        inserted_slot: { qty: newAppointmeentsArray.length, data: newAppointmeentsArray },
+        already_in_DB: { qty: appointmentsAlreadyInDbArray.length, data: appointmentsAlreadyInDbArray }
       });
-
     } catch (error) {
       console.trace(error);
-      res.status(500).json({ error });
+      res.status(500).json(error);
     }
   },
 
   async getAppointmentsPro(request, response) {
+    let { id: shopId, dateStart, dateEnd = dateStart } = request.body;
+    let appointments;
+
     try {
-
-      let { id: shopId, dateStart, dateEnd = dateStart } = request.body
-      let appointments = [];
-
       appointments = await Appointment.getAppointmentShop(dateStart, dateEnd, shopId);
 
       response.json({
@@ -94,7 +89,6 @@ module.exports = {
         number_appointment: appointments.length,
         data: appointments
       });
-
     } catch (error) {
       console.trace(error);
       response.status(500).json({ error });
@@ -103,10 +97,9 @@ module.exports = {
 
   // Method to confirm that a client attended an appointment
   async confirmAttendance(request, response) {
+    const { id: appointmentId } = request.body;
+
     try {
-
-      const { id: appointmentId } = request.body;
-
       let appointment = await Appointment.findById(appointmentId);
 
       if (!appointment.user_id)
@@ -122,10 +115,9 @@ module.exports = {
         message: 'Attendance confirmation successfully registered.',
         data: appointment
       });
-
     } catch (error) {
       console.trace(error);
       response.status(500).json({ error });
     }
   }
-}
+};

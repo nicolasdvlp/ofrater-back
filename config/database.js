@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
-const { postgresql } = require('./../config')
-const { query } = require('express');
+const { postgresql } = require('./../config');
+// const { query } = require('express');
 
 // console.log(`postgres://${postgresql.user}:${postgresql.password}@${postgresql.host}:5432/${postgresql.database}`)
 
@@ -8,7 +8,7 @@ const sequelize = new Sequelize(`postgres://${postgresql.user}:${postgresql.pass
   define: {
     timestamps: false
   }
-})
+});
 
 module.exports = sequelize;
 

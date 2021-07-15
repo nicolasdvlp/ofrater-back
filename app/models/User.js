@@ -51,43 +51,43 @@ User.init({
 }, {
   sequelize,
   tableName: 'user'
-})
+});
 
-module.exports = User
+module.exports = User;
 
-  // static async findAllPro() {
-  //   const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE role_id = $1;`, [1]);
+// static async findAllPro() {
+//   const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" WHERE role_id = $1;`, [1]);
 
-  //   const proList = [];
-  //   for (const professional of result.rows) {
-  //     proList.push(new this(professional));
-  //   }
+//   const proList = [];
+//   for (const professional of result.rows) {
+//     proList.push(new this(professional));
+//   }
 
-  //   return proList;
-  // };
+//   return proList;
+// };
 
-  // static async findByMail(mail) {
+// static async findByMail(mail) {
 
-  //   const result = await db.query(`select * from "${this.name.toLowerCase()}" where mail=$1;`, [mail]);
+//   const result = await db.query(`select * from "${this.name.toLowerCase()}" where mail=$1;`, [mail]);
 
-  //   return result.rows[0];
-  // };
+//   return result.rows[0];
+// };
 
-  // static async findByAccountValidationCrypto(account_validation_crypto) {
+// static async findByAccountValidationCrypto(account_validation_crypto) {
 
-  //   const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" where account_validation_crypto = $1;`, [account_validation_crypto]);
-  //   return new this(result.rows[0]);
-  // }
+//   const result = await db.query(`SELECT * FROM "${this.name.toLowerCase()}" where account_validation_crypto = $1;`, [account_validation_crypto]);
+//   return new this(result.rows[0]);
+// }
 
-  // async ownShop(shopInstance) {
+// async ownShop(shopInstance) {
 
-  //   const query = {
-  //     text: `INSERT INTO "user_owns_shop" (user_id, shop_id) VALUES ($1, $2) RETURNING "id"`,
-  //     values: [this.id, shopInstance.id],
-  //   };
+//   const query = {
+//     text: `INSERT INTO "user_owns_shop" (user_id, shop_id) VALUES ($1, $2) RETURNING "id"`,
+//     values: [this.id, shopInstance.id],
+//   };
 
-  //   const result = await db.query(query);
+//   const result = await db.query(query);
 
-  //   return result.rowCount;
+//   return result.rowCount;
 
-  // };
+// };

@@ -15,6 +15,6 @@ Review.init({
 }, {
   sequelize,
   tableName: 'review'
-})
+});
 
 module.exports = Review;

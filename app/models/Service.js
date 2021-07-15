@@ -21,7 +21,7 @@ Service.init({
 }, {
   sequelize,
   tableName: 'service'
-})
+});
 
 module.exports = Service;
 
