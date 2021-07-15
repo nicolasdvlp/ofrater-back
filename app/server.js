@@ -1,15 +1,15 @@
 'use strict';
 
 if (process.env.NODE_ENV !== 'production') { require('dotenv').config(); }
-const config = require('./config');
+const config = require('./../config');
 const express = require('express');
 const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
-const { requireHTTPS } = require('./app/middlewares')
-const routers = require('./app/routers');
+const { requireHTTPS } = require('./middlewares')
+const routers = require('./routers');
 const cors = require('cors');
-require(`${process.cwd()}/prototyping`);
+require(`${process.cwd()}/app/prototyping`);
 
 // const https = require('https');
 
@@ -46,7 +46,7 @@ app.use(cors())
 
 // Doc for API
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('../swagger.json');
 app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
